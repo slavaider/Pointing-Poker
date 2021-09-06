@@ -1,22 +1,38 @@
-import { createServer } from 'http'
-import { parse } from 'url'
-import next from 'next'
+import express, { Express, Request, Response } from 'express';
+import http from 'http';
+import next, { NextApiHandler } from 'next';
+import socketio from 'socket.io';
+import cors from 'cors';
 
-const port = parseInt(process.env.PORT || '3000', 10)
-const dev = process.env.NODE_ENV !== 'production'
-const app = next({ dev })
-const handle = app.getRequestHandler()
+const port: number = parseInt(process.env.PORT || '3000', 10);
+const dev: boolean = process.env.NODE_ENV !== 'production';
+const nextApp = next({ dev });
+const nextHandler: NextApiHandler = nextApp.getRequestHandler();
+const app: Express = express();
+const server: http.Server = http.createServer(app);
+const io: socketio.Server = new socketio.Server();
 
-app.prepare().then(() => {
-  createServer((req, res) => {
-    const parsedUrl = parse(req.url!, true)
-    handle(req, res, parsedUrl)
-  }).listen(port)
+const messages: any[] = [];
 
-  // tslint:disable-next-line:no-console
-  console.log(
-    `> Server listening at http://localhost:${port} as ${
-      dev ? 'development' : process.env.NODE_ENV
-    }`
-  )
-})
+nextApp.prepare().then(async () => {
+  app.use(cors());
+
+  io.attach(server);
+
+  io.on('connection', (socket: socketio.Socket) => {
+    socket.on('chat', (data) => {
+      messages.push(data);
+      socket.broadcast.emit('chat', data);
+    });
+  });
+
+  app.get('/chat', (_req: Request, res: Response) => {
+    res.json({ messages });
+  });
+
+  app.all('*', (req: any, res: any) => nextHandler(req, res));
+
+  server.listen(port, () => {
+    console.log(`> Ready on http://localhost:${port}`);
+  });
+});
