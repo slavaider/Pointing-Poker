@@ -1,16 +1,15 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect } from 'react';
 import Link from 'next/link';
 import { Button, Input, Space } from 'antd';
 import { v4 } from 'uuid';
 import useSocket from '../../hooks/useSocket';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { addUsers, selectUsers } from '../../store/usersSlice';
+import { addUser, addUsers, selectUsers } from '../../store/usersSlice';
 
 const HomePage: React.FC = () => {
-  const socket = useSocket();
+  const socket = useSocket('http://localhost:3000');
   const dispatch = useAppDispatch();
   const users = useAppSelector(selectUsers);
-  const [room, setRoom] = useState(null);
 
   const connectByUrl = (event: FormEvent) => {
     event.preventDefault();
@@ -24,7 +23,6 @@ const HomePage: React.FC = () => {
           avatar: 'random string',
         },
         (data: any) => {
-          setRoom(data.room);
           dispatch(addUsers(data));
         },
       );
@@ -40,19 +38,18 @@ const HomePage: React.FC = () => {
           avatar: 'random string',
         },
         (data: any) => {
-          setRoom(data.room);
           dispatch(addUsers(data));
         },
       );
   };
 
-  // useEffect(() => {
-  //   if (socket) {
-  //     socket.on('add user', (data: any) => {
-  //       dispatch(addUser(data));
-  //     });
-  //   }
-  // }, [dispatch, socket]);
+  useEffect(() => {
+    if (socket) {
+      socket.on('add user', (data: any) => {
+        dispatch(addUser(data));
+      });
+    }
+  }, [socket]);
 
   return (
     <>
@@ -87,18 +84,17 @@ const HomePage: React.FC = () => {
         </form>
       </Space>
       <ul>
-        {room && (
-          <>
-            <h1>Room {room}</h1>
-            {users.map((user: any) => {
-              return (
-                <li key={user.userId}>
-                  {user.name} {user.userId}
-                </li>
-              );
-            })}
-          </>
-        )}
+        <>
+          {users.map((user: any) => {
+            return (
+              <li key={user.userId}>
+                {user.name} <br />
+                id: {user.userId} <br />
+                room: {user.room}
+              </li>
+            );
+          })}
+        </>
       </ul>
     </>
   );

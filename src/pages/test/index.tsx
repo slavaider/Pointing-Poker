@@ -4,7 +4,7 @@ import useSocket from '../../hooks/useSocket';
 const Test: React.FC = () => {
   const [messages, setMessages] = useState<any>([]);
   const [message, setMessage] = useState<any>([]);
-  const socket = useSocket();
+  const socket = useSocket('http://localhost:3000');
 
   useEffect(() => {
     if (socket) {

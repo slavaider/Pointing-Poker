@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "dev": "next",
+    "dev": "nodemon",
     "build": "next build && tsc --project tsconfig.server.json",
     "start": "cross-env NODE_ENV=production node dist/index.js",
     "lint": "eslint src --fix"
@@ -21,7 +21,6 @@
     "redux": "^4.1.1",
     "redux-devtools-extension": "^2.13.9",
     "sass": "^1.39.0",
-    "socket-io": "^1.0.0",
     "socket.io": "^4.2.0",
     "socket.io-client": "^4.2.0",
     "uuid": "^8.3.2"
