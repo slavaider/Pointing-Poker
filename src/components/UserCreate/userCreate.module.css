@@ -1,6 +1,5 @@
 .user__create {
   width: 876px;
-  height: 833px;
 }
 
 .form__user_create {
@@ -25,14 +24,13 @@
 
 .form__title_text {
   margin: 0;
-  font-size: 54px;
+  font-size: 50px;
   font-style: normal;
   font-weight: 700;
   text-align: center;
 }
 
 .form__input {
-  width: 470px;
   max-width: 100%;
   font-size: 24px;
   border-radius: 0 0 0 10px;
@@ -45,12 +43,18 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -ms-flex-pack: distribute;
-      justify-content: space-around;
   padding: 0;
   margin: 0;
-  width: 250px;
+  width: 160px;
   max-width: 100%;
+}
+
+.label__switch > div {
+  max-width: 100%;
+}
+
+.label__switch > div > label {
+  font-size: 16px;
 }
 
 .label__switch > div {
@@ -75,5 +79,19 @@
   font-size: 40px;
   background-color: #60dabf;
   color: white;
+}
+
+.avatar__uploader {
+  width: 120px;
+}
+
+.switch {
+  font-size: 14px;
+}
+
+.btn {
+  width: 120px;
+  height: 40px;
+  border-radius: 5px;
 }
 /*# sourceMappingURL=userCreate.module.css.map */
