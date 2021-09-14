@@ -2,7 +2,10 @@
 p {
   margin: 0 auto;
   padding: 0;
+<<<<<<< HEAD
   font-family: Roboto, sans-serif;
+=======
+>>>>>>> fa2d45f7fb2f7c0a23ecbdbd1f27cb9b1f750821
 }
 
 .user-create {
@@ -22,16 +25,26 @@ p {
   -webkit-box-direction: normal;
       -ms-flex-direction: row;
           flex-direction: row;
+<<<<<<< HEAD
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
   -webkit-box-align: start;
       -ms-flex-align: start;
           align-items: flex-start;
+=======
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  margin-top: 20px;
+>>>>>>> fa2d45f7fb2f7c0a23ecbdbd1f27cb9b1f750821
 }
 
 .form-title-text {
   margin: 0;
+<<<<<<< HEAD
   font-size: 64px;
   font-style: normal;
   font-weight: 700;
@@ -61,5 +74,28 @@ label {
 
 .label-text {
   font-size: 16px;
+=======
+  font-size: 54px;
+  font-style: normal;
+  font-weight: 700;
+  text-align: center;
+}
+
+.label-switch > div {
+  padding: 0;
+  margin: 0;
+}
+
+.label-text {
+  font-size: 16px;
+}
+
+.ant-form-item-label > label {
+  font-size: 24px;
+}
+
+.ant-upload.ant-upload-select-picture-card {
+  height: 36px;
+>>>>>>> fa2d45f7fb2f7c0a23ecbdbd1f27cb9b1f750821
 }
 /*# sourceMappingURL=userCreate.css.map */
