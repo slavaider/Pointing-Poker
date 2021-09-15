@@ -9,47 +9,41 @@ const GameSettings: FC = () => {
     <div>
       <h4 className={stylesPage.title}>Game settings:</h4>
       <form onSubmit={(e) => e.preventDefault()}>
-        <label className="setting">
+        <label className={styles.setting}>
           <span>Scram master as player: </span>
           <Switch defaultChecked />
         </label>
-        <label className="setting">
+
+        <label className={styles.setting}>
           <span>Changing card in round end: </span>
           <Switch />
         </label>
-        <label className="setting">
+
+        <label className={styles.setting}>
           <span>Is timer needed: </span>
           <Switch defaultChecked />
         </label>
-        <label className="setting">
+
+        <label className={styles.setting}>
           <span>Score type: </span>
           <Input className={styles.input} placeholder="story point" />
         </label>
-        <label className="setting">
+
+        <label className={styles.setting}>
           <span>Score type (Short): </span>
           <Input className={styles.input} placeholder="SP" />
         </label>
-        <label className="setting">
+
+        <label className={styles.setting}>
           <span>Round time: </span>
           <TimePicker
             defaultValue={moment('02:20', 'mm:ss')}
             format={'mm:ss'}
             size="large"
+            style={{ width: '120px' }}
           />
         </label>
       </form>
-
-      <style jsx>{`
-        .setting {
-          cursor: pointer;
-          max-width: 550px;
-          margin: 20px 5px 0 0;
-          display: flex;
-
-          align-items: center;
-          justify-content: space-between;
-        }
-      `}</style>
     </div>
   );
 };
