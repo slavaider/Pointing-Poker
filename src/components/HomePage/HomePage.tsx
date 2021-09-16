@@ -65,6 +65,11 @@ const HomePage: React.FC = () => {
           </Link>
         </li>
         <li>
+          <Link href="/settings" replace>
+            <a>Settings</a>
+          </Link>
+        </li>
+        <li>
           <Link href="/test" replace>
             <a>Test</a>
           </Link>

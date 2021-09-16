@@ -1,0 +1,41 @@
+.cardWrapper{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  height: 160px;
+  width: 98px;
+  margin: 10px 10px 0 0;
+  padding: 5px;
+  border: 1px solid #EEEEEE;
+  box-sizing: border-box;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 14px;
+}
+.cardsContainer{
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.cardVal__top{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  svg{
+    width: 15px;
+    height: 15px;
+  }
+}
+.cardTitle{
+  text-align: center;
+}
+.cardVal__bottom{
+  text-align: start;
+  transform: rotate(180deg);
+}
+.cardVal__bottom, .cardVal__top span{
+  font-size: 15px;
+  line-height: 15px;
+}

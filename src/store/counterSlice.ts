@@ -5,6 +5,8 @@ import { AppThunk, RootState } from '.';
 const initialState = {
   value: 0,
   status: 'idle',
+  members: [],
+  issues: [{}],
 };
 
 function fetchCount(amount = 1) {
