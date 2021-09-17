@@ -1,0 +1,97 @@
+.user__create {
+  width: 876px;
+}
+
+.form__user_create {
+  width: 100%;
+}
+
+.form__title {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  margin-top: 20px;
+}
+
+.form__title_text {
+  margin: 0;
+  font-size: 50px;
+  font-style: normal;
+  font-weight: 700;
+  text-align: center;
+}
+
+.form__input {
+  max-width: 100%;
+  font-size: 24px;
+  border-radius: 0 0 0 10px;
+}
+
+.label__switch {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 0;
+  margin: 0;
+  width: 160px;
+  max-width: 100%;
+}
+
+.label__switch > div {
+  max-width: 100%;
+}
+
+.label__switch > div > label {
+  font-size: 16px;
+}
+
+.label__switch > div {
+  padding: 0;
+  margin: 0;
+}
+
+.label__text {
+  font-size: 16px;
+}
+
+.avatar__img {
+  min-width: 70px;
+  min-height: 70px;
+  display: block;
+}
+
+.avatar__text {
+  width: 70px;
+  height: 70px;
+  line-height: 70px;
+  font-size: 40px;
+  background-color: #60dabf;
+  color: white;
+}
+
+.avatar__uploader {
+  width: 120px;
+}
+
+.switch {
+  font-size: 14px;
+}
+
+.btn {
+  width: 120px;
+  height: 40px;
+  border-radius: 5px;
+}
+/*# sourceMappingURL=userCreate.module.css.map */

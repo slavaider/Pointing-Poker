@@ -1,0 +1,21 @@
+*,
+p {
+	margin: 0 auto;
+	padding: 0;
+}
+
+.ant-form-item-label>label {
+	font-size: 24px;
+}
+
+.ant-upload.ant-upload-select-picture-card {
+	height: 40px;
+}
+
+.ant-form-item-control-input-content {
+	width: 470px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: flex-end;
+}
