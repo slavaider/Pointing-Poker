@@ -13,6 +13,7 @@ const server: http.Server = http.createServer(app);
 const io: socketio.Server = new socketio.Server();
 
 const messages: any[] = [];
+const users = {};
 
 nextApp.prepare().then(async () => {
   app.use(cors());
@@ -20,6 +21,31 @@ nextApp.prepare().then(async () => {
   io.attach(server);
 
   io.on('connection', (socket: socketio.Socket) => {
+    socket.on('join server', (user: any, cb) => {
+      if (!user.name && !user.avatar) {
+        return cb('wrong');
+      }
+      const newUser = {
+        ...user,
+        userId: socket.id,
+      };
+      socket.join(user.room);
+      if (Object.prototype.hasOwnProperty.call(users, user.room)) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        users[user.room].push(newUser);
+      } else {
+        Object.assign(users, { [user.room]: [newUser] });
+      }
+      socket.broadcast.to(user.room).emit('add user', newUser);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      return cb(users[user.room]);
+    });
+
+    socket.on('add user', (user, cb) => {
+      cb(user);
+    });
     socket.on('chat', (data) => {
       messages.push(data);
       socket.broadcast.emit('chat', data);

@@ -9,11 +9,9 @@ const useSocket = (url: string): Socket | null => {
 
     setSocket(socketIo);
 
-    function cleanup() {
+    return () => {
       socketIo.disconnect();
-    }
-
-    return cleanup;
+    };
   }, [url]);
 
   return socket;

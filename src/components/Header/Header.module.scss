@@ -1,0 +1,19 @@
+.header{
+  z-index: 2;
+}
+
+.headerLine{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  height: 50px;
+  background-color: #2B3A67;
+}
+
+
+.greenLine{
+  height: 19px;
+  background: #66999B;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
