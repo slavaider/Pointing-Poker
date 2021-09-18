@@ -6,22 +6,38 @@ const initialState = {
   value: 0,
   status: 'idle',
   members: [],
-  issues: [{}],
+  issues: [
+    {
+      cardTitle: 'Issue 20',
+      priority: 'Low',
+      linkToIssue: '#',
+    },
+    {
+      cardTitle: 'Issue 25',
+      priority: 'Low',
+      linkToIssue: '#',
+    },
+    {
+      cardTitle: 'Issue 30',
+      priority: 'Low',
+      linkToIssue: '#',
+    },
+    {
+      cardTitle: 'Issue 35',
+      priority: 'Low',
+      linkToIssue: '#',
+    },
+  ],
 };
 
 function fetchCount(amount = 1) {
-  return new Promise<{ data: number }>((resolve) =>
-    setTimeout(() => resolve({ data: amount }), 500),
-  );
+  return new Promise<{ data: number }>((resolve) => setTimeout(() => resolve({ data: amount }), 500));
 }
 
-export const incrementAsync = createAsyncThunk(
-  'counter/fetchCount',
-  async (amount: number) => {
-    const response = await fetchCount(amount);
-    return response.data;
-  },
-);
+export const incrementAsync = createAsyncThunk('counter/fetchCount', async (amount: number) => {
+  const response = await fetchCount(amount);
+  return response.data;
+});
 
 export const counterSlice = createSlice({
   name: 'counter',
@@ -53,11 +69,9 @@ export const { increment, decrement, incrementByAmount } = counterSlice.actions;
 
 export const selectCount = (state: RootState): number => state.counter.value;
 
-export const incrementByAmountThunk =
-  (amount: number): AppThunk =>
-  async (dispatch) => {
-    const response = await fetchCount(amount);
-    dispatch(incrementByAmount(response.data));
-  };
+export const incrementByAmountThunk = (amount: number): AppThunk => async (dispatch) => {
+  const response = await fetchCount(amount);
+  dispatch(incrementByAmount(response.data));
+};
 
 export default counterSlice.reducer;

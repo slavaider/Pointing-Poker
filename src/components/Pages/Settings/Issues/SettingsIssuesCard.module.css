@@ -1,0 +1,52 @@
+.card__wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  min-height: 70px;
+  min-width: 300px;
+  margin: 10px 5px 0 0;
+  background: #fff;
+  padding: 10px;
+  -webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+          box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.card__title {
+  font-family: Roboto, sans-serif;
+  font-weight: 300;
+  font-size: 28px;
+  line-height: 38px;
+}
+
+.card__text_wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.card__text_priority {
+  font-size: 10px;
+  line-height: 12px;
+}
+
+.button__edit,
+.button__delete {
+  cursor: pointer;
+  margin-left: 10px;
+}
+/*# sourceMappingURL=SettingsIssuesCard.module.css.map */

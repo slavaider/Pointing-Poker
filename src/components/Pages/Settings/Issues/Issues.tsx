@@ -1,88 +1,46 @@
-import React, { FC, useState } from 'react';
-import { PlusOutlined } from '@ant-design/icons';
-import { Modal, Select, Form, Input } from 'antd';
-import SettingsIssuesCard from './SettingsIssuesCard';
-import styles from './Issues.module.scss';
-import stylesPage from '../Settings.module.scss';
-import { useAppSelector } from '../../../../hooks';
+import React, { FC, useState } from 'react'
+import { PlusOutlined } from '@ant-design/icons'
+import SettingsIssuesCard from './SettingsIssuesCard'
+import ModalIssues from './Issues-modal'
+import styles from './Issues.module.scss'
+import stylesPage from '../Settings.module.scss'
+import { useAppSelector } from '../../../../hooks'
 
-const { Option } = Select;
+interface cards {
+	cardTitle: string
+	priority: string
+	linkToIssue: string
+}
 
 const Issues: FC = () => {
-  const issues = useAppSelector((state) => state.settings.issues);
-
-  const [isModalVisible, setIsModalVisible] = useState(false);
-
-  return (
-    <div>
-      <h4 className={stylesPage.title}>Issues:</h4>
-      <div className={styles.container}>
-        <SettingsIssuesCard
-          cardTitle={'Issue 25'}
-          priority={'Low'}
-          linkToIssue={'#'}
-        />
-        <SettingsIssuesCard
-          cardTitle={'Issue 25'}
-          priority={'Low'}
-          linkToIssue={'#'}
-        />
-        <SettingsIssuesCard
-          cardTitle={'Issue 25'}
-          priority={'Low'}
-          linkToIssue={'#'}
-        />
-        <SettingsIssuesCard
-          cardTitle={'Issue 25'}
-          priority={'Low'}
-          linkToIssue={'#'}
-        />
-
-        <button
-          className={styles.cardWrapper}
-          style={{ color: '#479685' }}
-          onClick={() => setIsModalVisible(true)}
-        >
-          Crete new Issue
+	const issues: Array<cards> = useAppSelector((state) => state.settings.issues)
+	const [isModalVisible, setIsModalVisible] = useState(false)
+	const isModalSet = () => { setIsModalVisible(false) }
+	const priorityValueDefault = 'Low'
+	
+	return (
+		<div>
+			<h4 className={stylesPage.title}>Issues:</h4>
+			<div className={styles.container}>
+				{issues.map((item, index) =>
+					<SettingsIssuesCard
+						cardTitle={item.cardTitle}
+						priority={item.priority}
+						linkToIssue={item.linkToIssue}
+						key={`${item.cardTitle}+${index}`}
+					/>
+				)}
+				<button
+					className={styles.card__wrapper_new__issue}
+					onClick={() => setIsModalVisible(true)}
+				>
+					Crete new Issue
           <PlusOutlined />
-        </button>
-      </div>
+				</button>
+			</div>
+			{isModalVisible ? <ModalIssues isModal={isModalVisible} isModalSet={isModalSet} props={{ cardTitle: '', priority: priorityValueDefault, linkToIssue: '' }} /> : ''}
+		</div >
+	)
+}
 
-      <Modal
-        className={styles.modal}
-        visible={isModalVisible}
-        onOk={() => setIsModalVisible(false)}
-        onCancel={() => setIsModalVisible(false)}
-      >
-        <p>Create Issue</p>
-        <Form>
-          <Form.Item className={styles.input} label={'Title: '}>
-            <Input />
-          </Form.Item>
-          <Form.Item className={styles.input} label={'Link: '}>
-            <Input />
-          </Form.Item>
-          <Form.Item className={styles.select} label={'Priority: '}>
-            <Select
-              defaultValue={'Low'}
-              showSearch
-              placeholder="Select a priority"
-            >
-              <Option className={styles.option} value={'Low'}>
-                Low
-              </Option>
-              <Option className={styles.option} value={'Middle'}>
-                Middle
-              </Option>
-              <Option className={styles.option} value={'High'}>
-                High
-              </Option>
-            </Select>
-          </Form.Item>
-        </Form>
-      </Modal>
-    </div>
-  );
-};
-
-export default Issues;
+export default Issues

@@ -98,7 +98,7 @@ const UserCreate: React.FC = () => {
 	const uploadButton = (
 		<div>
 			{loading ? <LoadingOutlined /> : <UploadOutlined />}
-			<div>Upload</div>
+			<div style={{ fontSize: 14 }}>Upload</div>
 		</div>
 	)
 
@@ -132,9 +132,8 @@ const UserCreate: React.FC = () => {
 					<Form.Item
 						label='Your first name'
 						labelAlign='left'
-						labelCol={{ xs: { offset: 1 }, sm: { offset: 2 } }}
+						labelCol={{ xs: { offset: 0 }, sm: { offset: 2 } }}
 						name='firstName'
-						tooltip='This is a required field'
 						className={styles.label__text}
 						rules={[
 							{ required: true, message: 'Please input your first name!' }
@@ -148,7 +147,7 @@ const UserCreate: React.FC = () => {
 					</Form.Item>
 					<Form.Item
 						label='Your last name(optional)'
-						labelCol={{ xs: { offset: 1 }, sm: { offset: 2 } }}
+						labelCol={{ xs: { offset: 0 }, sm: { offset: 2 } }}
 						name='lastName'
 						className={styles.label__text}
 					>
@@ -161,7 +160,7 @@ const UserCreate: React.FC = () => {
 					<Form.Item
 						label='Your job position(optional)'
 						name='job'
-						labelCol={{ xs: { offset: 1 }, sm: { offset: 2 } }}
+						labelCol={{ xs: { offset: 0 }, sm: { offset: 2 } }}
 						className='label-text'
 					>
 						<Input className={styles.form__input} />
@@ -169,19 +168,12 @@ const UserCreate: React.FC = () => {
 					<Form.Item
 					>
 						<Form.Item
-							name='image'
 							label='Image'
-							labelCol={{ xs: { offset: 1 }, sm: { span: 32, offset: 0 } }}
+							labelCol={{ xs: { offset: 0 }, sm: { span: 32, offset: 0 } }}
 							wrapperCol={{ span: 32 }}
 							valuePropName='fileList'
 							getValueFromEvent={normFile}
-							style={{
-								width: 470,
-								maxWidth: '100%',
-								padding: 0
-							}}
 						>
-
 							{loaded ? (
 								<Avatar
 									size={60}
@@ -206,12 +198,12 @@ const UserCreate: React.FC = () => {
 								{imageUrl ? '' : uploadButton}
 							</Upload>
 							<Form.Item
+								name='switch'
 								label='Connect as Observer'
 								labelCol={{ xs: { offset: 0 }, sm: { span: 8, offset: 1 } }}
 								wrapperCol={{ span: 8 }}
 								valuePropName='checked'
 								className={styles.label__switch}
-								name='switch'
 							>
 								<Switch />
 							</Form.Item>
@@ -224,20 +216,32 @@ const UserCreate: React.FC = () => {
 							}}
 							size={32}
 						>
-							<Button type='primary' htmlType='submit' size='large' className={styles.btn}>
+							<Button
+								type='primary'
+								htmlType='submit'
+								size='large'
+								className='button button__small'>
 								Confirm
               </Button>
-							<Button type='default' onClick={handleCancel} size='large' className={styles.btn}>
+							<Button
+								type='default'
+								onClick={handleCancel}
+								size='large'
+								className='button button__small'>
 								Cancel
               </Button>
-							<Button htmlType='reset' onClick={onReset} size='large' className={styles.btn}>
+							<Button
+								htmlType='reset'
+								onClick={onReset}
+								size='large'
+								className='button button__small'>
 								Reset
               </Button>
 						</Space>
 					</Form.Item>
 				</Form>
 			</Modal>
-		</section>
+		</section >
 	)
 }
 

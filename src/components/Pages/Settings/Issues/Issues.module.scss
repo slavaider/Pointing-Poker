@@ -1,52 +1,49 @@
 $modalFZ:15px;
+
 .modal {
-  div button span {
-    font-size: $modalFZ;
-    font-weight: 600;
-  }
-}
-.select  {
-  * {
-    font-size: $modalFZ;
-  }
+	div button span {
+		font-size: $modalFZ;
+		font-weight: 600;
+	}
 }
 
-.select,.input{
-  label{
-    font-size: $modalFZ;
-  }
+.select {
+	* {
+		font-size: $modalFZ;
+	}
 }
-.option{
-  *{
-    font-size: $modalFZ;
-  }
+
+.select,
+.input {
+	label {
+		font-size: $modalFZ;
+	}
+}
+
+.option {
+	* {
+		font-size: $modalFZ;
+	}
 }
 
 .container {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
- }
-.cardWrapper {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+}
 
-  width: fit-content;
-  min-height: 70px;
-  min-width: 300px;
-  margin: 10px 5px 0 0;
-  background: #fff;
-  padding: 10px;
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 4px;
-
-  font-weight: 500;
- }
-
-.cardTitle {
-  font-family: Roboto sans-serif;
-  font-weight: 300;
-  font-size: 28px;
-  line-height: 38px;
+.card__wrapper_new__issue {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: fit-content;
+	min-height: 70px;
+	min-width: 300px;
+	margin: 10px 5px 0 0;
+	background: #fff;
+	padding: 10px;
+	box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+	border-radius: 4px;
+	font-weight: 500;
+	color: #479685;
 }
