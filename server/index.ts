@@ -3,6 +3,7 @@ import http from 'http';
 import next, { NextApiHandler } from 'next';
 import socketio from 'socket.io';
 import cors from 'cors';
+import IUser from "../src/interfaces/user";
 
 const port: number = parseInt(process.env.PORT || '3000', 10);
 const dev: boolean = process.env.NODE_ENV !== 'production';
@@ -21,26 +22,21 @@ nextApp.prepare().then(async () => {
   io.attach(server);
 
   io.on('connection', (socket: socketio.Socket) => {
-    socket.on('join server', (user: any, cb) => {
-      if (!user.name && !user.avatar) {
-        return cb('wrong');
-      }
+    socket.on('join server', (user: IUser, cb) => {
       const newUser = {
         ...user,
         userId: socket.id,
       };
       socket.join(user.room);
       if (Object.prototype.hasOwnProperty.call(users, user.room)) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         users[user.room].push(newUser);
       } else {
         Object.assign(users, { [user.room]: [newUser] });
       }
       socket.broadcast.to(user.room).emit('add user', newUser);
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      return cb(users[user.room]);
+      return cb(users[user.room],newUser.userId);
     });
 
     socket.on('add user', (user, cb) => {

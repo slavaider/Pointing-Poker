@@ -1,58 +1,83 @@
-import React, { FormEvent, useEffect } from 'react';
+import React, {
+  FormEvent,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import Link from 'next/link';
 import { Button, Input, Space } from 'antd';
 import { v4 } from 'uuid';
-import useSocket from '../../hooks/useSocket';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { addUser, addUsers, selectUsers } from '../../store/usersSlice';
+import { useRouter } from 'next/router';
+import { useAppDispatch } from '../../hooks';
+import { addUser, addUsers, setUser } from '../../store/usersSlice';
+import UserCreate from '../UserCreate';
+import IUser from '../../interfaces/user';
+import SocketContext from '../../shared/SocketContext';
 
 const HomePage: React.FC = () => {
-  const socket = useSocket('http://localhost:3000');
+  const socket = useContext(SocketContext);
   const dispatch = useAppDispatch();
-  const users = useAppSelector(selectUsers);
+
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [isMaster, setIsMaster] = useState<boolean>(false);
+  const [url, setUrl] = useState<string>('');
+  const router = useRouter();
+
+  const showModel = () => {
+    setIsModalVisible(true);
+  };
 
   const connectByUrl = (event: FormEvent) => {
     event.preventDefault();
-    const url = (event.target as HTMLFormElement).url.value;
-    if (socket)
-      socket.emit(
-        'join server',
-        {
-          room: url,
-          name: 'random member',
-          avatar: 'random string',
-        },
-        (data: any) => {
-          dispatch(addUsers(data));
-        },
-      );
+    const urlData = (event.target as HTMLFormElement).url.value;
+    setUrl(urlData);
+    setIsMaster(false);
+    showModel();
   };
 
   const connect = () => {
-    if (socket)
-      socket.emit(
-        'join server',
-        {
-          room: v4(),
-          name: 'random member',
-          avatar: 'random string',
-        },
-        (data: any) => {
-          dispatch(addUsers(data));
-        },
-      );
+    setIsMaster(true);
+    showModel();
   };
+
+  const handleUser = useCallback(
+    (user: IUser) => {
+      if (socket) {
+        const room = isMaster ? v4() : url;
+        socket.emit(
+          'join server',
+          {
+            ...user,
+            isMaster,
+            room,
+          },
+          (response: IUser, userId: string) => {
+            dispatch(addUsers(response));
+            dispatch(setUser(userId));
+            router.push(`/lobby/${room}`);
+          },
+        );
+      }
+    },
+    [dispatch, isMaster, router, socket, url],
+  );
 
   useEffect(() => {
     if (socket) {
-      socket.on('add user', (data: any) => {
+      socket.on('add user', (data: IUser) => {
         dispatch(addUser(data));
       });
     }
-  }, [socket]);
+  }, [dispatch, socket]);
 
   return (
     <>
+      <UserCreate
+        isShow={isModalVisible}
+        hideModel={() => setIsModalVisible(false)}
+        handleUser={handleUser}
+      />
       <ul>
         <li>
           <Link href="/" replace>
@@ -65,7 +90,13 @@ const HomePage: React.FC = () => {
           </Link>
         </li>
         <li>
-          <Link href="/settings" replace>
+          <Link
+            href={{
+              pathname: '/settings/[roomId]',
+              query: { roomId: 1 },
+            }}
+            replace
+          >
             <a>Settings</a>
           </Link>
         </li>
@@ -88,19 +119,6 @@ const HomePage: React.FC = () => {
           </Space>
         </form>
       </Space>
-      <ul>
-        <>
-          {users.map((user: any) => {
-            return (
-              <li key={user.userId}>
-                {user.name} <br />
-                id: {user.userId} <br />
-                room: {user.room}
-              </li>
-            );
-          })}
-        </>
-      </ul>
     </>
   );
 };
