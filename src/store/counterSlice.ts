@@ -2,42 +2,57 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 // eslint-disable-next-line import/no-cycle
 import { AppThunk, RootState } from '.';
 
+interface Issue {
+  cardTitle: string,
+  priority: string,
+  linkToIssue: string,
+  id: number,
+}
+
 const initialState = {
   value: 0,
   status: 'idle',
   members: [],
-  issues: [
-    {
-      cardTitle: 'Issue 20',
-      priority: 'Low',
-      linkToIssue: '#',
-    },
-    {
-      cardTitle: 'Issue 25',
-      priority: 'Low',
-      linkToIssue: '#',
-    },
-    {
-      cardTitle: 'Issue 30',
-      priority: 'Low',
-      linkToIssue: '#',
-    },
-    {
-      cardTitle: 'Issue 35',
-      priority: 'Low',
-      linkToIssue: '#',
-    },
-  ],
+  issues:
+    [
+      {
+        cardTitle: 'Issue 20',
+        priority: 'Low',
+        linkToIssue: '#',
+        id: 1,
+      },
+      {
+        cardTitle: 'Issue 25',
+        priority: 'Low',
+        linkToIssue: '#',
+        id: 2,
+      },
+      {
+        cardTitle: 'Issue 30',
+        priority: 'Low',
+        linkToIssue: '#',
+        id: 3,
+      },
+      {
+        cardTitle: 'Issue 35',
+        priority: 'Low',
+        linkToIssue: '#',
+        id: 4,
+      },
+    ],
 };
 
 function fetchCount(amount = 1) {
-  return new Promise<{ data: number }>((resolve) => setTimeout(() => resolve({ data: amount }), 500));
+  return new Promise<{
+    data: number;
+  }>((resolve) => setTimeout(() => resolve({ data: amount }), 500));
 }
 
-export const incrementAsync = createAsyncThunk('counter/fetchCount', async (amount: number) => {
-  const response = await fetchCount(amount);
-  return response.data;
-});
+export const incrementAsync =
+  createAsyncThunk('counter/fetchCount', async (amount: number) => {
+    const response = await fetchCount(amount);
+    return response.data;
+  });
 
 export const counterSlice = createSlice({
   name: 'counter',
@@ -52,6 +67,19 @@ export const counterSlice = createSlice({
     incrementByAmount: (state, action: PayloadAction<number>) => {
       state.value += action.payload;
     },
+    addIssue: (state, action: PayloadAction<Issue>) => {
+      state.issues.push(action.payload);
+    },
+    removeIssue: (state, action: PayloadAction<number>) => {
+      state.issues.filter((element: { id: number; }, index: number) => {
+        element.id === action.payload
+          ? state.issues.splice(index, 1)
+          : '';
+      });
+    },
+    editIssue: (state, action) => {
+      state.issues[action.payload.id - 1] = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -65,7 +93,14 @@ export const counterSlice = createSlice({
   },
 });
 
-export const { increment, decrement, incrementByAmount } = counterSlice.actions;
+export const {
+  increment,
+  decrement,
+  incrementByAmount,
+  addIssue,
+  removeIssue,
+  editIssue
+} = counterSlice.actions;
 
 export const selectCount = (state: RootState): number => state.counter.value;
 
