@@ -1,9 +1,9 @@
 import React, {
   FC,
-  KeyboardEvent,
   useContext,
   useEffect,
   useState,
+  KeyboardEvent,
 } from 'react';
 import { Drawer, Input } from 'antd';
 import Image from 'next/image';
@@ -21,6 +21,9 @@ import {
 } from '../../store/usersSlice';
 import IMessage from '../../interfaces/message';
 
+export interface InputProps extends KeyboardEvent<HTMLInputElement> {
+  code: string;
+}
 const Header: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
   // TODO: переделать Logo и доверстать
 
@@ -28,21 +31,21 @@ const Header: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
   const dispatch = useAppDispatch();
 
   const [visible, setVisible] = useState(false);
+  const [text, setText] = useState('');
   const { roomId } = router.query;
   const user = useAppSelector(selectUser);
   const messages = useAppSelector(selectMessages);
 
-  const writeMessage = (event: KeyboardEvent<HTMLInputElement>) => {
-    if ((event as any).code === 'Enter') {
-      const target = event.target as HTMLInputElement;
+  const writeMessage = (event: InputProps) => {
+    if (event.code === 'Enter') {
       const message = {
         ...user,
-        text: target.value,
+        text,
         date: Date.now().toString(),
       };
       socket?.emit('send message', message, (response: IMessage[]) => {
         dispatch(addMessages(response));
-        target.value = '';
+        setText('');
       });
     }
   };
@@ -94,6 +97,8 @@ const Header: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
               <Input
                 placeholder="message..."
                 className={styles.messageText}
+                value={text}
+                onChange={(event) => setText(event.target.value)}
                 onKeyPress={writeMessage}
               />
             </Drawer>
