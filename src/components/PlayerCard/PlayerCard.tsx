@@ -2,29 +2,26 @@ import React, { FC, useState } from 'react';
 import { Card, Avatar, Badge, Modal } from 'antd';
 import { StopOutlined } from '@ant-design/icons';
 import styles from './PlayerCard.module.scss';
+import IUser from '../../interfaces/user';
 
 const { Meta } = Card;
 
-export interface PlayerCardProps {
-  avatarSrc?: string;
-  FirstName: string;
-  LastName?: string;
-  position?: string;
-  ItIsYou?: boolean;
-  isMaster?: boolean;
-  size?: 'max' | 'mini';
+export interface PlayerCardProps extends IUser {
+  ItIsYou: boolean;
+  isMaster: boolean;
+  size: 'max' | 'mini';
 }
 // todo поменять цвет исключения игрока томато
 
 const PlayerCard: FC<PlayerCardProps> = ({
-                                           avatarSrc,
-                                           FirstName,
-                                           LastName,
-                                           position,
-                                           ItIsYou,
-                                           isMaster = false,
-                                           size = 'max',
-                                         }: PlayerCardProps) => {
+  image,
+  firstName,
+  lastName,
+  job,
+  ItIsYou,
+  isMaster = false,
+  size = 'max',
+}: PlayerCardProps) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   return (
@@ -47,17 +44,17 @@ const PlayerCard: FC<PlayerCardProps> = ({
                     backgroundColor: '#60DABF',
                     boxShadow: 'inset 0px 4px 4px rgba(0, 0, 0, 0.25)',
                   }}
-                  src={avatarSrc}
+                  src={image}
                 >
-                  {FirstName[0] +
-                  (LastName
-                    ? LastName[0]
-                    : FirstName[FirstName.length - 1].toUpperCase())}
+                  {firstName[0] +
+                    (lastName
+                      ? firstName[0]
+                      : firstName[firstName.length - 1].toUpperCase())}
                 </Avatar>
               </Badge>
             }
-            title={position}
-            description={`${FirstName}  ${LastName || ''}`}
+            title={job}
+            description={`${firstName}  ${lastName || ''}`}
           />
           {!isMaster && !ItIsYou && (
             <button
@@ -89,17 +86,17 @@ const PlayerCard: FC<PlayerCardProps> = ({
                     backgroundColor: '#60DABF',
                     boxShadow: 'inset 0px 4px 4px rgba(0, 0, 0, 0.25)',
                   }}
-                  src={avatarSrc}
+                  src={image}
                 >
-                  {FirstName[0] +
-                  (LastName
-                    ? LastName[0]
-                    : FirstName[FirstName.length - 1].toUpperCase())}
+                  {firstName[0] +
+                    (lastName
+                      ? lastName[0]
+                      : firstName[firstName.length - 1].toUpperCase())}
                 </Avatar>
               </Badge>
             }
-            title={position}
-            description={`${FirstName}  ${LastName || ''}`}
+            title={job}
+            description={`${firstName}  ${lastName || ''}`}
           />
         </div>
       )}
@@ -112,7 +109,7 @@ const PlayerCard: FC<PlayerCardProps> = ({
         <p>Kick player?</p>
         <div>
           Are you really want to remove player{' '}
-          {`${FirstName} ${LastName || ''}`} from game session?
+          {`${firstName} ${lastName || ''}`} from game session?
         </div>
       </Modal>
     </>

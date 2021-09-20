@@ -9,16 +9,20 @@ import Link from 'next/link';
 import { Button, Input, Space } from 'antd';
 import { v4 } from 'uuid';
 import { useRouter } from 'next/router';
+import SocketContext from 'src/shared/SocketContext';
 import { useAppDispatch } from '../../hooks';
-import { addUser, addUsers, setUser } from '../../store/usersSlice';
+import {
+  addMessages,
+  addUser,
+  addUsers,
+  setUser,
+} from '../../store/usersSlice';
 import UserCreate from '../UserCreate';
 import IUser from '../../interfaces/user';
-import SocketContext from '../../shared/SocketContext';
 
 const HomePage: React.FC = () => {
-  const socket = useContext(SocketContext);
   const dispatch = useAppDispatch();
-
+  const socket = useContext(SocketContext);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [isMaster, setIsMaster] = useState<boolean>(false);
   const [url, setUrl] = useState<string>('');
@@ -42,33 +46,30 @@ const HomePage: React.FC = () => {
   };
 
   const handleUser = useCallback(
-    (user: IUser) => {
-      if (socket) {
-        const room = isMaster ? v4() : url;
-        socket.emit(
-          'join server',
-          {
-            ...user,
-            isMaster,
-            room,
-          },
-          (response: IUser, userId: string) => {
-            dispatch(addUsers(response));
-            dispatch(setUser(userId));
-            router.push(`/lobby/${room}`);
-          },
-        );
-      }
+    (userData: IUser) => {
+      const room = isMaster ? v4() : url;
+      socket?.emit(
+        'join server',
+        {
+          ...userData,
+          isMaster,
+          room,
+        },
+        (usersData: IUser[], messagesData: [], userResponse: IUser) => {
+          dispatch(addUsers(usersData));
+          dispatch(addMessages(messagesData));
+          dispatch(setUser(userResponse));
+          router.push(`/lobby/${room}`);
+        },
+      );
     },
     [dispatch, isMaster, router, socket, url],
   );
 
   useEffect(() => {
-    if (socket) {
-      socket.on('add user', (data: IUser) => {
-        dispatch(addUser(data));
-      });
-    }
+    socket?.on('add user', (data: IUser) => {
+      dispatch(addUser(data));
+    });
   }, [dispatch, socket]);
 
   return (
