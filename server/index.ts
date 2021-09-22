@@ -6,6 +6,7 @@ import socketio from 'socket.io';
 import cors from 'cors';
 import IUser from '../src/interfaces/user';
 import IMessage from '../src/interfaces/message';
+import {IOptions} from "../src/interfaces/options";
 
 const port: number = parseInt(process.env.PORT || '3000', 10);
 const dev: boolean = process.env.NODE_ENV !== 'production';
@@ -41,11 +42,23 @@ nextApp.prepare().then(async () => {
             } else {
                 Object.assign(users, {[user.room]: [newUser]});
                 Object.assign(messages, {[user.room]: []});
+                Object.assign(options, {[user.room]: {
+                        timerValue:'02:20',
+                        playable: true,
+                        swap: true,
+                        timer: true,
+                        scoreType: 'story point',
+                        scoreTypeShort: 'SP',
+                    }});
+                // TODO: other sockets
+                Object.assign(titles, {[user.room]: []});
+                Object.assign(issues, {[user.room]: []});
+                Object.assign(cards, {[user.room]: []});
             }
 
             socket.broadcast.to(user.room).emit('add user', newUser);
 
-            return cb(users[user.room], messages[user.room], newUser);
+            return cb(users[user.room], messages[user.room],options[user.room], newUser);
         });
 
         socket.on('add user', (user, cb) => {
@@ -62,40 +75,40 @@ nextApp.prepare().then(async () => {
             cb(message);
         });
 
-        socket.on('send option', (option: IMessage, cb) => {
-            options[option.room].push(option);
-            socket.broadcast.to(option.room).emit('add option', option);
-            cb(options[option.room]);
+        socket.on('send option', (option: IOptions,room, cb) => {
+            options[room] = option;
+            socket.broadcast.to(room).emit('add option', option);
+            cb(options[room]);
         });
 
         socket.on('add option', (option, cb) => {
             cb(option);
         });
 
-        socket.on('send title', (title: IMessage, cb) => {
-            titles[option.room] = title;
-            socket.broadcast.to(title.room).emit('add title', title);
-            cb(titles[title.room]);
+        socket.on('send title', (title: IMessage, room,cb) => {
+            titles[room] = title;
+            socket.broadcast.to(room).emit('add title', title);
+            cb(titles[room]);
         });
 
         socket.on('add title', (title, cb) => {
             cb(title);
         });
 
-        socket.on('send issue', (issue: IMessage, cb) => {
-            issues[issue.room].push(issue);
-            socket.broadcast.to(issue.room).emit('add issue', issue);
-            cb(issues[issue.room]);
+        socket.on('send issue', (issue: IMessage,room, cb) => {
+            issues[room].push(issue);
+            socket.broadcast.to(room).emit('add issue', issue);
+            cb(issues[room]);
         });
 
         socket.on('add issue', (issue, cb) => {
             cb(issue);
         });
 
-        socket.on('send card', (card: IMessage, cb) => {
-            cards[issue.room].push(card);
-            socket.broadcast.to(card.room).emit('add card', card);
-            cb(cards[card.room]);
+        socket.on('send card', (card: IMessage,room, cb) => {
+            cards[room].push(card);
+            socket.broadcast.to(room).emit('add card', card);
+            cb(cards[room]);
         });
 
         socket.on('add card', (card, cb) => {

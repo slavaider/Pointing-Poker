@@ -1,20 +1,28 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-// eslint-disable-next-line import/no-cycle
 import { RootState } from './index';
 import IUser from '../interfaces/user';
 import IMessage from '../interfaces/message';
+import { IOptions } from '../interfaces/options';
 
 type InitialStateType = {
   users: IUser[];
   user: null | IUser;
   messages: IMessage[];
+  options: IOptions;
 };
 
 const initialState: InitialStateType = {
   users: [],
   user: null,
   messages: [],
-  // options:{}
+  options: {
+    timerValue: '02:20',
+    playable: true,
+    swap: true,
+    timer: true,
+    scoreType: 'story point',
+    scoreTypeShort: 'SP',
+  },
 };
 
 const usersSlice = createSlice({
@@ -33,18 +41,29 @@ const usersSlice = createSlice({
     addMessage: (state, action: PayloadAction<IMessage>) => {
       state.messages.push(action.payload);
     },
+    addOptions: (state, action: PayloadAction<IOptions>) => {
+      state.options = action.payload;
+    },
     setUser: (state, action) => {
       state.user = action.payload;
     },
   },
 });
 
-export const { addUsers, addUser, setUser, addMessages, addMessage } =
-  usersSlice.actions;
+export const {
+  addUsers,
+  addUser,
+  setUser,
+  addMessages,
+  addMessage,
+  addOptions,
+} = usersSlice.actions;
 
 export const selectUsers = (state: RootState): IUser[] => state.users.users;
 export const selectMessages = (state: RootState): IMessage[] =>
   state.users.messages;
 export const selectUser = (state: RootState): null | IUser => state.users.user;
+export const selectOptions = (state: RootState): IOptions =>
+  state.users.options;
 
 export default usersSlice.reducer;
