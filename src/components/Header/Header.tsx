@@ -24,6 +24,8 @@ import IMessage from '../../interfaces/message';
 export interface InputProps extends KeyboardEvent<HTMLInputElement> {
   code: string;
 }
+const ENTER = 'Enter';
+
 const Header: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
   // TODO: переделать Logo и доверстать
 
@@ -37,7 +39,7 @@ const Header: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
   const messages = useAppSelector(selectMessages);
 
   const writeMessage = (event: InputProps) => {
-    if (event.code === 'Enter') {
+    if (event.code === ENTER) {
       const message = {
         ...user,
         text,

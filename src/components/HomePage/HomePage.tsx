@@ -15,10 +15,13 @@ import {
   addMessages,
   addUser,
   addUsers,
+  addOptions,
   setUser,
 } from '../../store/usersSlice';
 import UserCreate from '../UserCreate';
 import IUser from '../../interfaces/user';
+import IMessage from '../../interfaces/message';
+import { IOptions } from '../../interfaces/options';
 
 const HomePage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -55,9 +58,15 @@ const HomePage: React.FC = () => {
           isMaster,
           room,
         },
-        (usersData: IUser[], messagesData: [], userResponse: IUser) => {
+        (
+          usersData: IUser[],
+          messagesData: IMessage[],
+          options: IOptions,
+          userResponse: IUser,
+        ) => {
           dispatch(addUsers(usersData));
           dispatch(addMessages(messagesData));
+          dispatch(addOptions(options));
           dispatch(setUser(userResponse));
           router.push(`/lobby/${room}`);
         },
