@@ -14,6 +14,7 @@ const initialState: InitialStateType = {
   users: [],
   user: null,
   messages: [],
+  // options:{}
 };
 
 const usersSlice = createSlice({
