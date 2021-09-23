@@ -14,17 +14,16 @@ export interface PlayerCardProps {
   isMaster?: boolean;
   size?: 'max' | 'mini';
 }
-// todo поменять цвет исключения игрока томато
 
 const PlayerCard: FC<PlayerCardProps> = ({
-                                           avatarSrc,
-                                           FirstName,
-                                           LastName,
-                                           position,
-                                           ItIsYou,
-                                           isMaster = false,
-                                           size = 'max',
-                                         }: PlayerCardProps) => {
+  avatarSrc,
+  FirstName,
+  LastName,
+  position,
+  ItIsYou,
+  isMaster = false,
+  size = 'max',
+}: PlayerCardProps) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   return (
@@ -50,9 +49,9 @@ const PlayerCard: FC<PlayerCardProps> = ({
                   src={avatarSrc}
                 >
                   {FirstName[0] +
-                  (LastName
-                    ? LastName[0]
-                    : FirstName[FirstName.length - 1].toUpperCase())}
+                    (LastName
+                      ? LastName[0]
+                      : FirstName[FirstName.length - 1].toUpperCase())}
                 </Avatar>
               </Badge>
             }
@@ -92,9 +91,9 @@ const PlayerCard: FC<PlayerCardProps> = ({
                   src={avatarSrc}
                 >
                   {FirstName[0] +
-                  (LastName
-                    ? LastName[0]
-                    : FirstName[FirstName.length - 1].toUpperCase())}
+                    (LastName
+                      ? LastName[0]
+                      : FirstName[FirstName.length - 1].toUpperCase())}
                 </Avatar>
               </Badge>
             }

@@ -5,7 +5,7 @@ const GameControl: FC = () => {
   return (
     <div>
       <Button>Start Game</Button>
-      <Button backgroundColor={'#fff'} color={'2B3A67'}>
+      <Button backgroundColor={'#fff'} color={'#2B3A67'}>
         Cancel game
       </Button>
       <style jsx>{`

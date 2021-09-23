@@ -4,7 +4,22 @@ import styles from './Card-collection.module.scss';
 import Card from './Card';
 import stylesPage from '../Settings.module.scss';
 
-const CardCollection: FC = () => {
+export interface CardData {
+  issueId: string | number;
+  cardValue: string | number;
+  cardStatisticValue: string | number;
+}
+interface CardCollectionProps {
+  cardWidth?: string;
+  isSettingsPage: boolean;
+  cardData: CardData[];
+}
+
+const CardCollection: FC<CardCollectionProps> = ({
+  cardWidth,
+  isSettingsPage,
+  cardData,
+}) => {
   // todo использоовать для изменения значения
   // const [valueCard, setValueCard] = useState<string>('1');
 
@@ -13,21 +28,42 @@ const CardCollection: FC = () => {
   };
 
   return (
-    <div>
-      <h4 className={stylesPage.title}>Add card values:</h4>
+    <div style={{ width: 'fit-content' }}>
+      {isSettingsPage ? (
+        <h4 className={stylesPage.title}>Add card values:</h4>
+      ) : (
+        <h4 className={stylesPage.title}> Statistics:</h4>
+      )}
 
       <div id={'cardsContainer'} className={styles.cardsContainer}>
-        <Card />
+        {cardData.map(({ issueId, cardStatisticValue, cardValue }) => {
+          return (
+            <div key={`${issueId} ${cardValue}`}>
+              <Card
+                width={cardWidth}
+                cardValue={cardValue}
+                isSettingsPage={isSettingsPage}
+              />
+              {!isSettingsPage && (
+                <div className={styles.cardStatisticValue}>
+                  {cardStatisticValue}
+                </div>
+              )}
+            </div>
+          );
+        })}
 
-        <div
-          onClick={addNewCard}
-          style={{ cursor: 'pointer' }}
-          className={styles.cardWrapper}
-        >
-          <div style={{ margin: 'auto' }} className={styles.cardTitle}>
-            <PlusCircleOutlined style={{ transform: 'scale(2)' }} />
+        {isSettingsPage && (
+          <div
+            onClick={addNewCard}
+            className={styles.cardWrapper}
+            style={{ cursor: 'pointer', width: '98px' }}
+          >
+            <div style={{ margin: 'auto' }} className={styles.cardTitle}>
+              <PlusCircleOutlined style={{ transform: 'scale(2)' }} />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
