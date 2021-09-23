@@ -1,15 +1,15 @@
-import React, { FC, useState } from 'react';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import styles from './SettingsIssuesCard.module.scss';
-import ModalIssues from './Issues-modal';
-import { removeIssue } from 'src/store/counterSlice';
-import { useAppDispatch } from 'src/hooks';
+import React, { FC, useState } from 'react'
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
+import styles from './SettingsIssuesCard.module.scss'
+import ModalIssues from './Issues-modal'
+import { removeIssue } from 'src/store/counterSlice'
+import { useAppDispatch } from 'src/hooks'
 
 interface SettingsIssuesCardProps {
-  cardTitle: string;
-  priority: string;
-  linkToIssue: string;
-  id: number;
+  cardTitle: string
+  priority: string
+  linkToIssue: string
+  id: number
 }
 
 const SettingsIssuesCard: FC<SettingsIssuesCardProps> = ({
@@ -18,15 +18,12 @@ const SettingsIssuesCard: FC<SettingsIssuesCardProps> = ({
   linkToIssue,
   id
 }) => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const isModalSet = () => { setIsModalVisible(false); };
-  const dispatch = useAppDispatch();
-  const issueEdit = () => {
-    setIsModalVisible(true);
-  };
+  const [isModalVisible, setIsModalVisible] = useState(false)
+  const isModalSet = () => { setIsModalVisible(false) }
+  const dispatch = useAppDispatch()
   const issueRemove = (value: number) => {
-    dispatch(removeIssue(value));
-  };
+    dispatch(removeIssue(value))
+  }
 
   return (
     <div>
@@ -39,18 +36,18 @@ const SettingsIssuesCard: FC<SettingsIssuesCardProps> = ({
         </div>
         <div>
           <span className={styles.button__edit}>
-            <EditOutlined onClick={() => { issueEdit(); }}
+            <EditOutlined onClick={() => { setIsModalVisible(true) }}
             />
           </span>
           <span className={styles.button__delete}>
-            <DeleteOutlined onClick={() => { issueRemove(id); }} style={{ color: 'red' }} />
+            <DeleteOutlined onClick={() => { issueRemove(id) }} style={{ color: 'red' }} />
           </span>
         </div>
       </div >
       {
         isModalVisible
           ? <ModalIssues
-            isModal={isModalVisible}
+            isModalVisible={isModalVisible}
             isModalSet={isModalSet}
             props={{
               cardTitle: cardTitle,
@@ -64,7 +61,7 @@ const SettingsIssuesCard: FC<SettingsIssuesCardProps> = ({
           : ''
       }
     </div>
-  );
-};
+  )
+}
 
-export default SettingsIssuesCard;
+export default SettingsIssuesCard

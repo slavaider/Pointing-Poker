@@ -1,49 +1,60 @@
-import React, { FC, useState } from 'react';
-import { Modal, Select, Form, Input, Button } from 'antd';
-import styles from './Issues.module.scss';
-import { useAppDispatch } from 'src/hooks';
-import { addIssue, editIssue } from 'src/store/counterSlice';
-const { Option } = Select;
+import React, { FC } from 'react'
+import { Modal, Select, Form, Input, Button } from 'antd'
+import styles from './Issues.module.scss'
+import { useAppDispatch } from 'src/hooks'
+import { addIssue, editIssue } from 'src/store/counterSlice'
+const { Option } = Select
 
 interface ModalIssuesProps {
-  isModal: boolean;
-  isModalSet: () => void;
+  isModalVisible: boolean
+  isModalSet: () => void
   props: {
-    cardTitle: string;
-    linkToIssue: string;
-    priority: string;
-    id: number;
-  };
-  issueMode: string;
-  modalTitle: string;
+    cardTitle: string
+    linkToIssue: string
+    priority: string
+    id: number
+  }
+  issueMode: string
+  modalTitle: string
 }
 
 const ModalIssues: FC<ModalIssuesProps> = ({
-  isModal,
+  isModalVisible,
   isModalSet,
   props,
   issueMode,
   modalTitle
 }) => {
-  const [isModalVisible, setIsModalVisible] = useState(isModal);
-  const dispatch = useAppDispatch();
-  const [form] = Form.useForm();
+  const dispatch = useAppDispatch()
+  const [form] = Form.useForm()
+
   const onCancel = () => {
-    setIsModalVisible(false);
-    isModalSet();
-  };
+    isModalSet()
+  }
+
+  const onClick = () => {
+    form
+      .validateFields()
+      .then((value) => {
+        value.id = props.id
+        onSubmit(value)
+      })
+      .catch((info) => {
+        console.log("Validate Failed:", info)
+      })
+  }
+
   const onSubmit = (value: {
     cardTitle: string,
     linkToIssue: string,
     priority: string,
-    id: number;
+    id: number
   }) => {
-    setIsModalVisible(false);
-    isModalSet();
+    isModalSet()
     issueMode === 'create'
       ? dispatch(addIssue(value))
-      : dispatch(editIssue(value));
-  };
+      : dispatch(editIssue(value))
+  }
   return (
     <div>
       <Modal
@@ -61,17 +72,7 @@ const ModalIssues: FC<ModalIssuesProps> = ({
           <Button
             key='submit'
             type='primary'
-            onClick={() => {
-              form
-                .validateFields()
-                .then((value) => {
-                  value.id = props.id;
-                  onSubmit(value);
-                })
-                .catch((info) => {
-                  console.log("Validate Failed:", info);
-                });
-            }}
+            onClick={onClick}
           >
             Submit
           </Button>
@@ -130,7 +131,7 @@ const ModalIssues: FC<ModalIssuesProps> = ({
         </Form>
       </Modal>
     </div >
-  );
-};
+  )
+}
 
-export default ModalIssues;
+export default ModalIssues
