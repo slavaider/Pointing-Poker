@@ -1,4 +1,4 @@
-.cardWrapper{
+.card__wrapper {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -6,35 +6,84 @@
   width: 98px;
   margin: 10px 10px 0 0;
   padding: 5px;
-  border: 1px solid #EEEEEE;
+  border: 1px solid #eeeeee;
   box-sizing: border-box;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 14px;
+  position: relative;
 }
-.cardsContainer{
+.cards__container {
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
   align-items: center;
 }
-.cardVal__top{
+.cardVal__top {
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  svg{
+  svg {
     width: 15px;
     height: 15px;
   }
 }
-.cardTitle{
+.card__title {
   text-align: center;
 }
-.cardVal__bottom{
+.cardVal__bottom {
   text-align: start;
   transform: rotate(180deg);
 }
-.cardVal__bottom, .cardVal__top span{
+.cardVal__bottom,
+.cardVal__top span {
   font-size: 15px;
   line-height: 15px;
+}
+
+.button__edit,
+.button__delete {
+  cursor: pointer;
+  margin-left: 11px;
+}
+
+.button__edit {
+  margin-left: 5px;
+}
+
+.button__delete {
+  color: red;
+}
+
+.input__edit {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  &_card {
+    position: absolute;
+    font-size: 15px;
+    left: -2px;
+    top: 2px;
+    max-width: 69.5%;
+    margin: 0 0;
+    border: 0 transparent;
+    outline: none;
+  }
+
+  &_card:focus {
+    background-color: white;
+  }
+
+  &_button {
+    position: absolute;
+    padding: 0px 2px;
+    height: 33px;
+    top: 7px;
+    right: 0;
+  }
+
+  &_button > span {
+    font-size: 16px;
+  }
 }

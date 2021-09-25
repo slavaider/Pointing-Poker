@@ -1,4 +1,4 @@
-.cardWrapper {
+.card__wrapper {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -13,15 +13,16 @@
   width: 98px;
   margin: 10px 10px 0 0;
   padding: 5px;
-  border: 1px solid #EEEEEE;
+  border: 1px solid #eeeeee;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   -webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
           box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 14px;
+  position: relative;
 }
 
-.cardsContainer {
+.cards__container {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -52,7 +53,7 @@
   height: 15px;
 }
 
-.cardTitle {
+.card__title {
   text-align: center;
 }
 
@@ -62,8 +63,63 @@
           transform: rotate(180deg);
 }
 
-.cardVal__bottom, .cardVal__top span {
+.cardVal__bottom,
+.cardVal__top span {
   font-size: 15px;
   line-height: 15px;
+}
+
+.button__edit,
+.button__delete {
+  cursor: pointer;
+  margin-left: 11px;
+}
+
+.button__edit {
+  margin-left: 5px;
+}
+
+.button__delete {
+  color: red;
+}
+
+.input__edit {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.input__edit_card {
+  position: absolute;
+  font-size: 15px;
+  left: -2px;
+  top: 2px;
+  max-width: 69.5%;
+  margin: 0 0;
+  border: 0 transparent;
+  outline: none;
+}
+
+.input__edit_card:focus {
+  background-color: white;
+}
+
+.input__edit_button {
+  position: absolute;
+  padding: 0px 2px;
+  height: 33px;
+  top: 7px;
+  right: 0;
+}
+
+.input__edit_button > span {
+  font-size: 16px;
 }
 /*# sourceMappingURL=Card-collection.module.css.map */

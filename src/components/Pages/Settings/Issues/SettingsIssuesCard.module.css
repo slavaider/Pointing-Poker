@@ -23,7 +23,7 @@
 }
 
 .card__title {
-  font-family: Roboto, sans-serif;
+  font-family: Roboto, sans-serif;
   font-weight: 300;
   font-size: 28px;
   line-height: 38px;
@@ -48,5 +48,9 @@
 .button__delete {
   cursor: pointer;
   margin-left: 10px;
+}
+
+.button__delete {
+  color: red;
 }
 /*# sourceMappingURL=SettingsIssuesCard.module.css.map */

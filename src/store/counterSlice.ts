@@ -1,45 +1,56 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 // eslint-disable-next-line import/no-cycle
-import { AppThunk, RootState } from '.';
+import { AppThunk, RootState } from ".";
 
 interface Issue {
-  cardTitle: string,
-  priority: string,
-  linkToIssue: string,
-  id: number,
+  cardTitle: string;
+  priority: string;
+  linkToIssue: string;
+  id: number;
 }
 
 const initialState = {
   value: 0,
-  status: 'idle',
+  status: "idle",
   members: [],
-  issues:
-    [
-      {
-        cardTitle: 'Issue 20',
-        priority: 'Low',
-        linkToIssue: '#',
-        id: 1,
-      },
-      {
-        cardTitle: 'Issue 25',
-        priority: 'Low',
-        linkToIssue: '#',
-        id: 2,
-      },
-      {
-        cardTitle: 'Issue 30',
-        priority: 'Low',
-        linkToIssue: '#',
-        id: 3,
-      },
-      {
-        cardTitle: 'Issue 35',
-        priority: 'Low',
-        linkToIssue: '#',
-        id: 4,
-      },
-    ],
+  issues: [
+    {
+      cardTitle: "Issue 20",
+      priority: "Low",
+      linkToIssue: "#",
+      id: 1,
+    },
+    {
+      cardTitle: "Issue 25",
+      priority: "Low",
+      linkToIssue: "#",
+      id: 2,
+    },
+    {
+      cardTitle: "Issue 30",
+      priority: "Low",
+      linkToIssue: "#",
+      id: 3,
+    },
+    {
+      cardTitle: "Issue 35",
+      priority: "Low",
+      linkToIssue: "#",
+      id: 4,
+    },
+  ],
+  cards: [
+    {
+      cardValue: 13,
+      cardTitle: "SP",
+      id: 1,
+    },
+    {
+      cardValue: 15,
+      cardTitle: "SP",
+      id: 2,
+    },
+  ],
 };
 
 function fetchCount(amount = 1) {
@@ -48,14 +59,16 @@ function fetchCount(amount = 1) {
   }>((resolve) => setTimeout(() => resolve({ data: amount }), 500));
 }
 
-export const incrementAsync =
-  createAsyncThunk('counter/fetchCount', async (amount: number) => {
+export const incrementAsync = createAsyncThunk(
+  "counter/fetchCount",
+  async (amount: number) => {
     const response = await fetchCount(amount);
     return response.data;
-  });
+  }
+);
 
 export const counterSlice = createSlice({
-  name: 'counter',
+  name: "counter",
   initialState,
   reducers: {
     increment: (state) => {
@@ -71,23 +84,40 @@ export const counterSlice = createSlice({
       state.issues.push(action.payload);
     },
     removeIssue: (state, action: PayloadAction<number>) => {
-      state.issues.filter((element: { id: number; }, index: number) => {
-        element.id === action.payload
-          ? state.issues.splice(index, 1)
-          : '';
+      state.issues.filter((element: { id: number }, index: number) => {
+        element.id === action.payload ? state.issues.splice(index, 1) : "";
       });
     },
     editIssue: (state, action) => {
-      state.issues[action.payload.id - 1] = action.payload;
-    }
+      state.issues.filter((element: { id: number }, index: number) => {
+        element.id === action.payload.id
+          ? (state.issues[index] = action.payload)
+          : "";
+      });
+    },
+    addCard: (state, action) => {
+      state.cards.push(action.payload);
+    },
+    deleteCard: (state, action) => {
+      state.cards.filter((element: { id: number }, index: number) => {
+        element.id === action.payload ? state.cards.splice(index, 1) : "";
+      });
+    },
+    editCard: (state, action) => {
+      state.cards.filter((element: { id: number }, index: number) => {
+        element.id === action.payload.id
+          ? (state.cards[index].cardValue = action.payload.cardValue)
+          : "";
+      });
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(incrementAsync.pending, (state) => {
-        state.status = 'loading';
+        state.status = "loading";
       })
       .addCase(incrementAsync.fulfilled, (state, action) => {
-        state.status = 'idle';
+        state.status = "idle";
         state.value += action.payload;
       });
   },
@@ -99,12 +129,17 @@ export const {
   incrementByAmount,
   addIssue,
   removeIssue,
-  editIssue
+  editIssue,
+  addCard,
+  deleteCard,
+  editCard,
 } = counterSlice.actions;
 
 export const selectCount = (state: RootState): number => state.counter.value;
 
-export const incrementByAmountThunk = (amount: number): AppThunk => async (dispatch) => {
+export const incrementByAmountThunk = (amount: number): AppThunk => async (
+  dispatch
+) => {
   const response = await fetchCount(amount);
   dispatch(incrementByAmount(response.data));
 };
