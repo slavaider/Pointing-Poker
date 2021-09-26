@@ -10,25 +10,25 @@ const AppLayout: FC = ({ children }) => {
   const socket = useSocket('http://localhost:3000');
 
   return (
-      <SocketContext.Provider value={socket}>
-        <Head>
-          <title>Poker Planing</title>
-          <link rel="shortcut icon" href="/favicon.ico" />
-        </Head>
-        <Header />
-        <Layout>
-          <main
-            style={{
-              flex: '1 1 auto',
-              padding: '0 20px',
-              backgroundColor: '#fff',
-            }}
-          >
-            {children}
-          </main>
-        </Layout>
-        <Footer />
-      </SocketContext.Provider>
+    <SocketContext.Provider value={socket}>
+      <Head>
+        <title>Poker Planing</title>
+        <link rel="shortcut icon" href="/favicon.ico" />
+      </Head>
+      <Header />
+      <Layout>
+        <main
+          style={{
+            flex: '1 1 auto',
+            padding: '0 20px',
+            backgroundColor: '#fff',
+          }}
+        >
+          {children}
+        </main>
+      </Layout>
+      <Footer />
+    </SocketContext.Provider>
   );
 };
 

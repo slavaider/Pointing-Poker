@@ -1,21 +1,21 @@
-import React, { FC, useState } from "react";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import { Input, Button } from "antd";
-import styles from "./Card-collection.module.scss";
-import { useAppDispatch } from "src/hooks";
-import { deleteCard, editCard } from "src/store/counterSlice";
+import React, { FC, useState } from 'react';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Input, Button } from 'antd';
+import { useAppDispatch } from 'src/hooks';
+import { deleteCard, editCard } from 'src/store/counterSlice';
+import styles from './Card-collection.module.scss';
 
-interface card {
+interface CardProps {
   cardData: {
     cardValue: number;
     cardTitle: string;
     id: number;
   };
 }
-const Card: FC<card> = (props) => {
+const Card: FC<CardProps> = (props) => {
   const [isModeEdit, setIsModeEdit] = useState<boolean>(false);
   const dispatch = useAppDispatch();
-  let { cardValue, cardTitle, id } = props.cardData;
+  const { cardValue, cardTitle, id } = props.cardData;
   const editMode = () => {
     setIsModeEdit(true);
   };
@@ -71,7 +71,7 @@ const Card: FC<card> = (props) => {
             </Button>
           </>
         ) : (
-          ""
+          ''
         )}
       </div>
     </>
