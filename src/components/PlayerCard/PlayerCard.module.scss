@@ -1,11 +1,34 @@
 .wrapper{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
   width: fit-content;
   min-width: 300px;
-  height: 90px;
-  padding: 12px 14px 13px;
-  margin-top: 16px;
+  min-height: 70px;
+  height: fit-content;
+  padding: 12px 10px 0;
+  margin: 16px 0 0 1px;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 4px;
+  background-color: #fff;
+
+  &.min{
+    min-width: 150px;
+    min-height: 45px;
+    padding-bottom: 5px;
+    div {
+      font-size: 12px;
+      line-height: 15px;
+      font-weight: 600;
+      :last-child{
+        font-size: 15px;
+      }
+    }
+    div span{
+      font-size: 10px;
+    }
+  }
 
   *{
     font-family: Roboto, sans-serif;
@@ -21,16 +44,15 @@
     font-weight: 700;
     color: #ffffff;
   }
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+
 }
 .button{
   background-color: inherit;
   height: 30px;
   margin: 10px;
   svg{
-    width: 30px !important;
+    width: 25px !important;
     height: 100% !important;
+    fill: tomato;
   }
 }

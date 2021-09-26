@@ -7,16 +7,32 @@ import { useAppSelector } from "src/hooks";
 import { useAppDispatch } from "src/hooks";
 import { addCard } from "src/store/counterSlice";
 
+export interface CardData {
+  issueId: string | number;
+  cardValue: string | number;
+  cardStatisticValue: string | number;
+}
+interface CardCollectionProps {
+  cardWidth?: string;
+  isSettingsPage: boolean;
+  cardData: CardData[];
+}
+
 interface cards {
   cardValue: number;
   cardTitle: string;
   id: number;
 }
-
-const CardCollection: FC<cards> = () => {
+    
+const CardCollection: FC<CardCollectionProps> = ({
+  cardWidth,
+  isSettingsPage,
+  cardData,
+}) => {
   const cards: Array<cards> = useAppSelector((state) => state.settings.cards);
   const dispatch = useAppDispatch();
   const idLastCard = cards.length > 0 ? cards[cards.length - 1].id : 0;
+
 
   const addNewCard = () => {
     const newCardData = {
@@ -49,7 +65,7 @@ const CardCollection: FC<cards> = () => {
               onClick={addNewCard}
             />
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

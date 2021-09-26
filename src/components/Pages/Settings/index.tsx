@@ -9,12 +9,14 @@ import { MembersProps } from './Team-members/Team-members';
 import Issues from './Issues';
 import GameSettings from './Game-settings';
 import CardCollection from './Card-collection';
+import { CardData } from './Card-collection/Card-collection';
 
 // todo удалить , заменить на данные из сервера socket      или нет)
-const title = 'Spring 23 planning (issues 13, 533, 5623, 3252, 6623, ...)';
+export const title =
+  'Spring 23 planning (issues 13, 533, 5623, 3252, 6623, ...)';
 //
 // todo получаем массив с командой
-const membersArr: MembersProps[] = [
+export const membersArr: MembersProps[] = [
   {
     id: 1,
     FirstName: 'David',
@@ -41,17 +43,22 @@ const membersArr: MembersProps[] = [
   },
 ];
 
+const cardData: CardData[] = [
+  { cardValue: 'undefined', cardStatisticValue: '', issueId: 123 },
+  { cardValue: 13, cardStatisticValue: '', issueId: 123 },
+];
+
 const Settings: FC = () => {
   return (
     <div className={styles.SettingsContainer}>
-      <TitleServer title={title} />
+      <TitleServer title={title} isSettingsPage />
       <ScramMaster />
       <LinkToLobby linkToLobby={'http://pockerplanning.c...'} />
       <GameControl />
       <TeamMembers membersArr={membersArr} />
-      <Issues />
+      <Issues isMaster />
       <GameSettings />
-      <CardCollection />
+      <CardCollection isSettingsPage cardData={cardData} />
     </div>
   );
 };

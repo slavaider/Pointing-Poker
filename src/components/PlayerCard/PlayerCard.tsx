@@ -12,8 +12,8 @@ export interface PlayerCardProps {
   position?: string;
   ItIsYou?: boolean;
   isMaster?: boolean;
+  size?: 'max' | 'mini';
 }
-// todo поменять цвет исключения игрока томато
 
 const PlayerCard: FC<PlayerCardProps> = ({
   avatarSrc,
@@ -22,50 +22,86 @@ const PlayerCard: FC<PlayerCardProps> = ({
   position,
   ItIsYou,
   isMaster = false,
+  size = 'max',
 }: PlayerCardProps) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   return (
     <>
-      <div
-        style={ItIsYou ? { backgroundColor: 'lightcyan' } : undefined}
-        className={styles.wrapper}
-      >
-        <Meta
-          avatar={
-            <Badge dot={ItIsYou}>
-              <Avatar
-                style={{
-                  width: '62px',
-                  height: '62px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  color: 'fff',
-                  backgroundColor: '#60DABF',
-                  boxShadow: 'inset 0px 4px 4px rgba(0, 0, 0, 0.25)',
-                }}
-                src={avatarSrc}
-              >
-                {FirstName[0] +
-                  (LastName
-                    ? LastName[0]
-                    : FirstName[FirstName.length - 1].toUpperCase())}
-              </Avatar>
-            </Badge>
-          }
-          title={position}
-          description={`${FirstName}  ${LastName || ''}`}
-        />
-        {!isMaster && !ItIsYou && (
-          <button
-            onClick={() => setIsModalVisible(true)}
-            type={'button'}
-            className={styles.button}
-          >
-            <StopOutlined />
-          </button>
-        )}
-      </div>
+      {size === 'max' && (
+        <div
+          style={ItIsYou ? { backgroundColor: '#9af7f7' } : undefined}
+          className={styles.wrapper}
+        >
+          <Meta
+            avatar={
+              <Badge dot={ItIsYou}>
+                <Avatar
+                  style={{
+                    width: '55px',
+                    height: '55px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    color: 'fff',
+                    backgroundColor: '#60DABF',
+                    boxShadow: 'inset 0px 4px 4px rgba(0, 0, 0, 0.25)',
+                  }}
+                  src={avatarSrc}
+                >
+                  {FirstName[0] +
+                    (LastName
+                      ? LastName[0]
+                      : FirstName[FirstName.length - 1].toUpperCase())}
+                </Avatar>
+              </Badge>
+            }
+            title={position}
+            description={`${FirstName}  ${LastName || ''}`}
+          />
+          {!isMaster && !ItIsYou && (
+            <button
+              onClick={() => setIsModalVisible(true)}
+              type={'button'}
+              className={styles.button}
+            >
+              <StopOutlined />
+            </button>
+          )}
+        </div>
+      )}
+
+      {size === 'mini' && (
+        <div
+          style={ItIsYou ? { backgroundColor: '#9af7f7' } : undefined}
+          className={`${styles.wrapper} ${styles.min}`}
+        >
+          <Meta
+            avatar={
+              <Badge dot={ItIsYou}>
+                <Avatar
+                  style={{
+                    width: '30px',
+                    height: '30px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    color: 'fff',
+                    backgroundColor: '#60DABF',
+                    boxShadow: 'inset 0px 4px 4px rgba(0, 0, 0, 0.25)',
+                  }}
+                  src={avatarSrc}
+                >
+                  {FirstName[0] +
+                    (LastName
+                      ? LastName[0]
+                      : FirstName[FirstName.length - 1].toUpperCase())}
+                </Avatar>
+              </Badge>
+            }
+            title={position}
+            description={`${FirstName}  ${LastName || ''}`}
+          />
+        </div>
+      )}
 
       <Modal
         visible={isModalVisible}

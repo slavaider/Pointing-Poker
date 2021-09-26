@@ -13,7 +13,14 @@ interface Cards {
   id: number;
 }
 
-const Issues: FC = () => {
+
+interface IssuesProps {
+  isMaster?: boolean;
+  width?: string;
+}
+
+const Issues: FC<IssuesProps> = ({ isMaster = false, width }) => {
+  const issues = useAppSelector((state) => state.settings.issues);
   const issues: Cards[] = useAppSelector((state) => state.settings.issues);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const priorityValueDefault = "Low";
@@ -22,9 +29,10 @@ const Issues: FC = () => {
     setIsModalVisible(true);
   };
   return (
-    <div>
-      <h4 className={stylesPage.title}>Issues:</h4>
+    <div style={{ width }}>
+      {isMaster && <h4 className={stylesPage.title}>Issues:</h4>}
       <div className={styles.container}>
+
         {issues.map((item, index) => (
           <SettingsIssuesCard
             cardTitle={item.cardTitle}
