@@ -1,7 +1,7 @@
 
 .input {
   max-width: 324px;
-  width: fit-content;
+  width: 100%;
   height: 36px;
   font-size: 20px;
   border: 1px solid #2b3a67;
@@ -17,6 +17,9 @@
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
+    @media (max-width: 575px) {
+      justify-content: flex-start;
+    }
   }
   max-width: 550px;
   margin: 20px 5px 0 0;
