@@ -1,54 +1,80 @@
-import React, { FC, useState } from 'react';
-import { EditOutlined, CheckOutlined } from '@ant-design/icons';
-import styles from './Card-collection.module.scss';
+import React, { FC, useState } from "react";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { Input, Button } from "antd";
+import styles from "./Card-collection.module.scss";
+import { useAppDispatch } from "src/hooks";
+import { deleteCard, editCard } from "src/store/counterSlice";
 
-interface CardProps {
-  width?: string;
-  cardValue?: string | number;
-  isSettingsPage: boolean;
+interface card {
+  cardData: {
+    cardValue: number;
+    cardTitle: string;
+    id: number;
+  };
 }
+const Card: FC<card> = (props) => {
+  const [isModeEdit, setIsModeEdit] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
+  let { cardValue, cardTitle, id } = props.cardData;
+  const editMode = () => {
+    setIsModeEdit(true);
+  };
 
-const Card: FC<CardProps> = ({
-  width = '98px',
-  cardValue = 13,
-  isSettingsPage,
-}) => {
-  const [contentEditable, setContentEditable] = useState(false);
+  const removeCard = () => {
+    dispatch(deleteCard(id));
+  };
 
-  const color = contentEditable ? 'darkblue' : '#000';
+  const onClick = () => {
+    const inputValue = +(document.getElementById(`${id}`) as HTMLInputElement)
+      .value;
+    props.cardData.cardValue = inputValue;
+    dispatch(editCard(props.cardData));
+    setIsModeEdit(false);
+  };
 
   return (
-    <div className={styles.cardWrapper} style={{ width }}>
-      <div className={styles.cardVal__top}>
-        <span
-          contentEditable={contentEditable}
-          ref={(div) => div?.focus()}
-          style={{ color }}
-        >
-          {cardValue}
-        </span>
-
-        {isSettingsPage && !contentEditable && (
-          <EditOutlined
-            style={{ marginLeft: '5px' }}
-            key="edit"
-            onClick={() => {
-              setContentEditable(true);
-            }}
-          />
-        )}
-
-        {isSettingsPage && contentEditable && (
-          <CheckOutlined
-            style={{ marginLeft: '5px' }}
-            key="check"
-            onClick={() => setContentEditable(false)}
-          />
+    <>
+      <div className={styles.card__wrapper}>
+        <div className={styles.cardVal__top}>
+          <span>{cardValue}</span>
+          <div>
+            <EditOutlined
+              key={`edit - ${id}`}
+              className={styles.button__edit}
+              onClick={editMode}
+            />
+            <DeleteOutlined
+              key={`delete - ${id}`}
+              className={styles.button__delete}
+              onClick={removeCard}
+            />
+          </div>
+        </div>
+        <div className={styles.card__title}>{cardTitle}</div>
+        <span className={styles.cardVal__bottom}>{cardValue}</span>
+        {isModeEdit ? (
+          <>
+            <Input
+              id={`${id}`}
+              className={styles.input__edit_card}
+              defaultValue={cardValue}
+              maxLength={3}
+              autoFocus
+              bordered={false}
+            />
+            <Button
+              type="primary"
+              className={styles.input__edit_button}
+              onClick={onClick}
+            >
+              Ok
+            </Button>
+          </>
+        ) : (
+          ""
         )}
       </div>
-      <div className={styles.cardTitle}>SP</div>
-      <div className={styles.cardVal__bottom}>{cardValue}</div>
-    </div>
+    </>
   );
 };
 

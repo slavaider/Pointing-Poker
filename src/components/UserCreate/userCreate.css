@@ -1,0 +1,65 @@
+*,
+p {
+  margin: 0 auto;
+  padding: 0;
+  font-family: Roboto, sans-serif;
+}
+
+.user-create {
+  width: 876px;
+  height: 833px;
+}
+
+.form-user-create {
+  width: 100%;
+}
+
+.form-title {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+}
+
+.form-title-text {
+  margin: 0;
+  font-size: 64px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 75px;
+  letter-spacing: 0em;
+  text-align: left;
+  vertical-align: middle;
+  width: 100%;
+}
+
+label {
+  width: 230px;
+  font-size: 24px;
+}
+
+.label-switch > {
+  max-width: 100%;
+}
+
+.label-switch > .ant-form-item-label {
+  max-width: 150px;
+}
+
+.label-switch > .ant-form-item-control {
+  width: 100px;
+}
+
+.label-text {
+  font-size: 16px;
+}
+/*# sourceMappingURL=userCreate.css.map */

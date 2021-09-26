@@ -1,3 +1,4 @@
+
 import { Provider } from 'react-redux';
 import React from 'react';
 import { store } from 'src/store';
@@ -12,6 +13,6 @@ const App: React.FC<any> = ({ Component, pageProps }) => {
         <Component {...pageProps} />
       </AppLayout>
     </Provider>
-  );
-};
-export default App;
+  )
+}
+export default App

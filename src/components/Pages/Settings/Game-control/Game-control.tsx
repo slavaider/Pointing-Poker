@@ -1,22 +1,26 @@
-import React, { FC } from 'react';
-import Button from '../../../Button';
+import React, { FC } from 'react'
+import { Button } from 'antd'
+import styles from './Game-control.module.scss'
 
 const GameControl: FC = () => {
-  return (
-    <div>
-      <Button>Start Game</Button>
-      <Button backgroundColor={'#fff'} color={'#2B3A67'}>
-        Cancel game
-      </Button>
-      <style jsx>{`
-        div {
-          margin-top: 30px;
-          display: flex;
-          justify-content: space-between;
-        }
-      `}</style>
-    </div>
-  );
-};
+	return (
+		<div className={styles.game__control_container}>
+			<Button
+				type='primary'
+				htmlType='submit'
+				className='button'
+			>
+				Start Game
+			</Button>
+			<Button
+				type='default'
+				htmlType='submit'
+				className='button'
+			>
+				Cancel Game
+			</Button>
+		</div>
+	)
+}
 
-export default GameControl;
+export default GameControl
