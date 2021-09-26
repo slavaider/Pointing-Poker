@@ -24,17 +24,6 @@ const Button: FC<ButtonProps> = ({
       >
         {children}
       </button>
-      <style jsx>{`
-        button {
-          border: 1px solid #496a81;
-          box-sizing: border-box;
-          border-radius: 3px;
-          box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-
-          font-weight: bold;
-          text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-        }
-      `}</style>
     </>
   );
 };

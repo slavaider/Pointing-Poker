@@ -10,7 +10,6 @@ const AppLayout: FC = ({ children }) => {
   const socket = useSocket('http://localhost:3000');
 
   return (
-    <>
       <SocketContext.Provider value={socket}>
         <Head>
           <title>Poker Planing</title>
@@ -30,7 +29,6 @@ const AppLayout: FC = ({ children }) => {
         </Layout>
         <Footer />
       </SocketContext.Provider>
-    </>
   );
 };
 

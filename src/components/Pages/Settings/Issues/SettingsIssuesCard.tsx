@@ -1,48 +1,73 @@
-import React, { FC } from 'react';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import styles from './Issues.module.scss';
+import React, { FC, useState } from "react";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import styles from "./SettingsIssuesCard.module.scss";
+import ModalIssues from "./Issues-modal";
+import { removeIssue } from "src/store/counterSlice";
+import { useAppDispatch } from "src/hooks";
 
 interface SettingsIssuesCardProps {
   cardTitle: string;
   priority: string;
   linkToIssue: string;
+  id: number;
 }
 
 const SettingsIssuesCard: FC<SettingsIssuesCardProps> = ({
   cardTitle,
   priority,
   linkToIssue,
+  id,
 }) => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const dispatch = useAppDispatch();
+  const issueRemove = (value: number) => {
+    dispatch(removeIssue(value));
+  };
+
   return (
-    <div className={styles.cardWrapper}>
-      <div className="text-wrapper">
-        <a href={linkToIssue} className={styles.cardTitle}>
-          {cardTitle}
-        </a>
-        <span className="priority">{priority} priority</span>
+    <div>
+      <div className={styles.card__wrapper}>
+        <div className={styles.card__text_wrapper}>
+          <a href={linkToIssue} className={styles.card__title}>
+            {cardTitle}
+          </a>
+          <span className={styles.card__text_priority}>
+            {priority} priority
+          </span>
+        </div>
+        <div>
+          <span className={styles.button__edit}>
+            <EditOutlined
+              onClick={() => {
+                setIsModalVisible(true);
+              }}
+            />
+          </span>
+          <span className={styles.button__delete}>
+            <DeleteOutlined
+              onClick={() => {
+                issueRemove(id);
+              }}
+            />
+          </span>
+        </div>
       </div>
-      <div>
-        <span className="button">
-          <EditOutlined />
-        </span>
-        <span className="button">
-          <DeleteOutlined style={{ color: 'red' }} />
-        </span>
-      </div>
-      <style jsx>{`
-        .text-wrapper {
-          display: flex;
-          flex-direction: column;
-        }
-        .button {
-          cursor: pointer;
-          margin-left: 10px;
-        }
-        .priority {
-          font-size: 10px;
-          line-height: 12px;
-        }
-      `}</style>
+      {isModalVisible ? (
+        <ModalIssues
+          isModalVisible={isModalVisible}
+          setIsModalVisible={setIsModalVisible}
+          props={{
+            cardTitle: cardTitle,
+            priority: priority,
+            linkToIssue: linkToIssue,
+            id: id,
+          }}
+          issueMode="edit"
+          modalTitle="Edit Issue"
+        />
+      ) : (
+        ""
+      )}
     </div>
   );
 };

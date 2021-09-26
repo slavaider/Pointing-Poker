@@ -27,7 +27,6 @@ export interface InputProps extends KeyboardEvent<HTMLInputElement> {
 const ENTER = 'Enter';
 
 const Header: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
-  // TODO: переделать Logo и доверстать
 
   const socket = useContext(SocketContext);
   const dispatch = useAppDispatch();
@@ -109,6 +108,7 @@ const Header: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
       </div>
 
       <div className={styles.greenLine} />
+
     </header>
   );
 };
