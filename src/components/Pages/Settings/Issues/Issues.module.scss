@@ -1,23 +1,27 @@
-$modalFZ:15px;
+$modalFZ: 15px;
+
 .modal {
   div button span {
     font-size: $modalFZ;
     font-weight: 600;
   }
 }
-.select  {
+
+.select {
   * {
     font-size: $modalFZ;
   }
 }
 
-.select,.input{
-  label{
+.select,
+.input {
+  label {
     font-size: $modalFZ;
   }
 }
-.option{
-  *{
+
+.option {
+  * {
     font-size: $modalFZ;
   }
 }
@@ -26,12 +30,12 @@ $modalFZ:15px;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
- }
-.cardWrapper {
+}
+
+.card__wrapper_new__issue {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   width: fit-content;
   min-height: 70px;
   min-width: 300px;
@@ -40,13 +44,6 @@ $modalFZ:15px;
   padding: 10px;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 4px;
-
   font-weight: 500;
- }
-
-.cardTitle {
-  font-family: Roboto sans-serif;
-  font-weight: 300;
-  font-size: 28px;
-  line-height: 38px;
+  color: #479685;
 }
