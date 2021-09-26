@@ -1,8 +1,11 @@
-import React, { FC } from 'react';
-import { PlusCircleOutlined } from '@ant-design/icons';
-import styles from './Card-collection.module.scss';
-import Card from './Card';
-import stylesPage from '../Settings.module.scss';
+import React, { FC } from "react";
+import { PlusCircleOutlined } from "@ant-design/icons";
+import styles from "./Card-collection.module.scss";
+import Card from "./Card";
+import stylesPage from "../Settings.module.scss";
+import { useAppSelector } from "src/hooks";
+import { useAppDispatch } from "src/hooks";
+import { addCard } from "src/store/counterSlice";
 
 export interface CardData {
   issueId: string | number;
@@ -15,53 +18,52 @@ interface CardCollectionProps {
   cardData: CardData[];
 }
 
+interface cards {
+  cardValue: number;
+  cardTitle: string;
+  id: number;
+}
+    
 const CardCollection: FC<CardCollectionProps> = ({
   cardWidth,
   isSettingsPage,
   cardData,
 }) => {
-  // todo использоовать для изменения значения
-  // const [valueCard, setValueCard] = useState<string>('1');
+  const cards: Array<cards> = useAppSelector((state) => state.settings.cards);
+  const dispatch = useAppDispatch();
+  const idLastCard = cards.length > 0 ? cards[cards.length - 1].id : 0;
+
 
   const addNewCard = () => {
-    console.log('a');
+    const newCardData = {
+      cardValue: 0,
+      cardTitle: "SP",
+      id: idLastCard + 1,
+    };
+    console.log(newCardData);
+    dispatch(addCard(newCardData));
   };
 
   return (
-    <div style={{ width: 'fit-content' }}>
-      {isSettingsPage ? (
-        <h4 className={stylesPage.title}>Add card values:</h4>
-      ) : (
-        <h4 className={stylesPage.title}> Statistics:</h4>
-      )}
-
-      <div id={'cardsContainer'} className={styles.cardsContainer}>
-        {cardData.map(({ issueId, cardStatisticValue, cardValue }) => {
-          return (
-            <div key={`${issueId} ${cardValue}`}>
-              <Card
-                width={cardWidth}
-                cardValue={cardValue}
-                isSettingsPage={isSettingsPage}
-              />
-              {!isSettingsPage && (
-                <div className={styles.cardStatisticValue}>
-                  {cardStatisticValue}
-                </div>
-              )}
-            </div>
-          );
-        })}
-
-        {isSettingsPage && (
-          <div
-            onClick={addNewCard}
-            className={styles.cardWrapper}
-            style={{ cursor: 'pointer', width: '98px' }}
-          >
-            <div style={{ margin: 'auto' }} className={styles.cardTitle}>
-              <PlusCircleOutlined style={{ transform: 'scale(2)' }} />
-            </div>
+    <div>
+      <h4 className={stylesPage.title}>Add card values:</h4>
+      <div id="cardsContainer" className={styles.cards__container}>
+        {cards.map((item, index) => (
+          <Card
+            cardData={{
+              cardValue: item.cardValue,
+              cardTitle: item.cardTitle,
+              id: item.id,
+            }}
+            key={`${item.cardValue}-${index}`}
+          />
+        ))}
+        <div style={{ cursor: "pointer" }} className={styles.card__wrapper}>
+          <div style={{ margin: "auto" }} className={styles.card__title}>
+            <PlusCircleOutlined
+              style={{ transform: "scale(2)" }}
+              onClick={addNewCard}
+            />
           </div>
         )}
       </div>

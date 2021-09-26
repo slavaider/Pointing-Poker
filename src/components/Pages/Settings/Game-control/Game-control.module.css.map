@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,wBAAwB,CAAC;EACxB,SAAS,EAAE,IAAI;EACf,OAAO,EAAE,IAAI;EACb,cAAc,EAAE,GAAG;EACnB,eAAe,EAAE,aAAa;EAC9B,UAAU,EAAE,IAAI;CAChB",
+    "sources": [
+        "Game-control.module.scss"
+    ],
+    "names": [],
+    "file": "Game-control.module.css"
+}

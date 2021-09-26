@@ -19,17 +19,6 @@ const Button: FC<ButtonProps> = ({
       <button style={{ color, backgroundColor, height, width }} type={'button'}>
         {children}
       </button>
-      <style jsx>{`
-        button {
-          border: 1px solid #496a81;
-          box-sizing: border-box;
-          border-radius: 3px;
-          box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-
-          font-weight: bold;
-          text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-        }
-      `}</style>
     </>
   );
 };
