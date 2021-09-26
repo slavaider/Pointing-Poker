@@ -1,86 +1,68 @@
-import React, { FC, useState } from 'react';
-import { PlusOutlined } from '@ant-design/icons';
-import { Modal, Select, Form, Input } from 'antd';
-import SettingsIssuesCard from './SettingsIssuesCard';
-import styles from './Issues.module.scss';
-import stylesPage from '../Settings.module.scss';
-import { useAppSelector } from '../../../../hooks';
+import React, { FC, useState } from "react";
+import { PlusOutlined } from "@ant-design/icons";
+import SettingsIssuesCard from "./SettingsIssuesCard";
+import ModalIssues from "./Issues-modal";
+import styles from "./Issues.module.scss";
+import stylesPage from "../Settings.module.scss";
+import { useAppSelector } from "src/hooks";
 
-const { Option } = Select;
+interface Cards {
+  cardTitle: string;
+  priority: string;
+  linkToIssue: string;
+  id: number;
+}
 
-const Issues: FC = () => {
+
+interface IssuesProps {
+  isMaster?: boolean;
+  width?: string;
+}
+
+const Issues: FC<IssuesProps> = ({ isMaster = false, width }) => {
   const issues = useAppSelector((state) => state.settings.issues);
-
-  const [isModalVisible, setIsModalVisible] = useState(false);
-
+  const issues: Cards[] = useAppSelector((state) => state.settings.issues);
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const priorityValueDefault = "Low";
+  const idLastIssue = issues.length > 0 ? issues[issues.length - 1].id : 0;
+  const onClick = () => {
+    setIsModalVisible(true);
+  };
   return (
-    <div>
-      <h4 className={stylesPage.title}>Issues:</h4>
+    <div style={{ width }}>
+      {isMaster && <h4 className={stylesPage.title}>Issues:</h4>}
       <div className={styles.container}>
-        <SettingsIssuesCard
-          cardTitle={'Issue 25'}
-          priority={'Low'}
-          linkToIssue={'#'}
-        />
-        <SettingsIssuesCard
-          cardTitle={'Issue 25'}
-          priority={'Low'}
-          linkToIssue={'#'}
-        />
-        <SettingsIssuesCard
-          cardTitle={'Issue 25'}
-          priority={'Low'}
-          linkToIssue={'#'}
-        />
-        <SettingsIssuesCard
-          cardTitle={'Issue 25'}
-          priority={'Low'}
-          linkToIssue={'#'}
-        />
 
-        <button
-          className={styles.cardWrapper}
-          style={{ color: '#479685' }}
-          onClick={() => setIsModalVisible(true)}
-        >
-          Crete new Issue
+        {issues.map((item, index) => (
+          <SettingsIssuesCard
+            cardTitle={item.cardTitle}
+            priority={item.priority}
+            linkToIssue={item.linkToIssue}
+            id={item.id}
+            key={`${item.cardTitle}-${index}`}
+          />
+        ))}
+        <button className={styles.card__wrapper_new__issue} onClick={onClick}>
+          Create new Issue
           <PlusOutlined />
         </button>
       </div>
-
-      <Modal
-        className={styles.modal}
-        visible={isModalVisible}
-        onOk={() => setIsModalVisible(false)}
-        onCancel={() => setIsModalVisible(false)}
-      >
-        <p>Create Issue</p>
-        <Form>
-          <Form.Item className={styles.input} label={'Title: '}>
-            <Input />
-          </Form.Item>
-          <Form.Item className={styles.input} label={'Link: '}>
-            <Input />
-          </Form.Item>
-          <Form.Item className={styles.select} label={'Priority: '}>
-            <Select
-              defaultValue={'Low'}
-              showSearch
-              placeholder="Select a priority"
-            >
-              <Option className={styles.option} value={'Low'}>
-                Low
-              </Option>
-              <Option className={styles.option} value={'Middle'}>
-                Middle
-              </Option>
-              <Option className={styles.option} value={'High'}>
-                High
-              </Option>
-            </Select>
-          </Form.Item>
-        </Form>
-      </Modal>
+      {isModalVisible ? (
+        <ModalIssues
+          isModalVisible={isModalVisible}
+          setIsModalVisible={setIsModalVisible}
+          props={{
+            cardTitle: "",
+            priority: priorityValueDefault,
+            linkToIssue: "",
+            id: idLastIssue + 1,
+          }}
+          issueMode="create"
+          modalTitle="Create Issue"
+        />
+      ) : (
+        ""
+      )}
     </div>
   );
 };

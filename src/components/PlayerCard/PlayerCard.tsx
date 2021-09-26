@@ -11,7 +11,6 @@ export interface PlayerCardProps extends IUser {
   isMaster: boolean;
   size: 'max' | 'mini';
 }
-// todo поменять цвет исключения игрока томато
 
 const PlayerCard: FC<PlayerCardProps> = ({
   image,
