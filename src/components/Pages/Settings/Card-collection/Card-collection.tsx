@@ -1,51 +1,39 @@
-import React, { FC } from "react";
-import { PlusCircleOutlined } from "@ant-design/icons";
-import styles from "./Card-collection.module.scss";
-import Card from "./Card";
-import stylesPage from "../Settings.module.scss";
-import { useAppSelector } from "src/hooks";
-import { useAppDispatch } from "src/hooks";
-import { addCard } from "src/store/counterSlice";
+import React, { FC } from 'react';
+import { PlusCircleOutlined } from '@ant-design/icons';
+import { useAppSelector, useAppDispatch } from 'src/hooks';
+import { addCard } from 'src/store/counterSlice';
+import styles from './Card-collection.module.scss';
+import Card from './Card';
+import stylesPage from '../Settings.module.scss';
 
-export interface CardData {
-  issueId: string | number;
-  cardValue: string | number;
-  cardStatisticValue: string | number;
-}
-interface CardCollectionProps {
-  cardWidth?: string;
-  isSettingsPage: boolean;
-  cardData: CardData[];
-}
-
-interface cards {
+export interface Cards {
   cardValue: number;
   cardTitle: string;
   id: number;
 }
-    
-const CardCollection: FC<CardCollectionProps> = ({
-  cardWidth,
-  isSettingsPage,
-  cardData,
-}) => {
-  const cards: Array<cards> = useAppSelector((state) => state.settings.cards);
+export type Props = {
+  isSettingsPage: boolean;
+};
+
+const CardCollection: FC<Props> = ({ isSettingsPage }: Props) => {
+  const cards: Array<Cards> = useAppSelector((state) => state.settings.cards);
   const dispatch = useAppDispatch();
   const idLastCard = cards.length > 0 ? cards[cards.length - 1].id : 0;
-
 
   const addNewCard = () => {
     const newCardData = {
       cardValue: 0,
-      cardTitle: "SP",
+      cardTitle: 'SP',
       id: idLastCard + 1,
     };
     console.log(newCardData);
     dispatch(addCard(newCardData));
   };
 
+  console.log(isSettingsPage);
+
   return (
-    <div>
+    <>
       <h4 className={stylesPage.title}>Add card values:</h4>
       <div id="cardsContainer" className={styles.cards__container}>
         {cards.map((item, index) => (
@@ -58,16 +46,16 @@ const CardCollection: FC<CardCollectionProps> = ({
             key={`${item.cardValue}-${index}`}
           />
         ))}
-        <div style={{ cursor: "pointer" }} className={styles.card__wrapper}>
-          <div style={{ margin: "auto" }} className={styles.card__title}>
+        <div style={{ cursor: 'pointer' }} className={styles.card__wrapper}>
+          <div style={{ margin: 'auto' }} className={styles.card__title}>
             <PlusCircleOutlined
-              style={{ transform: "scale(2)" }}
+              style={{ transform: 'scale(2)' }}
               onClick={addNewCard}
             />
           </div>
-        )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

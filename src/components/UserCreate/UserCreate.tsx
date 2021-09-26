@@ -9,10 +9,11 @@ import {
   Switch,
   Avatar,
   Image,
-  message
+  message,
 } from 'antd';
 import { LoadingOutlined, UploadOutlined } from '@ant-design/icons';
 import styles from './userCreate.module.scss';
+import IUser from '../../interfaces/user';
 
 type SizeType = Parameters<typeof Form>[0]['size'];
 
@@ -34,35 +35,35 @@ function beforeUpload(file: any) {
   return isJpgOrPng && isLt2M;
 }
 
-const UserCreate: React.FC = () => {
+type UserCreateProps = {
+  isShow: boolean;
+  hideModel: () => void;
+  handleUser: (user: IUser) => void;
+};
+
+const UserCreate: React.FC<UserCreateProps> = ({
+  isShow,
+  hideModel,
+  handleUser,
+}: UserCreateProps) => {
   const [componentSize] = useState<SizeType | 'default'>('default');
-  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [loaded, setLoaded] = useState<boolean>(false);
-  const [imageUrl, setImageUrl] = useState<string>('');
-
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
+  const [imageUrl, setImageUrl] = useState<any>('');
 
   const normFile = (e: any) => {
-    console.log('Upload event:');
     if (Array.isArray(e)) {
       return e;
     }
     return e && e.fileList;
   };
 
-  const onFinish = (values: any) => {
-    // values.image = imageUrl;
-    setIsModalVisible(false);
-    console.log('Received values of form: ', values);
+  const onFinish = (values: IUser) => {
+    values.image = imageUrl;
+    hideModel();
+    handleUser(values);
   };
 
   const onReset = () => {
@@ -87,8 +88,8 @@ const UserCreate: React.FC = () => {
       return;
     }
     if (info.file.status === 'done') {
-      getBase64(info.file.originFileObj, (imageUrl: any) => {
-        setImageUrl(imageUrl);
+      getBase64(info.file.originFileObj, (image64: any) => {
+        setImageUrl(image64);
         setLoading(false);
         setLoaded(true);
       });
@@ -98,30 +99,27 @@ const UserCreate: React.FC = () => {
   const uploadButton = (
     <div>
       {loading ? <LoadingOutlined /> : <UploadOutlined />}
-      <div style={{ fontSize: 14 }}>Upload</div>
+      <div>Upload</div>
     </div>
   );
 
   return (
     <section className={styles.user__create}>
-      <Button type='primary' onClick={showModal}>
-        User Create
-      </Button>
       <Modal
         width={600}
         style={{ top: 20 }}
-        visible={isModalVisible}
-        onCancel={handleCancel}
+        visible={isShow}
+        onCancel={hideModel}
         closable={false}
         bodyStyle={{ padding: 10 }}
         footer={[]}
       >
         <Form
-          name='userForm'
+          name="userForm"
           className={styles.form__user_create}
           labelCol={{ span: 14, offset: 0 }}
           wrapperCol={{ span: 24 }}
-          layout='vertical'
+          layout="vertical"
           initialValues={{ size: 'default' }}
           size={componentSize as SizeType}
           onFinish={onFinish}
@@ -130,48 +128,47 @@ const UserCreate: React.FC = () => {
             <p className={styles.form__title_text}>Connect to lobby</p>
           </div>
           <Form.Item
-            label='Your first name'
-            labelAlign='left'
+            label="Your first name"
+            labelAlign="left"
             labelCol={{ xs: { offset: 0 }, sm: { offset: 2 } }}
-            name='firstName'
+            name="firstName"
             className={styles.label__text}
             rules={[
-              { required: true, message: 'Please input your first name!' }
+              { required: true, message: 'Please input your first name!' },
             ]}
           >
             <Input
               className={styles.form__input}
-              id='first-name'
+              id="first-name"
               onChange={onChangeFirstName}
             />
           </Form.Item>
           <Form.Item
-            label='Your last name(optional)'
+            label="Your last name(optional)"
             labelCol={{ xs: { offset: 0 }, sm: { offset: 2 } }}
-            name='lastName'
+            name="lastName"
             className={styles.label__text}
           >
             <Input
               className={styles.form__input}
-              id='last-name'
+              id="last-name"
               onChange={onChangeLastName}
             />
           </Form.Item>
           <Form.Item
-            label='Your job position(optional)'
-            name='job'
+            label="Your job position(optional)"
+            name="job"
             labelCol={{ xs: { offset: 0 }, sm: { offset: 2 } }}
-            className='label-text'
+            className="label-text"
           >
             <Input className={styles.form__input} />
           </Form.Item>
-          <Form.Item
-          >
+          <Form.Item>
             <Form.Item
-              label='Image'
+              label="Image"
               labelCol={{ xs: { offset: 0 }, sm: { span: 32, offset: 0 } }}
               wrapperCol={{ span: 32 }}
-              valuePropName='fileList'
+              valuePropName="fileList"
               getValueFromEvent={normFile}
             >
               {loaded ? (
@@ -180,16 +177,17 @@ const UserCreate: React.FC = () => {
                   src={<Image className={styles.avatar__img} src={imageUrl} />}
                 ></Avatar>
               ) : (
-                <Avatar className={styles.avatar__text} size={60}
-                >
-                  {firstName ? firstName.toLocaleUpperCase().slice(0, 1) : 'User'}
+                <Avatar className={styles.avatar__text} size={60}>
+                  {firstName
+                    ? firstName.toLocaleUpperCase().slice(0, 1)
+                    : 'User'}
                   {lastName
                     ? lastName.toLocaleUpperCase().slice(0, 1)
                     : firstName.toLocaleUpperCase().slice(-1)}
                 </Avatar>
               )}
               <Upload
-                listType='picture-card'
+                listType="picture-card"
                 className={styles.avatar__uploader}
                 showUploadList={false}
                 beforeUpload={beforeUpload}
@@ -198,12 +196,12 @@ const UserCreate: React.FC = () => {
                 {imageUrl ? '' : uploadButton}
               </Upload>
               <Form.Item
-                name='switch'
-                label='Connect as Observer'
+                label="Connect as Observer"
                 labelCol={{ xs: { offset: 0 }, sm: { span: 8, offset: 1 } }}
                 wrapperCol={{ span: 8 }}
-                valuePropName='checked'
+                valuePropName="checked"
                 className={styles.label__switch}
+                name="isObserver"
               >
                 <Switch />
               </Form.Item>
@@ -212,36 +210,39 @@ const UserCreate: React.FC = () => {
           <Form.Item>
             <Space
               style={{
-                margin: '0 auto'
+                margin: '0 auto',
               }}
               size={32}
             >
               <Button
-                type='primary'
-                htmlType='submit'
-                size='large'
-                className='button button__small'>
+                type="primary"
+                htmlType="submit"
+                size="large"
+                className="button button__small"
+              >
                 Confirm
               </Button>
               <Button
-                type='default'
-                onClick={handleCancel}
-                size='large'
-                className='button button__small'>
+                type="default"
+                onClick={hideModel}
+                size="large"
+                className="button button__small"
+              >
                 Cancel
               </Button>
               <Button
-                htmlType='reset'
+                htmlType="reset"
                 onClick={onReset}
-                size='large'
-                className='button button__small'>
+                size="large"
+                className="button button__small"
+              >
                 Reset
               </Button>
             </Space>
           </Form.Item>
         </Form>
       </Modal>
-    </section >
+    </section>
   );
 };
 

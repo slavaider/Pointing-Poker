@@ -1,12 +1,16 @@
 import React, { FC } from 'react';
 import Head from 'next/head';
 import { Layout } from 'antd';
+import SocketContext from 'src/shared/SocketContext';
 import Header from '../Header';
 import Footer from '../Footer';
+import useSocket from '../../hooks/useSocket';
 
 const AppLayout: FC = ({ children }) => {
+  const socket = useSocket('http://localhost:3000');
+
   return (
-    <>
+    <SocketContext.Provider value={socket}>
       <Head>
         <title>Poker Planing</title>
         <link rel="shortcut icon" href="/favicon.ico" />
@@ -16,14 +20,15 @@ const AppLayout: FC = ({ children }) => {
         <main
           style={{
             flex: '1 1 auto',
-            backgroundColor: '#4e698e',
+            padding: '0 20px',
+            backgroundColor: '#fff',
           }}
         >
           {children}
         </main>
       </Layout>
       <Footer />
-    </>
+    </SocketContext.Provider>
   );
 };
 
