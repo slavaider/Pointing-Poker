@@ -1,21 +1,27 @@
 import React, { FC, useState } from 'react';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { Input, Button } from 'antd';
+import { CheckOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Input } from 'antd';
 import { useAppDispatch } from 'src/hooks';
 import { deleteCard, editCard } from 'src/store/counterSlice';
 import styles from './Card-collection.module.scss';
 
 interface CardProps {
   cardData: {
-    cardValue: number;
     cardTitle: string;
     id: number;
+    cardValue: string | number;
   };
+  width?: string;
+  isSettingsPage: boolean;
 }
-const Card: FC<CardProps> = (props) => {
+
+const Card: FC<CardProps> = ({ width = '100px', isSettingsPage, cardData }) => {
   const [isModeEdit, setIsModeEdit] = useState<boolean>(false);
   const dispatch = useAppDispatch();
-  const { cardValue, cardTitle, id } = props.cardData;
+  const { cardTitle, id } = cardData;
+  let { cardValue } = cardData;
+  const color = isModeEdit ? 'darkblue' : '#000';
+
   const editMode = () => {
     setIsModeEdit(true);
   };
@@ -25,24 +31,50 @@ const Card: FC<CardProps> = (props) => {
   };
 
   const onClick = () => {
-    const inputValue = +(document.getElementById(`${id}`) as HTMLInputElement)
-      .value;
-    props.cardData.cardValue = inputValue;
-    dispatch(editCard(props.cardData));
+    // Input value
+    cardValue = (document.getElementById(`${id}`) as HTMLInputElement).value;
+    dispatch(editCard({ ...cardData, cardValue }));
     setIsModeEdit(false);
   };
 
+  //
+  // todo для чего фрагмент
+  //
+
   return (
     <>
-      <div className={styles.card__wrapper}>
+      <div className={styles.card__wrapper} style={{ width }}>
         <div className={styles.cardVal__top}>
-          <span>{cardValue}</span>
-          <div>
-            <EditOutlined
-              key={`edit - ${id}`}
-              className={styles.button__edit}
-              onClick={editMode}
+          {isModeEdit ? (
+            <Input
+              id={`${id}`}
+              className={styles.input__edit_card}
+              defaultValue={cardValue}
+              maxLength={5}
+              autoFocus
+              bordered={false}
+              style={{ color }}
             />
+          ) : (
+            <span style={{ color }}>{cardValue}</span>
+          )}
+          {console.log('isSettingsPage', isSettingsPage)}
+          <div style={{ display: 'flex' }}>
+            {isSettingsPage && !isModeEdit && (
+              <EditOutlined
+                className={styles.button__edit}
+                key={`edit - ${id}`}
+                onClick={editMode}
+              />
+            )}
+
+            {isSettingsPage && isModeEdit && (
+              <CheckOutlined
+                className={styles.button__edit}
+                key={`check - ${id}`}
+                onClick={onClick}
+              />
+            )}
             <DeleteOutlined
               key={`delete - ${id}`}
               className={styles.button__delete}
@@ -52,27 +84,6 @@ const Card: FC<CardProps> = (props) => {
         </div>
         <div className={styles.card__title}>{cardTitle}</div>
         <span className={styles.cardVal__bottom}>{cardValue}</span>
-        {isModeEdit ? (
-          <>
-            <Input
-              id={`${id}`}
-              className={styles.input__edit_card}
-              defaultValue={cardValue}
-              maxLength={3}
-              autoFocus
-              bordered={false}
-            />
-            <Button
-              type="primary"
-              className={styles.input__edit_button}
-              onClick={onClick}
-            >
-              Ok
-            </Button>
-          </>
-        ) : (
-          ''
-        )}
       </div>
     </>
   );

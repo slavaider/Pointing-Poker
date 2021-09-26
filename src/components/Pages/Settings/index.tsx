@@ -14,9 +14,6 @@ import PlayerCards from '../../PlayerCards';
 import { IOptions } from '../../../interfaces/options';
 import SocketContext from '../../../shared/SocketContext';
 
-// todo удалить , заменить на данные из сервера socket      или нет)
-const title = 'Spring 23 planning (issues 13, 533, 5623, 3252, 6623, ...)';
-
 const Settings: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
   const users = useAppSelector(selectUsers);
   const user = useAppSelector(selectUser);
@@ -47,7 +44,7 @@ const Settings: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
 
   return (
     <div className={styles.SettingsContainer}>
-      <TitleServer title={title} />
+      <TitleServer isSettingsPage />
       {
         <PlayerCards
           items={master ? [master] : []}
