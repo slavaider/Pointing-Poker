@@ -84,31 +84,30 @@ export const counterSlice = createSlice({
       state.issues.push(action.payload);
     },
     removeIssue: (state, action: PayloadAction<number>) => {
-      state.issues.forEach((element: { id: number }, index: number) => {
-        if (element.id === action.payload) {
-          state.issues.splice(index, 1);
-        }
+      state.issues.filter((element: { id: number }, index: number) => {
+        element.id === action.payload ? state.issues.splice(index, 1) : '';
       });
     },
     editIssue: (state, action) => {
-      state.issues.forEach((element: { id: number }, index: number) => {
-        if (element.id === action.payload.id) {
-          state.issues[index] = action.payload;
-        }
+      state.issues.filter((element: { id: number }, index: number) => {
+        element.id === action.payload.id
+          ? (state.issues[index] = action.payload)
+          : '';
       });
     },
     addCard: (state, action) => {
       state.cards.push(action.payload);
     },
     deleteCard: (state, action) => {
-      state.cards.forEach((element: { id: number }, index: number) => {
-        if (element.id === action.payload) state.cards.splice(index, 1);
+      state.cards.filter((element: { id: number }, index: number) => {
+        element.id === action.payload ? state.cards.splice(index, 1) : '';
       });
     },
     editCard: (state, action) => {
-      state.cards.forEach((element: { id: number }, index: number) => {
-        if (element.id === action.payload.id)
-          state.cards[index].cardValue = action.payload.cardValue;
+      state.cards.filter((element: { id: number }, index: number) => {
+        element.id === action.payload.id
+          ? (state.cards[index].cardValue = action.payload.cardValue)
+          : '';
       });
     },
   },

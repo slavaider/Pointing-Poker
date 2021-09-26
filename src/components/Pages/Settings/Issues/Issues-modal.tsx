@@ -37,20 +37,6 @@ const ModalIssues: FC<ModalIssuesProps> = ({
     setIsModalVisible(false);
   };
 
-  const onSubmit = (value: {
-    cardTitle: string;
-    linkToIssue: string;
-    priority: string;
-    id: number;
-  }) => {
-    setIsModalVisible(false);
-    if (issueMode === 'create') {
-      dispatch(addIssue(value));
-    } else {
-      dispatch(editIssue(value));
-    }
-  };
-
   const onClick = () => {
     form
       .validateFields()
@@ -63,6 +49,17 @@ const ModalIssues: FC<ModalIssuesProps> = ({
       });
   };
 
+  const onSubmit = (value: {
+    cardTitle: string;
+    linkToIssue: string;
+    priority: string;
+    id: number;
+  }) => {
+    setIsModalVisible(false);
+    issueMode === 'create'
+      ? dispatch(addIssue(value))
+      : dispatch(editIssue(value));
+  };
   return (
     <div>
       <Modal

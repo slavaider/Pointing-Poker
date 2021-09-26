@@ -5,14 +5,14 @@ import { useAppDispatch } from 'src/hooks';
 import { deleteCard, editCard } from 'src/store/counterSlice';
 import styles from './Card-collection.module.scss';
 
-interface CardProps {
+interface card {
   cardData: {
     cardValue: number;
     cardTitle: string;
     id: number;
   };
 }
-const Card: FC<CardProps> = (props) => {
+const Card: FC<card> = (props) => {
   const [isModeEdit, setIsModeEdit] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const { cardValue, cardTitle, id } = props.cardData;

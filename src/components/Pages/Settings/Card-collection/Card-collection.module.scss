@@ -3,6 +3,7 @@
   flex-direction: column;
   justify-content: space-between;
   height: 160px;
+  width: 98px;
   margin: 10px 10px 0 0;
   padding: 5px;
   border: 1px solid #eeeeee;
@@ -40,55 +41,49 @@
   line-height: 15px;
 }
 
+.button__edit,
+.button__delete {
+  cursor: pointer;
+  margin-left: 11px;
+}
 
-.cardStatisticValue{
-  margin-top: 5px;
-  text-align: center;
+.button__edit {
+  margin-left: 5px;
+}
 
-  .button__edit,
-  .button__delete {
-    cursor: pointer;
-    margin-left: 11px;
+.button__delete {
+  color: red;
+}
+
+.input__edit {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  &_card {
+    position: absolute;
+    font-size: 15px;
+    left: -2px;
+    top: 2px;
+    max-width: 69.5%;
+    margin: 0 0;
+    border: 0 transparent;
+    outline: none;
   }
 
-  .button__edit {
-    margin-left: 5px;
+  &_card:focus {
+    background-color: white;
   }
 
-  .button__delete {
-    color: red;
+  &_button {
+    position: absolute;
+    padding: 0px 2px;
+    height: 33px;
+    top: 7px;
+    right: 0;
   }
 
-  .input__edit {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-
-    &_card {
-      position: absolute;
-      font-size: 15px;
-      left: -2px;
-      top: 2px;
-      max-width: 69.5%;
-      margin: 0 0;
-      border: 0 transparent;
-      outline: none;
-    }
-
-    &_card:focus {
-      background-color: white;
-    }
-
-    &_button {
-      position: absolute;
-      padding: 0px 2px;
-      height: 33px;
-      top: 7px;
-      right: 0;
-    }
-
-    &_button > span {
-      font-size: 16px;
-    }
+  &_button > span {
+    font-size: 16px;
   }
 }

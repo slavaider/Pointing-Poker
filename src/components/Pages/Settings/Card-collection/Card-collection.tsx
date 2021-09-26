@@ -6,17 +6,14 @@ import styles from './Card-collection.module.scss';
 import Card from './Card';
 import stylesPage from '../Settings.module.scss';
 
-export interface Cards {
+interface cards {
   cardValue: number;
   cardTitle: string;
   id: number;
 }
-export type Props = {
-  isSettingsPage: boolean;
-};
 
-const CardCollection: FC<Props> = ({ isSettingsPage }: Props) => {
-  const cards: Array<Cards> = useAppSelector((state) => state.settings.cards);
+const CardCollection: FC<cards> = () => {
+  const cards: Array<cards> = useAppSelector((state) => state.settings.cards);
   const dispatch = useAppDispatch();
   const idLastCard = cards.length > 0 ? cards[cards.length - 1].id : 0;
 
@@ -30,10 +27,8 @@ const CardCollection: FC<Props> = ({ isSettingsPage }: Props) => {
     dispatch(addCard(newCardData));
   };
 
-  console.log(isSettingsPage);
-
   return (
-    <>
+    <div>
       <h4 className={stylesPage.title}>Add card values:</h4>
       <div id="cardsContainer" className={styles.cards__container}>
         {cards.map((item, index) => (
@@ -55,7 +50,7 @@ const CardCollection: FC<Props> = ({ isSettingsPage }: Props) => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

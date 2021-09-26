@@ -1,11 +1,11 @@
-import React, { FC, HTMLAttributes } from 'react';
+import React, { FC } from 'react';
 
-interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
+type ButtonProps = {
   width?: string;
   height?: string;
   backgroundColor?: string;
   color?: string;
-}
+};
 
 const Button: FC<ButtonProps> = ({
   color = '#fff',
@@ -13,15 +13,10 @@ const Button: FC<ButtonProps> = ({
   height = '47px',
   width = '190px',
   children,
-  ...props
 }) => {
   return (
     <>
-      <button
-        {...props}
-        style={{ color, backgroundColor, height, width }}
-        type={'button'}
-      >
+      <button style={{ color, backgroundColor, height, width }} type={'button'}>
         {children}
       </button>
     </>
