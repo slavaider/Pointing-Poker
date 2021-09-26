@@ -1,9 +1,9 @@
-import React, { FC, useState } from "react";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import styles from "./SettingsIssuesCard.module.scss";
-import ModalIssues from "./Issues-modal";
-import { removeIssue } from "src/store/counterSlice";
-import { useAppDispatch } from "src/hooks";
+import React, { FC, useState } from 'react';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { removeIssue } from 'src/store/counterSlice';
+import { useAppDispatch } from 'src/hooks';
+import styles from './SettingsIssuesCard.module.scss';
+import ModalIssues from './Issues-modal';
 
 interface SettingsIssuesCardProps {
   cardTitle: string;
@@ -57,16 +57,16 @@ const SettingsIssuesCard: FC<SettingsIssuesCardProps> = ({
           isModalVisible={isModalVisible}
           setIsModalVisible={setIsModalVisible}
           props={{
-            cardTitle: cardTitle,
-            priority: priority,
-            linkToIssue: linkToIssue,
-            id: id,
+            cardTitle,
+            priority,
+            linkToIssue,
+            id,
           }}
           issueMode="edit"
           modalTitle="Edit Issue"
         />
       ) : (
-        ""
+        ''
       )}
     </div>
   );

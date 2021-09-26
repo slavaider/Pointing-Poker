@@ -31,34 +31,35 @@ nextApp.prepare().then(async () => {
     io.on('connection', (socket: socketio.Socket) => {
 
         socket.on('join server', (user: IUser, cb) => {
+            const room = user.room;
             const newUser = {
                 ...user,
                 userId: socket.id,
             };
-            socket.join(user.room);
+            socket.join(room);
 
-            if (Object.prototype.hasOwnProperty.call(users, user.room)) {
-                users[user.room].push(newUser);
+            if (Object.prototype.hasOwnProperty.call(users, room)) {
+                users[room].push(newUser);
             } else {
-                Object.assign(users, {[user.room]: [newUser]});
-                Object.assign(messages, {[user.room]: []});
-                Object.assign(options, {[user.room]: {
-                        timerValue:'02:20',
-                        playable: true,
-                        swap: true,
-                        timer: true,
-                        scoreType: 'story point',
-                        scoreTypeShort: 'SP',
-                    }});
+                users[room]  = [newUser]
+                messages[room] = []
+                options[room] = {
+                    timerValue:'02:20',
+                    playable: true,
+                    swap: true,
+                    timer: true,
+                    scoreType: 'story point',
+                    scoreTypeShort: 'SP',
+                }
                 // TODO: other sockets
-                Object.assign(titles, {[user.room]: []});
-                Object.assign(issues, {[user.room]: []});
-                Object.assign(cards, {[user.room]: []});
+                Object.assign(titles, {[room]: []});
+                Object.assign(issues, {[room]: []});
+                Object.assign(cards, {[room]: []});
             }
 
-            socket.broadcast.to(user.room).emit('add user', newUser);
+            socket.broadcast.to(room).emit('add user', newUser);
 
-            return cb(users[user.room], messages[user.room],options[user.room], newUser);
+            return cb(users[room], messages[room],options[room], newUser);
         });
 
         socket.on('add user', (user, cb) => {

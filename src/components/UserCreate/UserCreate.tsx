@@ -35,7 +35,6 @@ function beforeUpload(file: any) {
   return isJpgOrPng && isLt2M;
 }
 
-
 type UserCreateProps = {
   isShow: boolean;
   hideModel: () => void;
@@ -129,13 +128,13 @@ const UserCreate: React.FC<UserCreateProps> = ({
             <p className={styles.form__title_text}>Connect to lobby</p>
           </div>
           <Form.Item
-            label='Your first name'
-            labelAlign='left'
+            label="Your first name"
+            labelAlign="left"
             labelCol={{ xs: { offset: 0 }, sm: { offset: 2 } }}
-            name='firstName'
+            name="firstName"
             className={styles.label__text}
             rules={[
-              { required: true, message: 'Please input your first name!' }
+              { required: true, message: 'Please input your first name!' },
             ]}
           >
             <Input
@@ -145,9 +144,9 @@ const UserCreate: React.FC<UserCreateProps> = ({
             />
           </Form.Item>
           <Form.Item
-            label='Your last name(optional)'
+            label="Your last name(optional)"
             labelCol={{ xs: { offset: 0 }, sm: { offset: 2 } }}
-            name='lastName'
+            name="lastName"
             className={styles.label__text}
           >
             <Input
@@ -157,20 +156,19 @@ const UserCreate: React.FC<UserCreateProps> = ({
             />
           </Form.Item>
           <Form.Item
-            label='Your job position(optional)'
-            name='job'
+            label="Your job position(optional)"
+            name="job"
             labelCol={{ xs: { offset: 0 }, sm: { offset: 2 } }}
-            className='label-text'
+            className="label-text"
           >
             <Input className={styles.form__input} />
           </Form.Item>
-          <Form.Item
-          >
+          <Form.Item>
             <Form.Item
-              label='Image'
+              label="Image"
               labelCol={{ xs: { offset: 0 }, sm: { span: 32, offset: 0 } }}
               wrapperCol={{ span: 32 }}
-              valuePropName='fileList'
+              valuePropName="fileList"
               getValueFromEvent={normFile}
             >
               {loaded ? (
@@ -179,16 +177,17 @@ const UserCreate: React.FC<UserCreateProps> = ({
                   src={<Image className={styles.avatar__img} src={imageUrl} />}
                 ></Avatar>
               ) : (
-                <Avatar className={styles.avatar__text} size={60}
-                >
-                  {firstName ? firstName.toLocaleUpperCase().slice(0, 1) : 'User'}
+                <Avatar className={styles.avatar__text} size={60}>
+                  {firstName
+                    ? firstName.toLocaleUpperCase().slice(0, 1)
+                    : 'User'}
                   {lastName
                     ? lastName.toLocaleUpperCase().slice(0, 1)
                     : firstName.toLocaleUpperCase().slice(-1)}
                 </Avatar>
               )}
               <Upload
-                listType='picture-card'
+                listType="picture-card"
                 className={styles.avatar__uploader}
                 showUploadList={false}
                 beforeUpload={beforeUpload}
@@ -216,24 +215,27 @@ const UserCreate: React.FC<UserCreateProps> = ({
               size={32}
             >
               <Button
-                type='primary'
-                htmlType='submit'
-                size='large'
-                className='button button__small'>
+                type="primary"
+                htmlType="submit"
+                size="large"
+                className="button button__small"
+              >
                 Confirm
               </Button>
               <Button
-                type='default'
-                onClick={handleCancel}
-                size='large'
-                className='button button__small'>
+                type="default"
+                onClick={hideModel}
+                size="large"
+                className="button button__small"
+              >
                 Cancel
               </Button>
               <Button
-                htmlType='reset'
+                htmlType="reset"
                 onClick={onReset}
-                size='large'
-                className='button button__small'>
+                size="large"
+                className="button button__small"
+              >
                 Reset
               </Button>
             </Space>

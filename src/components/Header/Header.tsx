@@ -24,8 +24,9 @@ import IMessage from '../../interfaces/message';
 export interface InputProps extends KeyboardEvent<HTMLInputElement> {
   code: string;
 }
-const Header: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
+const ENTER = 'Enter';
 
+const Header: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
   const socket = useContext(SocketContext);
   const dispatch = useAppDispatch();
 
@@ -36,7 +37,7 @@ const Header: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
   const messages = useAppSelector(selectMessages);
 
   const writeMessage = (event: InputProps) => {
-    if (event.code === 'Enter') {
+    if (event.code === ENTER) {
       const message = {
         ...user,
         text,
@@ -106,7 +107,6 @@ const Header: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
       </div>
 
       <div className={styles.greenLine} />
-
     </header>
   );
 };

@@ -22,8 +22,8 @@ const GameSettings: FC = () => {
   );
   const [timeString, setTimeString] = useState<string>(options.timerValue);
 
-  const onChange = (timeData: Moment | null, str: string) => {
-    setTimeString(str);
+  const onChange = (timeData: Moment | null, timeStringData: string) => {
+    setTimeString(timeStringData);
     setValue(timeData);
   };
 

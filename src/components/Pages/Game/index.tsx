@@ -1,31 +1,38 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
+import PlayerCards from 'src/components/PlayerCards';
 import TitleServer from '../Settings/Title-Spring/Title-spring';
-import ScramMaster from '../Settings/Scram-master';
-import { title } from '../Settings';
+
 import Issues from '../Settings/Issues';
 import styles from './GamePage.module.scss';
 import Button from '../../Button';
 import RoundControl from './RoundControl';
+import { useAppSelector } from '../../../hooks';
+import { selectUser, selectUsers } from '../../../store/usersSlice';
 import CardCollection from '../Settings/Card-collection';
-import { CardData } from '../Settings/Card-collection/Card-collection';
-
-const cardData: CardData[] = [
-  { cardValue: 'unknown', cardStatisticValue: '12%', issueId: 123 },
-  // { cardValue: 13, cardStatisticValue: '12%', issueId: 123 },
-  // { cardValue: 5, cardStatisticValue: '12%', issueId: 123 },
-  // { cardValue: 8, cardStatisticValue: '12%', issueId: 123 },
-  // { cardValue: 3, cardStatisticValue: '12%', issueId: 123 },
-  // { cardValue: 9, cardStatisticValue: '12%', issueId: 123 },
-];
 
 const Game: FC = () => {
+  const users = useAppSelector(selectUsers);
+  const user = useAppSelector(selectUser);
+
+  const master = useMemo(() => {
+    return users.find((item) => item.isMaster);
+  }, [users]);
+
+  // const others = useMemo(() => {
+  //   return users.filter((item) => !item.isMaster);
+  // }, [users]);
+
   return (
     <div style={{ display: 'flex' /* , flexWrap: 'wrap' */ }}>
       <div className={styles.GameContainer}>
-        <TitleServer title={title} />
+        <TitleServer title={'123'} />
 
         <div className={styles.flexRow}>
-          <ScramMaster />
+          <PlayerCards
+            items={master ? [master] : []}
+            user={user}
+            title={'Scram master:'}
+          />
           <Button backgroundColor={'#fff'} color={'#2B3A67'}>
             Stop Game
           </Button>
@@ -36,7 +43,7 @@ const Game: FC = () => {
           <RoundControl />
         </div>
 
-        <CardCollection isSettingsPage={false} cardData={cardData} />
+        <CardCollection isSettingsPage={false} />
       </div>
 
       <aside className={styles.aside}>

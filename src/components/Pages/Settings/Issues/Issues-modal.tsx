@@ -1,8 +1,9 @@
-import React, { Dispatch, FC, SetStateAction } from "react";
-import { Modal, Select, Form, Input, Button } from "antd";
-import styles from "./Issues.module.scss";
-import { useAppDispatch } from "src/hooks";
-import { addIssue, editIssue } from "src/store/counterSlice";
+import React, { Dispatch, FC, SetStateAction } from 'react';
+import { Modal, Select, Form, Input, Button } from 'antd';
+import { useAppDispatch } from 'src/hooks';
+import { addIssue, editIssue } from 'src/store/counterSlice';
+import styles from './Issues.module.scss';
+
 const { Option } = Select;
 
 interface ModalIssuesProps {
@@ -28,12 +29,26 @@ const ModalIssues: FC<ModalIssuesProps> = ({
   const dispatch = useAppDispatch();
   const [form] = Form.useForm();
   const initialValuesForm = {
-    ["cardTitle"]: props.cardTitle,
-    ["linkToIssue"]: props.linkToIssue,
-    ["priority"]: props.priority,
+    cardTitle: props.cardTitle,
+    linkToIssue: props.linkToIssue,
+    priority: props.priority,
   };
   const onCancel = () => {
     setIsModalVisible(false);
+  };
+
+  const onSubmit = (value: {
+    cardTitle: string;
+    linkToIssue: string;
+    priority: string;
+    id: number;
+  }) => {
+    setIsModalVisible(false);
+    if (issueMode === 'create') {
+      dispatch(addIssue(value));
+    } else {
+      dispatch(editIssue(value));
+    }
   };
 
   const onClick = () => {
@@ -44,21 +59,10 @@ const ModalIssues: FC<ModalIssuesProps> = ({
         onSubmit(value);
       })
       .catch((info) => {
-        console.log("Validate Failed:", info);
+        console.log('Validate Failed:', info);
       });
   };
 
-  const onSubmit = (value: {
-    cardTitle: string;
-    linkToIssue: string;
-    priority: string;
-    id: number;
-  }) => {
-    setIsModalVisible(false);
-    issueMode === "create"
-      ? dispatch(addIssue(value))
-      : dispatch(editIssue(value));
-  };
   return (
     <div>
       <Modal
@@ -81,30 +85,30 @@ const ModalIssues: FC<ModalIssuesProps> = ({
           <Form.Item
             name="cardTitle"
             className={styles.input}
-            label={"Title: "}
+            label={'Title: '}
           >
             <Input />
           </Form.Item>
           <Form.Item
             name="linkToIssue"
             className={styles.input}
-            label={"Link: "}
+            label={'Link: '}
           >
             <Input />
           </Form.Item>
           <Form.Item
             name="priority"
             className={styles.select}
-            label={"Priority: "}
+            label={'Priority: '}
           >
             <Select showSearch placeholder="Select a priority">
-              <Option className={styles.option} value={"Low"}>
+              <Option className={styles.option} value={'Low'}>
                 Low
               </Option>
-              <Option className={styles.option} value={"Middle"}>
+              <Option className={styles.option} value={'Middle'}>
                 Middle
               </Option>
-              <Option className={styles.option} value={"High"}>
+              <Option className={styles.option} value={'High'}>
                 High
               </Option>
             </Select>

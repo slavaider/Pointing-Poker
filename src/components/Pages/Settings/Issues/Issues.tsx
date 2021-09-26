@@ -1,10 +1,10 @@
-import React, { FC, useState } from "react";
-import { PlusOutlined } from "@ant-design/icons";
-import SettingsIssuesCard from "./SettingsIssuesCard";
-import ModalIssues from "./Issues-modal";
-import styles from "./Issues.module.scss";
-import stylesPage from "../Settings.module.scss";
-import { useAppSelector } from "src/hooks";
+import React, { FC, useState } from 'react';
+import { PlusOutlined } from '@ant-design/icons';
+import { useAppSelector } from 'src/hooks';
+import SettingsIssuesCard from './SettingsIssuesCard';
+import ModalIssues from './Issues-modal';
+import styles from './Issues.module.scss';
+import stylesPage from '../Settings.module.scss';
 
 interface Cards {
   cardTitle: string;
@@ -13,17 +13,15 @@ interface Cards {
   id: number;
 }
 
-
 interface IssuesProps {
   isMaster?: boolean;
   width?: string;
 }
 
 const Issues: FC<IssuesProps> = ({ isMaster = false, width }) => {
-  const issues = useAppSelector((state) => state.settings.issues);
   const issues: Cards[] = useAppSelector((state) => state.settings.issues);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const priorityValueDefault = "Low";
+  const priorityValueDefault = 'Low';
   const idLastIssue = issues.length > 0 ? issues[issues.length - 1].id : 0;
   const onClick = () => {
     setIsModalVisible(true);
@@ -32,7 +30,6 @@ const Issues: FC<IssuesProps> = ({ isMaster = false, width }) => {
     <div style={{ width }}>
       {isMaster && <h4 className={stylesPage.title}>Issues:</h4>}
       <div className={styles.container}>
-
         {issues.map((item, index) => (
           <SettingsIssuesCard
             cardTitle={item.cardTitle}
@@ -52,16 +49,16 @@ const Issues: FC<IssuesProps> = ({ isMaster = false, width }) => {
           isModalVisible={isModalVisible}
           setIsModalVisible={setIsModalVisible}
           props={{
-            cardTitle: "",
+            cardTitle: '',
             priority: priorityValueDefault,
-            linkToIssue: "",
+            linkToIssue: '',
             id: idLastIssue + 1,
           }}
           issueMode="create"
           modalTitle="Create Issue"
         />
       ) : (
-        ""
+        ''
       )}
     </div>
   );
