@@ -1,5 +1,6 @@
 import React, { FC, useState } from 'react';
 import { EditOutlined, CheckOutlined } from '@ant-design/icons';
+import AutosizeInput from 'react-input-autosize';
 import styles from './TitleSpring.module.scss';
 
 interface TitleSpringInterface {
@@ -12,18 +13,20 @@ const TitleSpring: FC<TitleSpringInterface> = ({
   isSettingsPage = false,
 }: TitleSpringInterface) => {
   const [contentEditable, setContentEditable] = useState(false);
-
   const color = contentEditable ? 'darkblue' : '#000';
 
   return (
     <div className={styles.titleSpring}>
-      <div
-        contentEditable={contentEditable}
-        ref={(div) => div?.focus()}
-        style={{ color }}
-      >
-        {title}
-      </div>{' '}
+      {contentEditable ? (
+        <AutosizeInput
+          style={{ boxShadow: 'inset 0px 4px 4px rgba(0, 0, 0, 0.25)', color }}
+          className={styles.autoSizeInput}
+          defaultValue={title}
+          onBlur={(e) => console.log(e.currentTarget.innerHTML)}
+        />
+      ) : (
+        <div style={{ color }}>{title}</div>
+      )}{' '}
       {isSettingsPage && !contentEditable && (
         <EditOutlined
           style={{ marginLeft: '15px' }}
