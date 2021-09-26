@@ -1,64 +1,124 @@
-import express, { Express, Request, Response } from 'express';
+// @ts-nocheck
+import express, {Express} from 'express';
 import http from 'http';
-import next, { NextApiHandler } from 'next';
+import next, {NextApiHandler} from 'next';
 import socketio from 'socket.io';
 import cors from 'cors';
+import IUser from '../src/interfaces/user';
+import IMessage from '../src/interfaces/message';
+import {IOptions} from "../src/interfaces/options";
 
 const port: number = parseInt(process.env.PORT || '3000', 10);
 const dev: boolean = process.env.NODE_ENV !== 'production';
-const nextApp = next({ dev });
+const nextApp = next({dev});
 const nextHandler: NextApiHandler = nextApp.getRequestHandler();
 const app: Express = express();
 const server: http.Server = http.createServer(app);
 const io: socketio.Server = new socketio.Server();
 
-const messages: any[] = [];
+const messages = {};
 const users = {};
+const options = {};
+const titles = {};
+const issues = {};
+const cards = {};
 
 nextApp.prepare().then(async () => {
-  app.use(cors());
+    app.use(cors());
 
-  io.attach(server);
+    io.attach(server);
 
-  io.on('connection', (socket: socketio.Socket) => {
-    socket.on('join server', (user: any, cb) => {
-      if (!user.name && !user.avatar) {
-        return cb('wrong');
-      }
-      const newUser = {
-        ...user,
-        userId: socket.id,
-      };
-      socket.join(user.room);
-      if (Object.prototype.hasOwnProperty.call(users, user.room)) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        users[user.room].push(newUser);
-      } else {
-        Object.assign(users, { [user.room]: [newUser] });
-      }
-      socket.broadcast.to(user.room).emit('add user', newUser);
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      return cb(users[user.room]);
+    io.on('connection', (socket: socketio.Socket) => {
+
+        socket.on('join server', (user: IUser, cb) => {
+            const newUser = {
+                ...user,
+                userId: socket.id,
+            };
+            socket.join(user.room);
+
+            if (Object.prototype.hasOwnProperty.call(users, user.room)) {
+                users[user.room].push(newUser);
+            } else {
+                Object.assign(users, {[user.room]: [newUser]});
+                Object.assign(messages, {[user.room]: []});
+                Object.assign(options, {[user.room]: {
+                        timerValue:'02:20',
+                        playable: true,
+                        swap: true,
+                        timer: true,
+                        scoreType: 'story point',
+                        scoreTypeShort: 'SP',
+                    }});
+                // TODO: other sockets
+                Object.assign(titles, {[user.room]: []});
+                Object.assign(issues, {[user.room]: []});
+                Object.assign(cards, {[user.room]: []});
+            }
+
+            socket.broadcast.to(user.room).emit('add user', newUser);
+
+            return cb(users[user.room], messages[user.room],options[user.room], newUser);
+        });
+
+        socket.on('add user', (user, cb) => {
+            cb(user);
+        });
+
+        socket.on('send message', (message: IMessage, cb) => {
+            messages[message.room].push(message);
+            socket.broadcast.to(message.room).emit('add message', message);
+            cb(messages[message.room]);
+        });
+
+        socket.on('add message', (message, cb) => {
+            cb(message);
+        });
+
+        socket.on('send option', (option: IOptions,room, cb) => {
+            options[room] = option;
+            socket.broadcast.to(room).emit('add option', option);
+            cb(options[room]);
+        });
+
+        socket.on('add option', (option, cb) => {
+            cb(option);
+        });
+
+        socket.on('send title', (title: IMessage, room,cb) => {
+            titles[room] = title;
+            socket.broadcast.to(room).emit('add title', title);
+            cb(titles[room]);
+        });
+
+        socket.on('add title', (title, cb) => {
+            cb(title);
+        });
+
+        socket.on('send issue', (issue: IMessage,room, cb) => {
+            issues[room].push(issue);
+            socket.broadcast.to(room).emit('add issue', issue);
+            cb(issues[room]);
+        });
+
+        socket.on('add issue', (issue, cb) => {
+            cb(issue);
+        });
+
+        socket.on('send card', (card: IMessage,room, cb) => {
+            cards[room].push(card);
+            socket.broadcast.to(room).emit('add card', card);
+            cb(cards[room]);
+        });
+
+        socket.on('add card', (card, cb) => {
+            cb(card);
+        });
     });
 
-    socket.on('add user', (user, cb) => {
-      cb(user);
+    app.all('*', (req: any, res: any) => nextHandler(req, res));
+
+    server.listen(port, () => {
+        console.log(`> Ready on http://localhost:${port}`);
     });
-    socket.on('chat', (data) => {
-      messages.push(data);
-      socket.broadcast.emit('chat', data);
-    });
-  });
-
-  app.get('/chat', (_req: Request, res: Response) => {
-    res.json({ messages });
-  });
-
-  app.all('*', (req: any, res: any) => nextHandler(req, res));
-
-  server.listen(port, () => {
-    console.log(`> Ready on http://localhost:${port}`);
-  });
 });
