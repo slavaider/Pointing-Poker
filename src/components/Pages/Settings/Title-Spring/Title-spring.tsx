@@ -4,19 +4,27 @@ import styles from './TitleSpring.module.scss';
 
 interface TitleSpringInterface {
   title: string;
+  isSettingsPage?: boolean;
 }
 
 const TitleSpring: FC<TitleSpringInterface> = ({
   title,
+  isSettingsPage = false,
 }: TitleSpringInterface) => {
   const [contentEditable, setContentEditable] = useState(false);
 
+  const color = contentEditable ? 'darkblue' : '#000';
+
   return (
     <div className={styles.titleSpring}>
-      <div contentEditable={contentEditable} ref={(div) => div?.focus()}>
+      <div
+        contentEditable={contentEditable}
+        ref={(div) => div?.focus()}
+        style={{ color }}
+      >
         {title}
       </div>{' '}
-      {!contentEditable && (
+      {isSettingsPage && !contentEditable && (
         <EditOutlined
           style={{ marginLeft: '15px' }}
           key="edit"
@@ -25,10 +33,10 @@ const TitleSpring: FC<TitleSpringInterface> = ({
           }}
         />
       )}
-      {contentEditable && (
+      {isSettingsPage && contentEditable && (
         <CheckOutlined
           style={{ marginLeft: '15px' }}
-          key="edit"
+          key="check"
           onClick={() => setContentEditable(false)}
         />
       )}

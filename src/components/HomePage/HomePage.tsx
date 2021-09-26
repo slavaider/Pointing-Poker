@@ -1,58 +1,93 @@
-import React, { FormEvent, useEffect } from 'react';
+import React, {
+  FormEvent,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import Link from 'next/link';
 import { Button, Input, Space } from 'antd';
 import { v4 } from 'uuid';
-import useSocket from '../../hooks/useSocket';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { addUser, addUsers, selectUsers } from '../../store/usersSlice';
+import { useRouter } from 'next/router';
+import SocketContext from 'src/shared/SocketContext';
+import { useAppDispatch } from '../../hooks';
+import {
+  addMessages,
+  addUser,
+  addUsers,
+  addOptions,
+  setUser,
+} from '../../store/usersSlice';
+import UserCreate from '../UserCreate';
+import IUser from '../../interfaces/user';
+import IMessage from '../../interfaces/message';
+import { IOptions } from '../../interfaces/options';
 
 const HomePage: React.FC = () => {
-  const socket = useSocket('http://localhost:3000');
   const dispatch = useAppDispatch();
-  const users = useAppSelector(selectUsers);
+  const socket = useContext(SocketContext);
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [isMaster, setIsMaster] = useState<boolean>(false);
+  const [url, setUrl] = useState<string>('');
+  const router = useRouter();
+
+  const showModel = () => {
+    setIsModalVisible(true);
+  };
 
   const connectByUrl = (event: FormEvent) => {
     event.preventDefault();
-    const url = (event.target as HTMLFormElement).url.value;
-    if (socket)
-      socket.emit(
-        'join server',
-        {
-          room: url,
-          name: 'random member',
-          avatar: 'random string',
-        },
-        (data: any) => {
-          dispatch(addUsers(data));
-        },
-      );
+    const urlData = (event.target as HTMLFormElement).url.value;
+    setUrl(urlData);
+    setIsMaster(false);
+    showModel();
   };
 
   const connect = () => {
-    if (socket)
-      socket.emit(
-        'join server',
-        {
-          room: v4(),
-          name: 'random member',
-          avatar: 'random string',
-        },
-        (data: any) => {
-          dispatch(addUsers(data));
-        },
-      );
+    setIsMaster(true);
+    showModel();
   };
 
+  const handleUser = useCallback(
+    (userData: IUser) => {
+      const room = isMaster ? v4() : url;
+      socket?.emit(
+        'join server',
+        {
+          ...userData,
+          isMaster,
+          room,
+        },
+        (
+          usersData: IUser[],
+          messagesData: IMessage[],
+          options: IOptions,
+          userResponse: IUser,
+        ) => {
+          dispatch(addUsers(usersData));
+          dispatch(addMessages(messagesData));
+          dispatch(addOptions(options));
+          dispatch(setUser(userResponse));
+          router.push(`/lobby/${room}`);
+        },
+      );
+    },
+    [dispatch, isMaster, router, socket, url],
+  );
+
   useEffect(() => {
-    if (socket) {
-      socket.on('add user', (data: any) => {
-        dispatch(addUser(data));
-      });
-    }
-  }, [socket]);
+    socket?.on('add user', (data: IUser) => {
+      dispatch(addUser(data));
+    });
+  }, [dispatch, socket]);
 
   return (
     <>
+      <UserCreate
+        isShow={isModalVisible}
+        hideModel={() => setIsModalVisible(false)}
+        handleUser={handleUser}
+      />
       <ul>
         <li>
           <Link href="/" replace>
@@ -65,7 +100,13 @@ const HomePage: React.FC = () => {
           </Link>
         </li>
         <li>
-          <Link href="/settings" replace>
+          <Link
+            href={{
+              pathname: '/settings/[roomId]',
+              query: { roomId: 1 },
+            }}
+            replace
+          >
             <a>Settings</a>
           </Link>
         </li>
@@ -88,19 +129,6 @@ const HomePage: React.FC = () => {
           </Space>
         </form>
       </Space>
-      <ul>
-        <>
-          {users.map((user: any) => {
-            return (
-              <li key={user.userId}>
-                {user.name} <br />
-                id: {user.userId} <br />
-                room: {user.room}
-              </li>
-            );
-          })}
-        </>
-      </ul>
     </>
   );
 };

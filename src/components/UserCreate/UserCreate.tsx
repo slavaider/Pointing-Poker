@@ -13,6 +13,7 @@ import {
 } from 'antd';
 import { LoadingOutlined, UploadOutlined } from '@ant-design/icons';
 import styles from './userCreate.module.scss';
+import IUser from '../../interfaces/user';
 
 type SizeType = Parameters<typeof Form>[0]['size'];
 
@@ -34,35 +35,35 @@ function beforeUpload(file: any) {
   return isJpgOrPng && isLt2M;
 }
 
-const UserCreate: React.FC = () => {
+type UserCreateProps = {
+  isShow: boolean;
+  hideModel: () => void;
+  handleUser: (user: IUser) => void;
+};
+
+const UserCreate: React.FC<UserCreateProps> = ({
+  isShow,
+  hideModel,
+  handleUser,
+}: UserCreateProps) => {
   const [componentSize] = useState<SizeType | 'default'>('default');
-  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [loaded, setLoaded] = useState<boolean>(false);
-  const [imageUrl, setImageUrl] = useState<string>('');
-
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
+  const [imageUrl, setImageUrl] = useState<any>('');
 
   const normFile = (e: any) => {
-    console.log('Upload event:');
     if (Array.isArray(e)) {
       return e;
     }
     return e && e.fileList;
   };
 
-  const onFinish = (values: any) => {
-    // values.image = imageUrl;
-    setIsModalVisible(false);
-    console.log('Received values of form: ', values);
+  const onFinish = (values: IUser) => {
+    values.image = imageUrl;
+    hideModel();
+    handleUser(values);
   };
 
   const onReset = () => {
@@ -87,8 +88,8 @@ const UserCreate: React.FC = () => {
       return;
     }
     if (info.file.status === 'done') {
-      getBase64(info.file.originFileObj, (imageUrl: any) => {
-        setImageUrl(imageUrl);
+      getBase64(info.file.originFileObj, (image64: any) => {
+        setImageUrl(image64);
         setLoading(false);
         setLoaded(true);
       });
@@ -98,20 +99,17 @@ const UserCreate: React.FC = () => {
   const uploadButton = (
     <div>
       {loading ? <LoadingOutlined /> : <UploadOutlined />}
-      <div style={{ fontSize: 14 }}>Upload</div>
+      <div>Upload</div>
     </div>
   );
 
   return (
     <section className={styles.user__create}>
-      <Button type="primary" onClick={showModal}>
-        User Create
-      </Button>
       <Modal
         width={600}
         style={{ top: 20 }}
-        visible={isModalVisible}
-        onCancel={handleCancel}
+        visible={isShow}
+        onCancel={hideModel}
         closable={false}
         bodyStyle={{ padding: 10 }}
         footer={[]}
@@ -198,12 +196,12 @@ const UserCreate: React.FC = () => {
                 {imageUrl ? '' : uploadButton}
               </Upload>
               <Form.Item
-                name="switch"
                 label="Connect as Observer"
                 labelCol={{ xs: { offset: 0 }, sm: { span: 8, offset: 1 } }}
                 wrapperCol={{ span: 8 }}
                 valuePropName="checked"
                 className={styles.label__switch}
+                name="isObserver"
               >
                 <Switch />
               </Form.Item>
@@ -226,7 +224,7 @@ const UserCreate: React.FC = () => {
               </Button>
               <Button
                 type="default"
-                onClick={handleCancel}
+                onClick={hideModel}
                 size="large"
                 className="button button__small"
               >
