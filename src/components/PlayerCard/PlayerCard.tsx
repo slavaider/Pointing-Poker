@@ -2,11 +2,11 @@ import React, { FC, useState } from 'react';
 import { Card, Avatar, Badge, Modal } from 'antd';
 import { StopOutlined } from '@ant-design/icons';
 import styles from './PlayerCard.module.scss';
-import IUser from '../../interfaces/user';
+import User from '../../interfaces/user';
 
 const { Meta } = Card;
 
-export interface PlayerCardProps extends IUser {
+export interface PlayerCardProps extends User {
   ItIsYou: boolean;
   isMaster: boolean;
   size: 'max' | 'mini';

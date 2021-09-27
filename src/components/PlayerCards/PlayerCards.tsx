@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
 import PlayerCard from '../PlayerCard';
 import styles from './PlayerCards.module.scss';
-import IUser from '../../interfaces/user';
+import User from '../../interfaces/user';
 import stylesPage from '../Pages/Settings/Settings.module.scss';
 
 type PlayerCardsProps = {
-  items: IUser[];
-  user: IUser | null;
+  items: User[];
+  user: User | null;
   title: string;
 };
 

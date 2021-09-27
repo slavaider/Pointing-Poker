@@ -1,7 +1,6 @@
-import IUser from './user';
+import User from './user';
 
-export default interface IMessage extends IUser {
-  room: string;
+export default interface Message extends User {
   text: string;
   date: string;
 }

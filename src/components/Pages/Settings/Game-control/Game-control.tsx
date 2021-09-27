@@ -1,28 +1,45 @@
 import React, { FC } from 'react';
 import { Button } from 'antd';
+import { withRouter } from 'next/router';
+import { WithRouterProps } from 'next/dist/client/with-router';
 import styles from './Game-control.module.scss';
-import { useAppSelector } from '../../../../hooks';
-import { selectOptions } from '../../../../store/usersSlice';
 
-const GameControl: FC = () => {
-  const options = useAppSelector(selectOptions);
+export interface GameControlProps extends WithRouterProps {
+  isMaster: boolean;
+}
+
+const GameControl: FC<GameControlProps> = ({
+  router,
+  isMaster,
+}: GameControlProps) => {
+  const startGame = () => {
+    router.push('/game');
+  };
+  const cancelGame = () => {
+    router.push('/');
+  };
+  const exitGame = () => {
+    router.push('/');
+  };
+
   return (
     <div className={styles.game__control_container}>
-      <Button
-        type="primary"
-        htmlType="submit"
-        className="button"
-        onClick={() => {
-          console.log(options);
-        }}
-      >
-        Start Game
-      </Button>
-      <Button type="default" htmlType="submit" className="button">
-        Cancel Game
-      </Button>
+      {isMaster ? (
+        <>
+          <Button type="primary" className="button" onClick={startGame}>
+            START GAME
+          </Button>
+          <Button type="default" className="button" onClick={cancelGame}>
+            CANCEL GAME
+          </Button>
+        </>
+      ) : (
+        <Button type="default" className="button" onClick={exitGame}>
+          EXIT GAME
+        </Button>
+      )}
     </div>
   );
 };
 
-export default GameControl;
+export default withRouter(GameControl);

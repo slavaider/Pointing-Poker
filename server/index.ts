@@ -4,9 +4,9 @@ import http from 'http';
 import next, {NextApiHandler} from 'next';
 import socketio from 'socket.io';
 import cors from 'cors';
-import IUser from '../src/interfaces/user';
-import IMessage from '../src/interfaces/message';
-import {IOptions} from "../src/interfaces/options";
+import User from '../src/interfaces/user';
+import Message from '../src/interfaces/message';
+import {Options} from "../src/interfaces/options";
 
 const port: number = parseInt(process.env.PORT || '3000', 10);
 const dev: boolean = process.env.NODE_ENV !== 'production';
@@ -30,7 +30,7 @@ nextApp.prepare().then(async () => {
 
     io.on('connection', (socket: socketio.Socket) => {
 
-        socket.on('join server', (user: IUser, cb) => {
+        socket.on('join server', (user: User, cb) => {
             const room = user.room;
             const newUser = {
                 ...user,
@@ -66,7 +66,7 @@ nextApp.prepare().then(async () => {
             cb(user);
         });
 
-        socket.on('send message', (message: IMessage, cb) => {
+        socket.on('send message', (message: Message, cb) => {
             messages[message.room].push(message);
             socket.broadcast.to(message.room).emit('add message', message);
             cb(messages[message.room]);
@@ -76,7 +76,7 @@ nextApp.prepare().then(async () => {
             cb(message);
         });
 
-        socket.on('send option', (option: IOptions,room, cb) => {
+        socket.on('send option', (option: Options, room, cb) => {
             options[room] = option;
             socket.broadcast.to(room).emit('add option', option);
             cb(options[room]);
@@ -86,7 +86,7 @@ nextApp.prepare().then(async () => {
             cb(option);
         });
 
-        socket.on('send title', (title: IMessage, room,cb) => {
+        socket.on('send title', (title: Message, room, cb) => {
             titles[room] = title;
             socket.broadcast.to(room).emit('add title', title);
             cb(titles[room]);
@@ -96,7 +96,7 @@ nextApp.prepare().then(async () => {
             cb(title);
         });
 
-        socket.on('send issue', (issue: IMessage,room, cb) => {
+        socket.on('send issue', (issue: Message, room, cb) => {
             issues[room].push(issue);
             socket.broadcast.to(room).emit('add issue', issue);
             cb(issues[room]);
@@ -106,7 +106,7 @@ nextApp.prepare().then(async () => {
             cb(issue);
         });
 
-        socket.on('send card', (card: IMessage,room, cb) => {
+        socket.on('send card', (card: Message, room, cb) => {
             cards[room].push(card);
             socket.broadcast.to(room).emit('add card', card);
             cb(cards[room]);

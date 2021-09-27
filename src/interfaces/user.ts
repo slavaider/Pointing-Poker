@@ -1,4 +1,4 @@
-export default interface IUser {
+export default interface User {
   room: string;
   isMaster: boolean;
   firstName: string;
@@ -7,4 +7,5 @@ export default interface IUser {
   lastName: string;
   isObserver?: boolean;
   userId: string;
+  status: string; // 'settings' | 'idle' | [value]
 }

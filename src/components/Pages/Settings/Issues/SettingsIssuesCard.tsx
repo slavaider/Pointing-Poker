@@ -1,26 +1,20 @@
 import React, { FC, useState } from 'react';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { removeIssue } from 'src/store/counterSlice';
+import { removeIssue } from 'src/store/usersSlice';
 import { useAppDispatch } from 'src/hooks';
 import styles from './SettingsIssuesCard.module.scss';
 import ModalIssues from './Issues-modal';
+import Issue from '../../../../interfaces/issue';
 
-interface SettingsIssuesCardProps {
-  cardTitle: string;
-  priority: string;
-  linkToIssue: string;
-  id: number;
-}
-
-const SettingsIssuesCard: FC<SettingsIssuesCardProps> = ({
+const SettingsIssuesCard: FC<Issue> = ({
   cardTitle,
   priority,
   linkToIssue,
   id,
-}) => {
+}: Issue) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const dispatch = useAppDispatch();
-  const issueRemove = (value: number) => {
+  const issueRemove = (value: string) => {
     dispatch(removeIssue(value));
   };
 
@@ -56,7 +50,7 @@ const SettingsIssuesCard: FC<SettingsIssuesCardProps> = ({
         <ModalIssues
           isModalVisible={isModalVisible}
           setIsModalVisible={setIsModalVisible}
-          props={{
+          issue={{
             cardTitle,
             priority,
             linkToIssue,

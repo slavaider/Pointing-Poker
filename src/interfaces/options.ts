@@ -1,4 +1,4 @@
-export interface IOptions {
+export interface Options {
   timerValue: string;
   playable: boolean;
   swap: boolean;

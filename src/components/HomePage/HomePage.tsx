@@ -1,10 +1,4 @@
-import React, {
-  FormEvent,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, { FormEvent, useCallback, useContext, useState } from 'react';
 import Link from 'next/link';
 import { Button, Input, Space } from 'antd';
 import { v4 } from 'uuid';
@@ -13,15 +7,14 @@ import SocketContext from 'src/shared/SocketContext';
 import { useAppDispatch } from '../../hooks';
 import {
   addMessages,
-  addUser,
-  addUsers,
   addOptions,
+  addUsers,
   setUser,
 } from '../../store/usersSlice';
 import UserCreate from '../UserCreate';
-import IUser from '../../interfaces/user';
-import IMessage from '../../interfaces/message';
-import { IOptions } from '../../interfaces/options';
+import User from '../../interfaces/user';
+import Message from '../../interfaces/message';
+import { Options } from '../../interfaces/options';
 
 const HomePage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -49,7 +42,7 @@ const HomePage: React.FC = () => {
   };
 
   const handleUser = useCallback(
-    (userData: IUser) => {
+    (userData: User) => {
       const room = isMaster ? v4() : url;
       socket?.emit(
         'join server',
@@ -59,10 +52,10 @@ const HomePage: React.FC = () => {
           room,
         },
         (
-          usersData: IUser[],
-          messagesData: IMessage[],
-          options: IOptions,
-          userResponse: IUser,
+          usersData: User[],
+          messagesData: Message[],
+          options: Options,
+          userResponse: User,
         ) => {
           dispatch(addUsers(usersData));
           dispatch(addMessages(messagesData));
@@ -74,12 +67,6 @@ const HomePage: React.FC = () => {
     },
     [dispatch, isMaster, router, socket, url],
   );
-
-  useEffect(() => {
-    socket?.on('add user', (data: IUser) => {
-      dispatch(addUser(data));
-    });
-  }, [dispatch, socket]);
 
   return (
     <>

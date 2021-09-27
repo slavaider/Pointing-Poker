@@ -1,17 +1,12 @@
 import React, { FC, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { useAppSelector } from 'src/hooks';
+import { v4 } from 'uuid';
 import SettingsIssuesCard from './SettingsIssuesCard';
 import ModalIssues from './Issues-modal';
 import styles from './Issues.module.scss';
 import stylesPage from '../Settings.module.scss';
-
-interface Cards {
-  cardTitle: string;
-  priority: string;
-  linkToIssue: string;
-  id: number;
-}
+import { selectIssues } from '../../../../store/usersSlice';
 
 interface IssuesProps {
   isMaster?: boolean;
@@ -19,25 +14,20 @@ interface IssuesProps {
 }
 
 const Issues: FC<IssuesProps> = ({ isMaster = false, width }) => {
-  const issues: Cards[] = useAppSelector((state) => state.settings.issues);
+  const issues = useAppSelector(selectIssues);
+
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const priorityValueDefault = 'Low';
-  const idLastIssue = issues.length > 0 ? issues[issues.length - 1].id : 0;
+
   const onClick = () => {
     setIsModalVisible(true);
   };
+
   return (
     <div style={{ width }}>
       {isMaster && <h4 className={stylesPage.title}>Issues:</h4>}
       <div className={styles.container}>
-        {issues.map((item, index) => (
-          <SettingsIssuesCard
-            cardTitle={item.cardTitle}
-            priority={item.priority}
-            linkToIssue={item.linkToIssue}
-            id={item.id}
-            key={`${item.cardTitle}-${index}`}
-          />
+        {issues.map((item) => (
+          <SettingsIssuesCard {...item} key={item.id} />
         ))}
         <button className={styles.card__wrapper_new__issue} onClick={onClick}>
           Create new Issue
@@ -48,11 +38,11 @@ const Issues: FC<IssuesProps> = ({ isMaster = false, width }) => {
         <ModalIssues
           isModalVisible={isModalVisible}
           setIsModalVisible={setIsModalVisible}
-          props={{
+          issue={{
             cardTitle: '',
-            priority: priorityValueDefault,
+            priority: 'Low',
             linkToIssue: '',
-            id: idLastIssue + 1,
+            id: v4(),
           }}
           issueMode="create"
           modalTitle="Create Issue"

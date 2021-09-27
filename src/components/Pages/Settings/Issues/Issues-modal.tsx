@@ -1,20 +1,16 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
 import { Modal, Select, Form, Input, Button } from 'antd';
 import { useAppDispatch } from 'src/hooks';
-import { addIssue, editIssue } from 'src/store/counterSlice';
+import { addIssue, editIssue } from 'src/store/usersSlice';
 import styles from './Issues.module.scss';
+import Issue from '../../../../interfaces/issue';
 
 const { Option } = Select;
 
 interface ModalIssuesProps {
   isModalVisible: boolean;
   setIsModalVisible: Dispatch<SetStateAction<boolean>>;
-  props: {
-    cardTitle: string;
-    linkToIssue: string;
-    priority: string;
-    id: number;
-  };
+  issue: Issue;
   issueMode: string;
   modalTitle: string;
 }
@@ -22,27 +18,18 @@ interface ModalIssuesProps {
 const ModalIssues: FC<ModalIssuesProps> = ({
   isModalVisible,
   setIsModalVisible,
-  props,
+  issue,
   issueMode,
   modalTitle,
 }) => {
   const dispatch = useAppDispatch();
   const [form] = Form.useForm();
-  const initialValuesForm = {
-    cardTitle: props.cardTitle,
-    linkToIssue: props.linkToIssue,
-    priority: props.priority,
-  };
+
   const onCancel = () => {
     setIsModalVisible(false);
   };
 
-  const onSubmit = (value: {
-    cardTitle: string;
-    linkToIssue: string;
-    priority: string;
-    id: number;
-  }) => {
+  const onSubmit = (value: Issue) => {
     setIsModalVisible(false);
     if (issueMode === 'create') {
       dispatch(addIssue(value));
@@ -55,7 +42,7 @@ const ModalIssues: FC<ModalIssuesProps> = ({
     form
       .validateFields()
       .then((value) => {
-        value.id = props.id;
+        value.id = issue.id;
         onSubmit(value);
       })
       .catch((info) => {
@@ -81,7 +68,7 @@ const ModalIssues: FC<ModalIssuesProps> = ({
         ]}
       >
         <p>{modalTitle}</p>
-        <Form form={form} name="issue" initialValues={initialValuesForm}>
+        <Form form={form} name="issue" initialValues={issue}>
           <Form.Item
             name="cardTitle"
             className={styles.input}

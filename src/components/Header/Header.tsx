@@ -1,10 +1,4 @@
-import React, {
-  FC,
-  useContext,
-  useEffect,
-  useState,
-  KeyboardEvent,
-} from 'react';
+import React, { FC, KeyboardEvent, useContext, useState } from 'react';
 import { Drawer, Input } from 'antd';
 import Image from 'next/image';
 import { withRouter } from 'next/router';
@@ -14,16 +8,17 @@ import styles from './Header.module.scss';
 import Message from '../Message';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import {
-  addMessage,
   addMessages,
   selectMessages,
   selectUser,
 } from '../../store/usersSlice';
+
 import IMessage from '../../interfaces/message';
 
 export interface InputProps extends KeyboardEvent<HTMLInputElement> {
   code: string;
 }
+
 const ENTER = 'Enter';
 
 const Header: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
@@ -49,12 +44,6 @@ const Header: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
       });
     }
   };
-
-  useEffect(() => {
-    socket?.on('add message', (data: IMessage) => {
-      dispatch(addMessage(data));
-    });
-  }, [dispatch, socket]);
 
   return (
     <header className={styles.header}>

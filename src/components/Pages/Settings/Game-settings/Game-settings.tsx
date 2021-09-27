@@ -5,7 +5,7 @@ import { addOptions, selectOptions, selectUser } from 'src/store/usersSlice';
 import styles from './Game-settings.module.scss';
 import stylesPage from '../Settings.module.scss';
 import { useAppDispatch, useAppSelector } from '../../../../hooks';
-import { IOptions } from '../../../../interfaces/options';
+import { Options } from '../../../../interfaces/options';
 import SocketContext from '../../../../shared/SocketContext';
 
 const GameSettings: FC = () => {
@@ -27,9 +27,9 @@ const GameSettings: FC = () => {
     setValue(timeData);
   };
 
-  const submit = (values: IOptions) => {
+  const submit = (values: Options) => {
     values.timerValue = timeString;
-    socket?.emit('send option', values, user?.room, (response: IOptions) => {
+    socket?.emit('send option', values, user?.room, (response: Options) => {
       dispatch(addOptions(response));
     });
   };
