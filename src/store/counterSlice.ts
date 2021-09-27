@@ -10,6 +10,7 @@ interface Issue {
 }
 
 const initialState = {
+  titleSpring: 'Spring 23 planning (issues 13, 533, 5623, 3252, 6623, ...)',
   value: 0,
   status: 'idle',
   members: [],
@@ -41,13 +42,15 @@ const initialState = {
   ],
   cards: [
     {
-      cardValue: 13,
+      cardValue: 'unknown',
       cardTitle: 'SP',
+      cardStatisticValue: '',
       id: 1,
     },
     {
-      cardValue: 15,
+      cardValue: '13w',
       cardTitle: 'SP',
+      cardStatisticValue: '',
       id: 2,
     },
   ],
@@ -111,6 +114,9 @@ export const counterSlice = createSlice({
           state.cards[index].cardValue = action.payload.cardValue;
       });
     },
+    editTitleSpring: (state, action: PayloadAction<string>) => {
+      state.titleSpring = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -134,6 +140,7 @@ export const {
   addCard,
   deleteCard,
   editCard,
+  editTitleSpring,
 } = counterSlice.actions;
 
 export const selectCount = (state: RootState): number => state.counter.value;
