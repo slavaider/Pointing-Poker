@@ -19,12 +19,13 @@ const Issues: FC<IssuesProps> = ({ isMaster = false, width }) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
   const onClick = () => {
+    console.log(isMaster);
     setIsModalVisible(true);
   };
 
   return (
     <div style={{ width }}>
-      {isMaster && <h4 className={stylesPage.title}>Issues:</h4>}
+      <h4 className={stylesPage.title}>Issues:</h4>
       <div className={styles.container}>
         {issues.map((item) => (
           <SettingsIssuesCard {...item} key={item.id} />

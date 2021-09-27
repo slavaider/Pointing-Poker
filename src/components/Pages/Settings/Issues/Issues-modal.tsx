@@ -1,9 +1,10 @@
-import React, { Dispatch, FC, SetStateAction } from 'react';
+import React, { Dispatch, FC, SetStateAction, useContext } from 'react';
 import { Modal, Select, Form, Input, Button } from 'antd';
-import { useAppDispatch } from 'src/hooks';
-import { addIssue, editIssue } from 'src/store/usersSlice';
+import { useAppDispatch, useAppSelector } from 'src/hooks';
+import { addIssue, editIssue, selectUser } from 'src/store/usersSlice';
 import styles from './Issues.module.scss';
 import Issue from '../../../../interfaces/issue';
+import SocketContext from '../../../../shared/SocketContext';
 
 const { Option } = Select;
 
@@ -24,6 +25,8 @@ const ModalIssues: FC<ModalIssuesProps> = ({
 }) => {
   const dispatch = useAppDispatch();
   const [form] = Form.useForm();
+  const socket = useContext(SocketContext);
+  const user = useAppSelector(selectUser);
 
   const onCancel = () => {
     setIsModalVisible(false);
@@ -32,7 +35,9 @@ const ModalIssues: FC<ModalIssuesProps> = ({
   const onSubmit = (value: Issue) => {
     setIsModalVisible(false);
     if (issueMode === 'create') {
-      dispatch(addIssue(value));
+      socket?.emit('send issue', value, user?.room, (issueData: Issue) => {
+        dispatch(addIssue(issueData));
+      });
     } else {
       dispatch(editIssue(value));
     }
@@ -51,7 +56,7 @@ const ModalIssues: FC<ModalIssuesProps> = ({
   };
 
   return (
-    <div>
+    <>
       <Modal
         className={styles.modal}
         visible={isModalVisible}
@@ -102,7 +107,7 @@ const ModalIssues: FC<ModalIssuesProps> = ({
           </Form.Item>
         </Form>
       </Modal>
-    </div>
+    </>
   );
 };
 

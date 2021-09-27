@@ -56,7 +56,7 @@ const Settings: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
         <>
           <Issues />
           <GameSettings />
-          <CardCollection isSettingsPage={false} />
+          <CardCollection />
         </>
       )}
     </div>

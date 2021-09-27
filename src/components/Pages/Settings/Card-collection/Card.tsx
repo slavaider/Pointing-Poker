@@ -1,8 +1,8 @@
-import React, {FC, useState} from 'react';
-import {CheckOutlined, DeleteOutlined, EditOutlined} from '@ant-design/icons';
-import {Input} from 'antd';
-import {useAppDispatch} from 'src/hooks';
-import {deleteCard, editCard} from 'src/store/usersSlice';
+import React, { FC, useState } from 'react';
+import { CheckOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Input } from 'antd';
+import { useAppDispatch } from 'src/hooks';
+import { deleteCard, editCard } from 'src/store/usersSlice';
 import styles from './Card-collection.module.scss';
 import ICard from '../../../../interfaces/card';
 
@@ -12,10 +12,14 @@ interface CardProps {
   isSettingsPage: boolean;
 }
 
-const Card: FC<CardProps> = ({card, width = '100px', isSettingsPage}: CardProps) => {
+const Card: FC<CardProps> = ({
+  card,
+  width = '100px',
+  isSettingsPage,
+}: CardProps) => {
   const [isModeEdit, setIsModeEdit] = useState<boolean>(false);
   const dispatch = useAppDispatch();
-  const {cardTitle, cardValue, id} = card;
+  const { cardTitle, cardValue, id } = card;
 
   const color = isModeEdit ? 'darkblue' : '#000';
 
@@ -28,8 +32,7 @@ const Card: FC<CardProps> = ({card, width = '100px', isSettingsPage}: CardProps)
   };
 
   const onClick = () => {
-    const inputValue = +(document.getElementById(`${id}`) as HTMLInputElement)
-      .value;
+    const inputValue = +(document.getElementById(id) as HTMLInputElement).value;
     if (!Number.isNaN(inputValue)) {
       dispatch(
         editCard({
@@ -43,27 +46,25 @@ const Card: FC<CardProps> = ({card, width = '100px', isSettingsPage}: CardProps)
 
   return (
     <>
-      <div className={styles.card__wrapper} style={{width}}>
+      <div className={styles.card__wrapper} style={{ width }}>
         <div className={styles.cardVal__top}>
           {isModeEdit ? (
             <Input
-              id={`${id}`}
+              id={id}
               className={styles.input__edit_card}
               defaultValue={cardValue}
               maxLength={5}
               autoFocus
               bordered={false}
-              style={{color}}
+              style={{ color }}
             />
           ) : (
-            <span style={{color}}>{cardValue}</span>
+            <span style={{ color }}>{cardValue}</span>
           )}
-          {console.log('isSettingsPage', isSettingsPage)}
-          <div style={{display: 'flex'}}>
+          <div style={{ display: 'flex' }}>
             {isSettingsPage && !isModeEdit && (
               <EditOutlined
                 className={styles.button__edit}
-                key={`edit - ${id}`}
                 onClick={editMode}
               />
             )}
@@ -71,12 +72,10 @@ const Card: FC<CardProps> = ({card, width = '100px', isSettingsPage}: CardProps)
             {isSettingsPage && isModeEdit && (
               <CheckOutlined
                 className={styles.button__edit}
-                key={`check - ${id}`}
                 onClick={onClick}
               />
             )}
             <DeleteOutlined
-              key={`delete - ${id}`}
               className={styles.button__delete}
               onClick={removeCard}
             />

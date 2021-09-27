@@ -6,15 +6,20 @@ import { useRouter } from 'next/router';
 import SocketContext from 'src/shared/SocketContext';
 import { useAppDispatch } from '../../hooks';
 import {
+  addCards,
+  addIssues,
   addMessages,
   addOptions,
   addUsers,
+  editTitleSpring,
   setUser,
 } from '../../store/usersSlice';
 import UserCreate from '../UserCreate';
 import User from '../../interfaces/user';
 import Message from '../../interfaces/message';
 import { Options } from '../../interfaces/options';
+import Issue from '../../interfaces/issue';
+import Card from '../../interfaces/card';
 
 const HomePage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -55,12 +60,18 @@ const HomePage: React.FC = () => {
           usersData: User[],
           messagesData: Message[],
           options: Options,
+          issuesData: Issue[],
+          cardsData: Card[],
+          title: string,
           userResponse: User,
         ) => {
           dispatch(addUsers(usersData));
           dispatch(addMessages(messagesData));
           dispatch(addOptions(options));
           dispatch(setUser(userResponse));
+          dispatch(editTitleSpring(title));
+          dispatch(addIssues(issuesData));
+          dispatch(addCards(cardsData));
           router.push(`/lobby/${room}`);
         },
       );

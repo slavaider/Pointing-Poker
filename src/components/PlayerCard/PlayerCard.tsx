@@ -7,7 +7,7 @@ import User from '../../interfaces/user';
 const { Meta } = Card;
 
 export interface PlayerCardProps extends User {
-  ItIsYou: boolean;
+  isItYou: boolean;
   isMaster: boolean;
   size: 'max' | 'mini';
 }
@@ -17,7 +17,7 @@ const PlayerCard: FC<PlayerCardProps> = ({
   firstName,
   lastName,
   job,
-  ItIsYou,
+  isItYou,
   isMaster = false,
   size = 'max',
 }: PlayerCardProps) => {
@@ -27,12 +27,12 @@ const PlayerCard: FC<PlayerCardProps> = ({
     <>
       {size === 'max' && (
         <div
-          style={ItIsYou ? { backgroundColor: '#9af7f7' } : undefined}
+          style={isItYou ? { backgroundColor: '#9af7f7' } : undefined}
           className={styles.wrapper}
         >
           <Meta
             avatar={
-              <Badge dot={ItIsYou}>
+              <Badge dot={isItYou}>
                 <Avatar
                   style={{
                     width: '55px',
@@ -45,7 +45,7 @@ const PlayerCard: FC<PlayerCardProps> = ({
                   }}
                   src={image}
                 >
-                  {firstName[0] +
+                  {firstName[0].toUpperCase() +
                     (lastName
                       ? firstName[0]
                       : firstName[firstName.length - 1].toUpperCase())}
@@ -55,7 +55,7 @@ const PlayerCard: FC<PlayerCardProps> = ({
             title={job}
             description={`${firstName}  ${lastName || ''}`}
           />
-          {!isMaster && !ItIsYou && (
+          {!isMaster && !isItYou && (
             <button
               onClick={() => setIsModalVisible(true)}
               type={'button'}
@@ -69,12 +69,12 @@ const PlayerCard: FC<PlayerCardProps> = ({
 
       {size === 'mini' && (
         <div
-          style={ItIsYou ? { backgroundColor: '#9af7f7' } : undefined}
+          style={isItYou ? { backgroundColor: '#9af7f7' } : undefined}
           className={`${styles.wrapper} ${styles.min}`}
         >
           <Meta
             avatar={
-              <Badge dot={ItIsYou}>
+              <Badge dot={isItYou}>
                 <Avatar
                   style={{
                     width: '30px',
@@ -87,7 +87,7 @@ const PlayerCard: FC<PlayerCardProps> = ({
                   }}
                   src={image}
                 >
-                  {firstName[0] +
+                  {firstName[0].toUpperCase() +
                     (lastName
                       ? lastName[0]
                       : firstName[firstName.length - 1].toUpperCase())}

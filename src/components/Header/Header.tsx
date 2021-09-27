@@ -7,11 +7,7 @@ import SocketContext from 'src/shared/SocketContext';
 import styles from './Header.module.scss';
 import Message from '../Message';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import {
-  addMessages,
-  selectMessages,
-  selectUser,
-} from '../../store/usersSlice';
+import { addMessage, selectMessages, selectUser } from '../../store/usersSlice';
 
 import IMessage from '../../interfaces/message';
 
@@ -38,8 +34,8 @@ const Header: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
         text,
         date: Date.now().toString(),
       };
-      socket?.emit('send message', message, (response: IMessage[]) => {
-        dispatch(addMessages(response));
+      socket?.emit('send message', message, (response: IMessage) => {
+        dispatch(addMessage(response));
         setText('');
       });
     }

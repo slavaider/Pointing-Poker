@@ -24,102 +24,108 @@ const issues = {};
 const cards = {};
 
 nextApp.prepare().then(async () => {
-    app.use(cors());
+  app.use(cors());
 
-    io.attach(server);
+  io.attach(server);
 
-    io.on('connection', (socket: socketio.Socket) => {
+  io.on('connection', (socket: socketio.Socket) => {
 
-        socket.on('join server', (user: User, cb) => {
-            const room = user.room;
-            const newUser = {
-                ...user,
-                userId: socket.id,
-            };
-            socket.join(room);
+    socket.on('join server', (user: User, cb) => {
+      const room = user.room;
+      const newUser = {
+        ...user,
+        userId: socket.id,
+      };
+      socket.join(room);
 
-            if (Object.prototype.hasOwnProperty.call(users, room)) {
-                users[room].push(newUser);
-            } else {
-                users[room]  = [newUser]
-                messages[room] = []
-                options[room] = {
-                    timerValue:'02:20',
-                    playable: true,
-                    swap: true,
-                    timer: true,
-                    scoreType: 'story point',
-                    scoreTypeShort: 'SP',
-                }
-                // TODO: other sockets
-                Object.assign(titles, {[room]: []});
-                Object.assign(issues, {[room]: []});
-                Object.assign(cards, {[room]: []});
-            }
+      if (Object.prototype.hasOwnProperty.call(users, room)) {
+        users[room].push(newUser);
+      } else {
+        users[room] = [newUser];
+        messages[room] = [];
+        options[room] = {
+          timerValue: '02:20',
+          playable: true,
+          swap: true,
+          timer: true,
+          scoreType: 'story point',
+          scoreTypeShort: 'SP',
+        };
+        titles[room] = 'Spring 23 planning...';
+        issues[room] = [];
+        cards[room] = [];
+      }
 
-            socket.broadcast.to(room).emit('add user', newUser);
+      socket.broadcast.to(room).emit('add user', newUser);
 
-            return cb(users[room], messages[room],options[room], newUser);
-        });
-
-        socket.on('add user', (user, cb) => {
-            cb(user);
-        });
-
-        socket.on('send message', (message: Message, cb) => {
-            messages[message.room].push(message);
-            socket.broadcast.to(message.room).emit('add message', message);
-            cb(messages[message.room]);
-        });
-
-        socket.on('add message', (message, cb) => {
-            cb(message);
-        });
-
-        socket.on('send option', (option: Options, room, cb) => {
-            options[room] = option;
-            socket.broadcast.to(room).emit('add option', option);
-            cb(options[room]);
-        });
-
-        socket.on('add option', (option, cb) => {
-            cb(option);
-        });
-
-        socket.on('send title', (title: Message, room, cb) => {
-            titles[room] = title;
-            socket.broadcast.to(room).emit('add title', title);
-            cb(titles[room]);
-        });
-
-        socket.on('add title', (title, cb) => {
-            cb(title);
-        });
-
-        socket.on('send issue', (issue: Message, room, cb) => {
-            issues[room].push(issue);
-            socket.broadcast.to(room).emit('add issue', issue);
-            cb(issues[room]);
-        });
-
-        socket.on('add issue', (issue, cb) => {
-            cb(issue);
-        });
-
-        socket.on('send card', (card: Message, room, cb) => {
-            cards[room].push(card);
-            socket.broadcast.to(room).emit('add card', card);
-            cb(cards[room]);
-        });
-
-        socket.on('add card', (card, cb) => {
-            cb(card);
-        });
+      return cb(
+        users[room],
+        messages[room],
+        options[room],
+        issues[room],
+        cards[room],
+        titles[room],
+        newUser);
     });
 
-    app.all('*', (req: any, res: any) => nextHandler(req, res));
-
-    server.listen(port, () => {
-        console.log(`> Ready on http://localhost:${port}`);
+    socket.on('add user', (user, cb) => {
+      cb(user);
     });
+
+    socket.on('send message', (message: Message, cb) => {
+      messages[message.room].push(message);
+      socket.broadcast.to(message.room).emit('add message', message);
+      cb(message);
+    });
+
+    socket.on('add message', (message, cb) => {
+      cb(message);
+    });
+
+    socket.on('send option', (option: Options, room, cb) => {
+      options[room] = option;
+      socket.broadcast.to(room).emit('add option', option);
+      cb(option);
+    });
+
+    socket.on('add option', (option, cb) => {
+      cb(option);
+    });
+
+    socket.on('send title', (title: Message, room, cb) => {
+      titles[room] = title;
+      socket.broadcast.to(room).emit('add title', title);
+      cb(title);
+    });
+
+    socket.on('add title', (title, cb) => {
+      cb(title);
+    });
+
+    socket.on('send issue', (issue: Message, room, cb) => {
+      issues[room].push(issue);
+      socket.broadcast.to(room).emit('add issue', issue);
+      cb(issue);
+    });
+
+    socket.on('add issue', (issue, cb) => {
+      cb(issue);
+    });
+
+    socket.on('send card', (card: Message, room, cb) => {
+      cards[room].push(card);
+      socket.broadcast.to(room).emit('add card', card);
+      cb(card);
+    });
+
+    socket.on('add card', (card, cb) => {
+      cb(card);
+    });
+  });
+
+  app.all('*', (req: any, res: any) => nextHandler(req, res));
+
+  server.listen(port, () => {
+    console.log(`> Ready on http://localhost:${port}`);
+  });
 });

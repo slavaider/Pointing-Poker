@@ -19,7 +19,7 @@ const SettingsIssuesCard: FC<Issue> = ({
   };
 
   return (
-    <div>
+    <>
       <div className={styles.card__wrapper}>
         <div className={styles.card__text_wrapper}>
           <a href={linkToIssue} className={styles.card__title}>
@@ -62,7 +62,7 @@ const SettingsIssuesCard: FC<Issue> = ({
       ) : (
         ''
       )}
-    </div>
+    </>
   );
 };
 

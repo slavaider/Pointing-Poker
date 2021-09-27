@@ -7,6 +7,7 @@ import { Options } from '../interfaces/options';
 import Issue from '../interfaces/issue';
 
 type InitialStateType = {
+  titleSpring: string;
   users: User[];
   user: null | User;
   messages: Message[];
@@ -16,6 +17,7 @@ type InitialStateType = {
 };
 
 const initialState: InitialStateType = {
+  titleSpring: 'Spring 23 planning...',
   users: [],
   user: null,
   messages: [],
@@ -27,56 +29,26 @@ const initialState: InitialStateType = {
     scoreType: 'story point',
     scoreTypeShort: 'SP',
   },
-  issues: [
-    {
-      cardTitle: 'Issue 20',
-      priority: 'Low',
-      linkToIssue: '#',
-      id: '1',
-    },
-    {
-      cardTitle: 'Issue 25',
-      priority: 'Low',
-      linkToIssue: '#',
-      id: '2',
-    },
-    {
-      cardTitle: 'Issue 30',
-      priority: 'Low',
-      linkToIssue: '#',
-      id: '3',
-    },
-    {
-      cardTitle: 'Issue 35',
-      priority: 'Low',
-      linkToIssue: '#',
-      id: '4',
-    },
-  ],
-  cards: [
-    {
-      cardValue: 13,
-      cardTitle: 'SP',
-      id: '1',
-    },
-    {
-      cardValue: 15,
-      cardTitle: 'SP',
-      id: '2',
-    },
-  ],
+  issues: [],
+  cards: [],
 };
 
 const usersSlice = createSlice({
   name: 'users',
   initialState,
   reducers: {
+    // USERS
     addUsers: (state, action) => {
       state.users = action.payload;
     },
     addUser: (state, action: PayloadAction<User>) => {
       state.users.push(action.payload);
     },
+    setUser: (state, action) => {
+      state.user = action.payload;
+    },
+
+    // MESSAGES
     addMessages: (state, action) => {
       state.messages = action.payload;
     },
@@ -86,10 +58,11 @@ const usersSlice = createSlice({
     addOptions: (state, action: PayloadAction<Options>) => {
       state.options = action.payload;
     },
-    setUser: (state, action) => {
-      state.user = action.payload;
-    },
 
+    // ISSUES
+    addIssues: (state, action) => {
+      state.issues = action.payload;
+    },
     addIssue: (state, action: PayloadAction<Issue>) => {
       state.issues.push(action.payload);
     },
@@ -106,6 +79,10 @@ const usersSlice = createSlice({
       });
     },
 
+    // CARDS
+    addCards: (state, action) => {
+      state.cards = action.payload;
+    },
     addCard: (state, action) => {
       state.cards.push(action.payload);
     },
@@ -120,6 +97,11 @@ const usersSlice = createSlice({
           state.cards[index].cardValue = action.payload.cardValue;
       });
     },
+
+    // TITLE
+    editTitleSpring: (state, action: PayloadAction<string>) => {
+      state.titleSpring = action.payload;
+    },
   },
 });
 
@@ -132,10 +114,13 @@ export const {
   addOptions,
   addIssue,
   removeIssue,
+  addIssues,
   editIssue,
   addCard,
   deleteCard,
+  addCards,
   editCard,
+  editTitleSpring,
 } = usersSlice.actions;
 
 export const selectUsers = (state: RootState): User[] => state.users.users;
@@ -145,5 +130,7 @@ export const selectUser = (state: RootState): null | User => state.users.user;
 export const selectOptions = (state: RootState): Options => state.users.options;
 export const selectIssues = (state: RootState): Issue[] => state.users.issues;
 export const selectCards = (state: RootState): Card[] => state.users.cards;
+export const selectTitle = (state: RootState): string =>
+  state.users.titleSpring;
 
 export default usersSlice.reducer;

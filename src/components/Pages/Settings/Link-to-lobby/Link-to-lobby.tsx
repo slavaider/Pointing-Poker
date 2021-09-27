@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import { Button } from 'antd';
 import styles from './Link-to-lobby.module.scss';
-// import CopyToClipboard from "react-copy-to-clipboard";
 
 interface LinkToLobbyProps {
   linkToLobby: string;

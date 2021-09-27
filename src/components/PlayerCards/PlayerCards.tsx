@@ -25,7 +25,7 @@ const PlayerCards: FC<PlayerCardsProps> = ({
             <PlayerCard
               {...item}
               key={item.userId}
-              ItIsYou={item.userId === user?.userId}
+              isItYou={item.userId === user?.userId}
               isMaster={item.isMaster}
               size="max"
             />
