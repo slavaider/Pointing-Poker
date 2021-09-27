@@ -13,9 +13,6 @@ import { selectUser, selectUsers } from '../../../store/usersSlice';
 import PlayerCards from '../../PlayerCards';
 import useFetchSettingsSockets from '../../../hooks/useFetchDataSockets';
 
-// todo удалить , заменить на данные из сервера socket      или нет)
-const title = 'Spring 23 planning (issues 13, 533, 5623, 3252, 6623, ...)';
-
 const Settings: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
   useFetchSettingsSockets();
 
@@ -44,7 +41,7 @@ const Settings: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
 
   return (
     <div className={styles.SettingsContainer}>
-      <TitleServer title={title} />
+      <TitleServer isSettingsPage />
       {
         <PlayerCards
           items={master ? [master] : []}

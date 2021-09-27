@@ -2,10 +2,58 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 // eslint-disable-next-line import/no-cycle
 import { AppThunk, RootState } from '.';
 
+interface Issue {
+  cardTitle: string;
+  priority: string;
+  linkToIssue: string;
+  id: number;
+}
+
 const initialState = {
+  titleSpring: 'Spring 23 planning (issues 13, 533, 5623, 3252, 6623, ...)',
   value: 0,
   status: 'idle',
   members: [],
+  issues: [
+    {
+      cardTitle: 'Issue 20',
+      priority: 'Low',
+      linkToIssue: '#',
+      id: 1,
+    },
+    {
+      cardTitle: 'Issue 25',
+      priority: 'Low',
+      linkToIssue: '#',
+      id: 2,
+    },
+    {
+      cardTitle: 'Issue 30',
+      priority: 'Low',
+      linkToIssue: '#',
+      id: 3,
+    },
+    {
+      cardTitle: 'Issue 35',
+      priority: 'Low',
+      linkToIssue: '#',
+      id: 4,
+    },
+  ],
+  cards: [
+    {
+      cardValue: 'unknown',
+      cardTitle: 'SP',
+      cardStatisticValue: '',
+      id: 1,
+    },
+    {
+      cardValue: '13w',
+      cardTitle: 'SP',
+      cardStatisticValue: '',
+      id: 2,
+    },
+  ],
 };
 
 function fetchCount(amount = 1) {
@@ -35,6 +83,40 @@ export const counterSlice = createSlice({
     incrementByAmount: (state, action: PayloadAction<number>) => {
       state.value += action.payload;
     },
+    addIssue: (state, action: PayloadAction<Issue>) => {
+      state.issues.push(action.payload);
+    },
+    removeIssue: (state, action: PayloadAction<number>) => {
+      state.issues.forEach((element: { id: number }, index: number) => {
+        if (element.id === action.payload) {
+          state.issues.splice(index, 1);
+        }
+      });
+    },
+    editIssue: (state, action) => {
+      state.issues.forEach((element: { id: number }, index: number) => {
+        if (element.id === action.payload.id) {
+          state.issues[index] = action.payload;
+        }
+      });
+    },
+    addCard: (state, action) => {
+      state.cards.push(action.payload);
+    },
+    deleteCard: (state, action) => {
+      state.cards.forEach((element: { id: number }, index: number) => {
+        if (element.id === action.payload) state.cards.splice(index, 1);
+      });
+    },
+    editCard: (state, action) => {
+      state.cards.forEach((element: { id: number }, index: number) => {
+        if (element.id === action.payload.id)
+          state.cards[index].cardValue = action.payload.cardValue;
+      });
+    },
+    editTitleSpring: (state, action: PayloadAction<string>) => {
+      state.titleSpring = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -48,7 +130,18 @@ export const counterSlice = createSlice({
   },
 });
 
-export const { increment, decrement, incrementByAmount } = counterSlice.actions;
+export const {
+  increment,
+  decrement,
+  incrementByAmount,
+  addIssue,
+  removeIssue,
+  editIssue,
+  addCard,
+  deleteCard,
+  editCard,
+  editTitleSpring,
+} = counterSlice.actions;
 
 export const selectCount = (state: RootState): number => state.counter.value;
 

@@ -1,19 +1,23 @@
-import React, { FC, useState } from 'react';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { Input, Button } from 'antd';
-import { useAppDispatch } from 'src/hooks';
-import { deleteCard, editCard } from 'src/store/usersSlice';
+import React, {FC, useState} from 'react';
+import {CheckOutlined, DeleteOutlined, EditOutlined} from '@ant-design/icons';
+import {Input} from 'antd';
+import {useAppDispatch} from 'src/hooks';
+import {deleteCard, editCard} from 'src/store/usersSlice';
 import styles from './Card-collection.module.scss';
 import ICard from '../../../../interfaces/card';
 
 interface CardProps {
   card: ICard;
+  width?: string;
+  isSettingsPage: boolean;
 }
 
-const Card: FC<CardProps> = ({ card }: CardProps) => {
-  const { cardTitle, cardValue, id } = card;
+const Card: FC<CardProps> = ({card, width = '100px', isSettingsPage}: CardProps) => {
   const [isModeEdit, setIsModeEdit] = useState<boolean>(false);
   const dispatch = useAppDispatch();
+  const {cardTitle, cardValue, id} = card;
+
+  const color = isModeEdit ? 'darkblue' : '#000';
 
   const editMode = () => {
     setIsModeEdit(true);
@@ -39,43 +43,44 @@ const Card: FC<CardProps> = ({ card }: CardProps) => {
 
   return (
     <>
-      <div className={styles.card__wrapper}>
+      <div className={styles.card__wrapper} style={{width}}>
         <div className={styles.cardVal__top}>
           {isModeEdit ? (
-            <>
-              <Input
-                id={`${id}`}
-                className={styles.input__edit_card}
-                defaultValue={cardValue}
-                maxLength={3}
-                autoFocus
-                bordered={false}
-              />
-              <Button
-                type="primary"
-                className={styles.input__edit_button}
-                onClick={onClick}
-              >
-                Ok
-              </Button>
-            </>
+            <Input
+              id={`${id}`}
+              className={styles.input__edit_card}
+              defaultValue={cardValue}
+              maxLength={5}
+              autoFocus
+              bordered={false}
+              style={{color}}
+            />
           ) : (
-            <>
-              <span>{cardValue}</span>
-              <div>
-                <EditOutlined
-                  key={`edit - ${id}`}
-                  className={styles.button__edit}
-                  onClick={editMode}
-                />
-                <DeleteOutlined
-                  key={`delete - ${id}`}
-                  className={styles.button__delete}
-                  onClick={removeCard}
-                />
-              </div>
-            </>
+            <span style={{color}}>{cardValue}</span>
           )}
+          {console.log('isSettingsPage', isSettingsPage)}
+          <div style={{display: 'flex'}}>
+            {isSettingsPage && !isModeEdit && (
+              <EditOutlined
+                className={styles.button__edit}
+                key={`edit - ${id}`}
+                onClick={editMode}
+              />
+            )}
+
+            {isSettingsPage && isModeEdit && (
+              <CheckOutlined
+                className={styles.button__edit}
+                key={`check - ${id}`}
+                onClick={onClick}
+              />
+            )}
+            <DeleteOutlined
+              key={`delete - ${id}`}
+              className={styles.button__delete}
+              onClick={removeCard}
+            />
+          </div>
         </div>
         <div className={styles.card__title}>{cardTitle}</div>
         <span className={styles.cardVal__bottom}>{cardValue}</span>

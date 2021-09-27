@@ -39,13 +39,13 @@ const GameSettings: FC = () => {
       <h4 className={stylesPage.title}>Game settings:</h4>
       <Form
         form={form}
-        className={styles.form}
         name="optionsForm"
         layout="horizontal"
         initialValues={{ ...options, time: value }}
         onFinish={submit}
       >
         <Form.Item
+          className={styles.setting}
           label="Scram master as player:"
           name="playable"
           valuePropName="checked"
@@ -54,6 +54,7 @@ const GameSettings: FC = () => {
         </Form.Item>
 
         <Form.Item
+          className={styles.setting}
           label="Changing card in round end:"
           name="swap"
           valuePropName="checked"
@@ -62,6 +63,7 @@ const GameSettings: FC = () => {
         </Form.Item>
 
         <Form.Item
+          className={styles.setting}
           label="Is timer needed:"
           name="timer"
           valuePropName="checked"
@@ -69,15 +71,23 @@ const GameSettings: FC = () => {
           <Switch />
         </Form.Item>
 
-        <Form.Item label="Score type:" name="scoreType">
+        <Form.Item
+          className={styles.setting}
+          label="Score type:"
+          name="scoreType"
+        >
           <Input className={styles.input} />
         </Form.Item>
 
-        <Form.Item label="Score type (Short):" name="scoreTypeShort">
+        <Form.Item
+          className={styles.setting}
+          label="Score type (Short):"
+          name="scoreTypeShort"
+        >
           <Input className={styles.input} />
         </Form.Item>
 
-        <Form.Item label="Round time:" name="time">
+        <Form.Item className={styles.setting} label="Round time:" name="time">
           <TimePicker
             className={styles.setting}
             size="large"
@@ -87,7 +97,7 @@ const GameSettings: FC = () => {
           />
         </Form.Item>
 
-        <Form.Item>
+        <Form.Item className={styles.setting}>
           <Button type="primary" htmlType="submit">
             Submit
           </Button>
