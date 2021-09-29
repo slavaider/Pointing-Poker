@@ -1,10 +1,11 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import { CheckOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Input } from 'antd';
-import { useAppDispatch } from 'src/hooks';
-import { deleteCard, editCard } from 'src/store/usersSlice';
+import { useAppDispatch, useAppSelector } from 'src/hooks';
+import { deleteCard, editCard, selectUser } from 'src/store/usersSlice';
 import styles from './Card-collection.module.scss';
 import ICard from '../../../../interfaces/card';
+import SocketContext from '../../../../shared/SocketContext';
 
 interface CardProps {
   card: ICard;
@@ -20,6 +21,8 @@ const Card: FC<CardProps> = ({
   const [isModeEdit, setIsModeEdit] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const { cardTitle, cardValue, id } = card;
+  const user = useAppSelector(selectUser);
+  const socket = useContext(SocketContext);
 
   const color = isModeEdit ? 'darkblue' : '#000';
 
@@ -28,17 +31,25 @@ const Card: FC<CardProps> = ({
   };
 
   const removeCard = () => {
-    dispatch(deleteCard(id));
+    socket?.emit('card remove', id, user?.room, (idResponse: string) => {
+      dispatch(deleteCard(idResponse));
+    });
   };
 
   const onClick = () => {
     const inputValue = +(document.getElementById(id) as HTMLInputElement).value;
     if (!Number.isNaN(inputValue)) {
-      dispatch(
-        editCard({
-          ...card,
-          cardValue: inputValue,
-        }),
+      const newCard = {
+        ...card,
+        cardValue: inputValue,
+      };
+      socket?.emit(
+        'card update',
+        newCard,
+        user?.room,
+        (cardResponse: string) => {
+          dispatch(editCard(cardResponse));
+        },
       );
     }
     setIsModeEdit(false);

@@ -32,7 +32,7 @@ const Settings: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
       router?.push('/');
     }
 
-    if (user?.status === 'idle') {
+    if (master?.status === 'game') {
       router?.push('/game');
     }
   }, [master, router, user]);

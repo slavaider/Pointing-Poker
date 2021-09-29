@@ -1,10 +1,11 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { removeIssue } from 'src/store/usersSlice';
-import { useAppDispatch } from 'src/hooks';
+import { removeIssue, selectUser } from 'src/store/usersSlice';
+import { useAppDispatch, useAppSelector } from 'src/hooks';
 import styles from './SettingsIssuesCard.module.scss';
 import ModalIssues from './Issues-modal';
 import Issue from '../../../../interfaces/issue';
+import SocketContext from '../../../../shared/SocketContext';
 
 const SettingsIssuesCard: FC<Issue> = ({
   cardTitle,
@@ -14,8 +15,14 @@ const SettingsIssuesCard: FC<Issue> = ({
 }: Issue) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const dispatch = useAppDispatch();
-  const issueRemove = (value: string) => {
-    dispatch(removeIssue(value));
+
+  const user = useAppSelector(selectUser);
+  const socket = useContext(SocketContext);
+
+  const issueRemove = (issueId: string) => {
+    socket?.emit('issue remove', issueId, user?.room, (idResponse: string) => {
+      dispatch(removeIssue(idResponse));
+    });
   };
 
   return (

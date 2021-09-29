@@ -6,7 +6,7 @@ import stylesPage from '../Pages/Settings/Settings.module.scss';
 
 type PlayerCardsProps = {
   items: User[];
-  user: User | null;
+  user: User | undefined;
   title: string;
 };
 

@@ -9,7 +9,7 @@ import Issue from '../interfaces/issue';
 type InitialStateType = {
   titleSpring: string;
   users: User[];
-  user: null | User;
+  userId: null | string;
   messages: Message[];
   options: Options;
   issues: Issue[];
@@ -19,7 +19,7 @@ type InitialStateType = {
 const initialState: InitialStateType = {
   titleSpring: 'Spring 23 planning...',
   users: [],
-  user: null,
+  userId: null,
   messages: [],
   options: {
     timerValue: '02:20',
@@ -45,7 +45,7 @@ const usersSlice = createSlice({
       state.users.push(action.payload);
     },
     setUser: (state, action) => {
-      state.user = action.payload;
+      state.userId = action.payload.userId;
     },
 
     // MESSAGES
@@ -102,6 +102,14 @@ const usersSlice = createSlice({
     editTitleSpring: (state, action: PayloadAction<string>) => {
       state.titleSpring = action.payload;
     },
+
+    // GAME
+    startGameUsers: (state, action: PayloadAction<User[]>) => {
+      state.users = action.payload.map((item) => {
+        item.status = 'game';
+        return item;
+      });
+    },
   },
 });
 
@@ -121,12 +129,14 @@ export const {
   addCards,
   editCard,
   editTitleSpring,
+  startGameUsers,
 } = usersSlice.actions;
 
 export const selectUsers = (state: RootState): User[] => state.users.users;
 export const selectMessages = (state: RootState): Message[] =>
   state.users.messages;
-export const selectUser = (state: RootState): null | User => state.users.user;
+export const selectUser = (state: RootState): undefined | User =>
+  state.users.users.find((item) => item.userId === state.users.userId);
 export const selectOptions = (state: RootState): Options => state.users.options;
 export const selectIssues = (state: RootState): Issue[] => state.users.issues;
 export const selectCards = (state: RootState): Card[] => state.users.cards;

@@ -7,6 +7,11 @@ import {
   addUser,
   editTitleSpring,
   addCard,
+  removeIssue,
+  editIssue,
+  editCard,
+  deleteCard,
+  startGameUsers,
 } from '../store/usersSlice';
 import SocketContext from '../shared/SocketContext';
 import { useAppDispatch } from './index';
@@ -20,39 +25,41 @@ const useFetchSettingsSockets = (): void => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    socket?.on('add option', (response: Options) => {
-      dispatch(addOptions(response));
-    });
+    if (socket) {
+      socket.on('send option server', (response: Options) => {
+        dispatch(addOptions(response));
+      });
+      socket.on('send user server', (data: User) => {
+        dispatch(addUser(data));
+      });
+      socket.on('send message server', (data: Message) => {
+        dispatch(addMessage(data));
+      });
+      socket.on('send title server', (data: string) => {
+        dispatch(editTitleSpring(data));
+      });
+      socket.on('send issue server', (data: Issue) => {
+        dispatch(addIssue(data));
+      });
+      socket.on('issue remove server', (idResponse: string) => {
+        dispatch(removeIssue(idResponse));
+      });
+      socket.on('issue update server', (issue: Issue) => {
+        dispatch(editIssue(issue));
+      });
+      socket.on('send card server', (data: Card) => {
+        dispatch(addCard(data));
+      });
+      socket.on('card remove server', (idResponse: string) => {
+        dispatch(deleteCard(idResponse));
+      });
+      socket.on('card update server', (card: Card) => {
+        dispatch(editCard(card));
+      });
+      socket.on('start game server', (users: User[]) => {
+        dispatch(startGameUsers(users));
+      });
+    }
   }, [socket, dispatch]);
-
-  useEffect(() => {
-    socket?.on('add user', (data: User) => {
-      dispatch(addUser(data));
-    });
-  }, [dispatch, socket]);
-
-  useEffect(() => {
-    socket?.on('add message', (data: Message) => {
-      dispatch(addMessage(data));
-    });
-  }, [dispatch, socket]);
-
-  useEffect(() => {
-    socket?.on('add title', (data: string) => {
-      dispatch(editTitleSpring(data));
-    });
-  }, [dispatch, socket]);
-
-  useEffect(() => {
-    socket?.on('add issue', (data: Issue) => {
-      dispatch(addIssue(data));
-    });
-  }, [dispatch, socket]);
-
-  useEffect(() => {
-    socket?.on('add card', (data: Card) => {
-      dispatch(addCard(data));
-    });
-  }, [dispatch, socket]);
 };
 export default useFetchSettingsSockets;

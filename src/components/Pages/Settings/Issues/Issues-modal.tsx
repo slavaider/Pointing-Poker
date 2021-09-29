@@ -39,7 +39,9 @@ const ModalIssues: FC<ModalIssuesProps> = ({
         dispatch(addIssue(issueData));
       });
     } else {
-      dispatch(editIssue(value));
+      socket?.emit('issue update', value, user?.room, (issueData: Issue) => {
+        dispatch(editIssue(issueData));
+      });
     }
   };
 
