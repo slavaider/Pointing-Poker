@@ -1,8 +1,11 @@
-import React, { FC, useState } from 'react';
-import { Card, Avatar, Badge, Modal } from 'antd';
+import React, { FC, useContext, useEffect, useState } from 'react';
+import { Avatar, Badge, Card, Modal } from 'antd';
 import { StopOutlined } from '@ant-design/icons';
 import styles from './PlayerCard.module.scss';
 import User from '../../interfaces/user';
+import SocketContext from '../../shared/SocketContext';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { kickPlayerById, selectUser } from '../../store/usersSlice';
 
 const { Meta } = Card;
 
@@ -18,10 +21,59 @@ const PlayerCard: FC<PlayerCardProps> = ({
   lastName,
   job,
   isItYou,
+  userId,
   isMaster = false,
   size = 'max',
 }: PlayerCardProps) => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const user = useAppSelector(selectUser);
+  const socket = useContext(SocketContext);
+  const dispatch = useAppDispatch();
+  const [kickOtherPerson, setKickOtherPerson] = useState<boolean>(false);
+  const [otherUser, setOtherUser] = useState<User | undefined>(undefined);
+
+  const [userIdKick, setUserIdKick] = useState<null | string>(null);
+
+  const userToKick = useAppSelector((state) => {
+    return state.users.users.find((item) => item.userId === userIdKick);
+  });
+
+  useEffect(() => {
+    if (!isMaster && user) {
+      socket?.on('kick player server', (userIdData: string, userData: User) => {
+        if (user?.userId !== userIdData) {
+          setKickOtherPerson(true);
+          setIsModalVisible(true);
+          setUserIdKick(userIdData);
+          setOtherUser(userData);
+        }
+      });
+    }
+  }, [isMaster, socket, user]);
+
+  const kickPlayer = () => {
+    socket?.emit(
+      'kick player',
+      userIdKick || userId,
+      user,
+      !kickOtherPerson,
+      (userIdData: string) => {
+        dispatch(kickPlayerById(userIdKick || userIdData));
+        if (kickOtherPerson) {
+          setKickOtherPerson(false);
+          setUserIdKick(null);
+        }
+        setIsModalVisible(false);
+      },
+    );
+  };
+
+  const cancelKick = () => {
+    setIsModalVisible(false);
+    setKickOtherPerson(false);
+  };
+
+  const handleShow = () => setIsModalVisible(true);
 
   return (
     <>
@@ -57,7 +109,7 @@ const PlayerCard: FC<PlayerCardProps> = ({
           />
           {!isMaster && !isItYou && (
             <button
-              onClick={() => setIsModalVisible(true)}
+              onClick={handleShow}
               type={'button'}
               className={styles.button}
             >
@@ -100,15 +152,22 @@ const PlayerCard: FC<PlayerCardProps> = ({
         </div>
       )}
 
-      <Modal
-        visible={isModalVisible}
-        onOk={() => setIsModalVisible(false)}
-        onCancel={() => setIsModalVisible(false)}
-      >
+      <Modal visible={isModalVisible} onOk={kickPlayer} onCancel={cancelKick}>
         <p>Kick player?</p>
         <div>
-          Are you really want to remove player{' '}
-          {`${firstName} ${lastName || ''}`} from game session?
+          {kickOtherPerson ? (
+            <span>
+              {`${otherUser?.firstName} ${otherUser?.lastName || ''}`} want to
+              kick member{' '}
+              {`${userToKick?.firstName} ${userToKick?.lastName || ''}`}. Do you
+              agree with it?
+            </span>
+          ) : (
+            <span>
+              Are you really want to remove player{' '}
+              {`${firstName} ${lastName || ''}`} from game session?
+            </span>
+          )}
         </div>
       </Modal>
     </>

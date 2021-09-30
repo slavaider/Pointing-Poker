@@ -12,6 +12,7 @@ import {
   editCard,
   deleteCard,
   startGameUsers,
+  updateUser,
 } from '../store/usersSlice';
 import SocketContext from '../shared/SocketContext';
 import { useAppDispatch } from './index';
@@ -58,6 +59,9 @@ const useFetchSettingsSockets = (): void => {
       });
       socket.on('start game server', (users: User[]) => {
         dispatch(startGameUsers(users));
+      });
+      socket?.on('update user server', (newUser: User) => {
+        dispatch(updateUser(newUser));
       });
     }
   }, [socket, dispatch]);

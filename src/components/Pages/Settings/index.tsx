@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo } from 'react';
+import React, { FC, useContext, useEffect, useMemo } from 'react';
 import { withRouter } from 'next/router';
 import { WithRouterProps } from 'next/dist/client/with-router';
 import styles from './Settings.module.scss';
@@ -12,12 +12,14 @@ import { useAppSelector } from '../../../hooks';
 import { selectUser, selectUsers } from '../../../store/usersSlice';
 import PlayerCards from '../../PlayerCards';
 import useFetchSettingsSockets from '../../../hooks/useFetchDataSockets';
+import SocketContext from '../../../shared/SocketContext';
 
 const Settings: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
   useFetchSettingsSockets();
 
   const users = useAppSelector(selectUsers);
   const user = useAppSelector(selectUser);
+  const socket = useContext(SocketContext);
 
   const master = useMemo(() => {
     return users.find((item) => item.isMaster);
@@ -28,14 +30,22 @@ const Settings: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
   }, [users]);
 
   useEffect(() => {
-    if (user === null || master === undefined) {
+    if (user === undefined || master === undefined) {
       router?.push('/');
     }
 
     if (master?.status === 'game') {
+      // update
       router?.push('/game');
     }
   }, [master, router, user]);
+
+  useEffect(() => {
+    if (users.length !== 1 && user?.kickVotes === users.length - 1) {
+      socket?.emit('leave', user);
+      router.push('/');
+    }
+  }, [user, router, users, socket]);
 
   const { roomId } = router.query;
 

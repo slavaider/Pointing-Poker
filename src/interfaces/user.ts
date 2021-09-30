@@ -8,4 +8,6 @@ export default interface User {
   isObserver?: boolean;
   userId: string;
   status: string; // 'settings' | 'idle' | [value]
+  kickVotes: number;
+  socketId: string;
 }

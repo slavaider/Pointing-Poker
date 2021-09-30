@@ -36,6 +36,7 @@ nextApp.prepare().then(async () => {
       const room = user.room;
       const newUser = {
         ...user,
+        socketId: socket.id,
         userId: socket.id,
       };
       socket.join(room);
@@ -72,6 +73,10 @@ nextApp.prepare().then(async () => {
 
     socket.on('send user server', (user, cb) => {
       cb(user);
+    });
+
+    socket.on('leave', (user:User) => {
+      socket.leave(user.room);
     });
 
     socket.on('send message', (message: Message, cb) => {
@@ -181,6 +186,33 @@ nextApp.prepare().then(async () => {
     socket.on('start game server', (users, cb) => {
       cb(users);
     });
+    
+
+    socket.on('kick player', (userId: string, user:User, split, cb) => {
+      
+      const userIndex = users[user.room].findIndex(
+        (item) => item.userId === userId,
+      );
+      
+      if (userIndex !== -1) {
+        users[user.room][userIndex].kickVotes += 1;
+        socket.broadcast.to(user.room).emit('update user server', users[user.room][userIndex]);
+      }
+      
+      if (users[user.room][userIndex].kickVotes === users[user.room].length - 1) {
+        users[user.room].splice(userIndex, 1);
+      }
+      
+      if(split) socket.broadcast.to(user.room).emit('kick player server', userId,user);
+
+      cb(userId);
+    });
+    
+    socket.on('kick player server', (userId,user, cb) => {
+      cb(userId,user);
+    });
+    
+    
 
 
   });

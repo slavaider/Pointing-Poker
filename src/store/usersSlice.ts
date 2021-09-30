@@ -110,6 +110,27 @@ const usersSlice = createSlice({
         return item;
       });
     },
+    updateUser: (state, action: PayloadAction<User>) => {
+      const userIndex = state.users.findIndex(
+        (item) => item.userId === action.payload.userId,
+      );
+      state.users[userIndex].kickVotes = action.payload.kickVotes;
+      if (state.users[userIndex].kickVotes === state.users.length - 1) {
+        state.users.splice(userIndex, 1);
+      }
+    },
+
+    kickPlayerById: (state, action: PayloadAction<string>) => {
+      const userIndex = state.users.findIndex(
+        (item) => item.userId === action.payload,
+      );
+      if (userIndex !== -1) {
+        state.users[userIndex].kickVotes += 1;
+      }
+      if (state.users[userIndex].kickVotes === state.users.length - 1) {
+        state.users.splice(userIndex, 1);
+      }
+    },
   },
 });
 
@@ -124,6 +145,8 @@ export const {
   removeIssue,
   addIssues,
   editIssue,
+  updateUser,
+  kickPlayerById,
   addCard,
   deleteCard,
   addCards,
