@@ -12,7 +12,30 @@ type InitialStateType = {
 };
 
 const initialState: InitialStateType = {
-  users: [],
+  users: [
+    // todo delete -->
+    {
+      isObserver: true,
+      room: 'df',
+      firstName: 'ds',
+      image: 'dsd',
+      isMaster: false,
+      job: 'jun',
+      lastName: 'sd',
+      userId: '15',
+    },
+    {
+      isObserver: true,
+      room: 'df',
+      firstName: 'sKKds',
+      image: 'dAssd',
+      isMaster: false,
+      job: 'Led',
+      lastName: 'sd',
+      userId: '15',
+    },
+    // <--delete
+  ],
   user: null,
   messages: [],
   options: {
