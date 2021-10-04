@@ -9,6 +9,7 @@ import RoundControl from './RoundControl';
 import { useAppSelector } from '../../../hooks';
 import { selectUser, selectUsers } from '../../../store/usersSlice';
 import CardCollection from '../Settings/Card-collection';
+import ScoreCardCollection from './ScoreCard/ScoreCardCollection';
 
 const Game: FC = () => {
   const users = useAppSelector(selectUsers);
@@ -25,7 +26,7 @@ const Game: FC = () => {
   return (
     <div style={{ display: 'flex' /* , flexWrap: 'wrap' */ }}>
       <div className={styles.GameContainer}>
-        <TitleServer title={'123'} />
+        <TitleServer />
 
         <div className={styles.flexRow}>
           <PlayerCards
@@ -44,11 +45,18 @@ const Game: FC = () => {
         </div>
 
         <CardCollection isSettingsPage={false} />
+
+        <aside className={styles.aside2}>
+          <div>Score:</div>
+          <div>Players:</div>
+          <ScoreCardCollection />
+        </aside>
       </div>
 
       <aside className={styles.aside}>
         <div>Score:</div>
         <div>Players:</div>
+        <ScoreCardCollection />
       </aside>
     </div>
   );
