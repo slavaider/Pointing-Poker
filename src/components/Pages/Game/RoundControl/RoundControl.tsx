@@ -8,21 +8,32 @@ const RoundControl: FC = () => {
   const [newRound, setNewRound] = useState(true);
 
   return (
-    <div style={{ maxWidth: '470px', width: '100%' }}>
+    <div style={{ maxWidth: '470px', width: '100%', padding: '15px 0' }}>
       <span style={{ margin: '40px 10px' }}>Timer: 13 : 12</span>
 
       <div
         style={{
           display: 'flex',
           justifyContent: 'space-between',
-          margin: '40px 10px',
+          flexWrap: 'wrap',
+          margin: '10px',
         }}
       >
-        <span onClick={() => setNewRound(() => false)}>
+        <span
+          style={{
+            margin: '5px',
+          }}
+          onClick={() => setNewRound(() => false)}
+        >
           <Button>{newRound ? RUN_ROUND : RESTART_ROUND}</Button>
         </span>
         {!newRound && (
-          <span onClick={() => setNewRound(() => true)}>
+          <span
+            style={{
+              margin: '5px',
+            }}
+            onClick={() => setNewRound(() => true)}
+          >
             <Button>Next Issue</Button>
           </span>
         )}

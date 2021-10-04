@@ -1,0 +1,28 @@
+.wrapper{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  
+  width: 100%;
+  margin-left: 2px ;
+  padding-bottom: 10px;
+  border-top: 0.01px solid #4c4b4b;
+  
+}
+.wrapper:nth-child(1){
+  border: red 2px solid;
+}
+
+.card{
+  width: fit-content;
+  min-width: 110px;
+  height: fit-content;
+  margin: 16px 0 0 1px;
+  padding: 10px 5px;
+  background: #FFFFFF;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+
+  text-align: center;
+}
