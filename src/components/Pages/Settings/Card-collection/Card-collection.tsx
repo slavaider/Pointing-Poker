@@ -1,17 +1,19 @@
-import React, { FC } from 'react';
+import React, { FC, memo, useContext } from 'react';
 import { PlusCircleOutlined } from '@ant-design/icons';
-import { useAppSelector, useAppDispatch } from 'src/hooks';
-import { addCard } from 'src/store/counterSlice';
+import { useAppDispatch, useAppSelector } from 'src/hooks';
+import { v4 } from 'uuid';
 import styles from './Card-collection.module.scss';
 import Card from './Card';
+import ICard from '../../../../interfaces/card';
 import stylesPage from '../Settings.module.scss';
+import {
+  addCard,
+  selectCards,
+  selectOptions,
+  selectUser,
+} from '../../../../store/usersSlice';
+import SocketContext from '../../../../shared/SocketContext';
 
-export interface Cards {
-  cardValue: number | string;
-  cardTitle: string;
-  cardStatisticValue: string | number;
-  id: number;
-}
 export type Props = {
   isSettingsPage?: boolean;
   cardWidth?: string;
@@ -21,18 +23,21 @@ const CardCollection: FC<Props> = ({
   isSettingsPage = true,
   cardWidth,
 }: Props) => {
-  const cards: Array<Cards> = useAppSelector((state) => state.settings.cards);
+  const cards = useAppSelector(selectCards);
+  const options = useAppSelector(selectOptions);
   const dispatch = useAppDispatch();
-  const idLastCard = cards.length > 0 ? cards[cards.length - 1].id : 0;
+  const socket = useContext(SocketContext);
+  const user = useAppSelector(selectUser);
 
   const addNewCard = () => {
-    const newCardData = {
+    const CardData = {
       cardValue: 0,
-      cardTitle: 'SP',
-      id: idLastCard + 1,
+      cardTitle: options.scoreTypeShort,
+      id: v4(),
     };
-    console.log(newCardData);
-    dispatch(addCard(newCardData));
+    socket?.emit('send card', CardData, user?.room, (card: ICard[]) => {
+      dispatch(addCard(card));
+    });
   };
 
   return (
@@ -44,24 +49,19 @@ const CardCollection: FC<Props> = ({
       )}
 
       <div id="cardsContainer" className={styles.cards__container}>
-        {cards.map((item, index) => (
-          <>
+        {cards.map((card) => (
+          <React.Fragment key={card.id}>
             <Card
               isSettingsPage={isSettingsPage}
-              cardData={{
-                cardValue: item.cardValue,
-                cardTitle: item.cardTitle,
-                id: item.id,
-              }}
+              card={card}
               width={cardWidth}
-              key={`${item.cardValue}-${index}`}
             />
             {!isSettingsPage && (
               <div className={styles.cardStatisticValue}>
-                {item.cardStatisticValue}
+                {card.cardStatisticValue}
               </div>
             )}
-          </>
+          </React.Fragment>
         ))}
         {isSettingsPage && (
           <div
@@ -79,4 +79,4 @@ const CardCollection: FC<Props> = ({
   );
 };
 
-export default CardCollection;
+export default memo(CardCollection);

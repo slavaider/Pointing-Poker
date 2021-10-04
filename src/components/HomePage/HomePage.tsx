@@ -1,10 +1,4 @@
-import React, {
-  FormEvent,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, { FormEvent, useCallback, useContext, useState } from 'react';
 import Link from 'next/link';
 import { Button, Input, Space } from 'antd';
 import { v4 } from 'uuid';
@@ -12,16 +6,20 @@ import { useRouter } from 'next/router';
 import SocketContext from 'src/shared/SocketContext';
 import { useAppDispatch } from '../../hooks';
 import {
+  addCards,
+  addIssues,
   addMessages,
-  addUser,
-  addUsers,
   addOptions,
+  addUsers,
+  editTitleSpring,
   setUser,
 } from '../../store/usersSlice';
 import UserCreate from '../UserCreate';
-import IUser from '../../interfaces/user';
-import IMessage from '../../interfaces/message';
-import { IOptions } from '../../interfaces/options';
+import User from '../../interfaces/user';
+import Message from '../../interfaces/message';
+import { Options } from '../../interfaces/options';
+import Issue from '../../interfaces/issue';
+import Card from '../../interfaces/card';
 
 const HomePage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -49,7 +47,7 @@ const HomePage: React.FC = () => {
   };
 
   const handleUser = useCallback(
-    (userData: IUser) => {
+    (userData: User) => {
       const room = isMaster ? v4() : url;
       socket?.emit(
         'join server',
@@ -57,29 +55,32 @@ const HomePage: React.FC = () => {
           ...userData,
           isMaster,
           room,
+          status: 'settings',
+          kickVotes: 0,
+          allVotes: 0,
         },
         (
-          usersData: IUser[],
-          messagesData: IMessage[],
-          options: IOptions,
-          userResponse: IUser,
+          usersData: User[],
+          messagesData: Message[],
+          options: Options,
+          issuesData: Issue[],
+          cardsData: Card[],
+          title: string,
+          userResponse: User,
         ) => {
           dispatch(addUsers(usersData));
           dispatch(addMessages(messagesData));
           dispatch(addOptions(options));
           dispatch(setUser(userResponse));
+          dispatch(editTitleSpring(title));
+          dispatch(addIssues(issuesData));
+          dispatch(addCards(cardsData));
           router.push(`/lobby/${room}`);
         },
       );
     },
     [dispatch, isMaster, router, socket, url],
   );
-
-  useEffect(() => {
-    socket?.on('add user', (data: IUser) => {
-      dispatch(addUser(data));
-    });
-  }, [dispatch, socket]);
 
   return (
     <>

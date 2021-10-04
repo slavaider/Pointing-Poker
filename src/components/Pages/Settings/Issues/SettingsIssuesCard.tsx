@@ -1,31 +1,32 @@
-import React, { FC, useState } from 'react';
+import React, { FC, memo, useContext, useState } from 'react';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { removeIssue } from 'src/store/counterSlice';
-import { useAppDispatch } from 'src/hooks';
+import { removeIssue, selectUser } from 'src/store/usersSlice';
+import { useAppDispatch, useAppSelector } from 'src/hooks';
 import styles from './SettingsIssuesCard.module.scss';
 import ModalIssues from './Issues-modal';
+import Issue from '../../../../interfaces/issue';
+import SocketContext from '../../../../shared/SocketContext';
 
-interface SettingsIssuesCardProps {
-  cardTitle: string;
-  priority: string;
-  linkToIssue: string;
-  id: number;
-}
-
-const SettingsIssuesCard: FC<SettingsIssuesCardProps> = ({
+const SettingsIssuesCard: FC<Issue> = ({
   cardTitle,
   priority,
   linkToIssue,
   id,
-}) => {
+}: Issue) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const dispatch = useAppDispatch();
-  const issueRemove = (value: number) => {
-    dispatch(removeIssue(value));
+
+  const user = useAppSelector(selectUser);
+  const socket = useContext(SocketContext);
+
+  const issueRemove = (issueId: string) => {
+    socket?.emit('issue remove', issueId, user?.room, (idResponse: string) => {
+      dispatch(removeIssue(idResponse));
+    });
   };
 
   return (
-    <div>
+    <>
       <div className={styles.card__wrapper}>
         <div className={styles.card__text_wrapper}>
           <a href={linkToIssue} className={styles.card__title}>
@@ -56,7 +57,7 @@ const SettingsIssuesCard: FC<SettingsIssuesCardProps> = ({
         <ModalIssues
           isModalVisible={isModalVisible}
           setIsModalVisible={setIsModalVisible}
-          props={{
+          issue={{
             cardTitle,
             priority,
             linkToIssue,
@@ -68,8 +69,8 @@ const SettingsIssuesCard: FC<SettingsIssuesCardProps> = ({
       ) : (
         ''
       )}
-    </div>
+    </>
   );
 };
 
-export default SettingsIssuesCard;
+export default memo(SettingsIssuesCard);

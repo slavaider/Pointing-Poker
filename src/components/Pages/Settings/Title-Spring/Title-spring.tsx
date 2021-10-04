@@ -1,9 +1,14 @@
-import React, { ChangeEvent, FC, useState } from 'react';
+import React, { ChangeEvent, FC, memo, useContext, useState } from 'react';
 import { EditOutlined, CheckOutlined } from '@ant-design/icons';
 import AutosizeInput from 'react-input-autosize';
-import { editTitleSpring } from 'src/store/counterSlice';
 import styles from './TitleSpring.module.scss';
 import { useAppDispatch, useAppSelector } from '../../../../hooks';
+import {
+  selectTitle,
+  editTitleSpring,
+  selectUser,
+} from '../../../../store/usersSlice';
+import SocketContext from '../../../../shared/SocketContext';
 
 interface TitleSpringInterface {
   isSettingsPage?: boolean;
@@ -12,11 +17,12 @@ interface TitleSpringInterface {
 const TitleSpring: FC<TitleSpringInterface> = ({
   isSettingsPage = false,
 }: TitleSpringInterface) => {
-  const title = useAppSelector((state) => state.settings.titleSpring);
+  const title = useAppSelector(selectTitle);
   const dispatch = useAppDispatch();
+  const user = useAppSelector(selectUser);
   const [contentEditable, setContentEditable] = useState(false);
   const [inputValue, setInputValue] = useState(title);
-
+  const socket = useContext(SocketContext);
   const color = contentEditable ? 'darkblue' : '#000';
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -24,8 +30,10 @@ const TitleSpring: FC<TitleSpringInterface> = ({
   };
 
   const setNewTitleValue = () => {
-    dispatch(editTitleSpring(inputValue));
-    setContentEditable(false);
+    socket?.emit('send title', inputValue, user?.room, (titleData: string) => {
+      dispatch(editTitleSpring(titleData));
+      setContentEditable(false);
+    });
   };
 
   return (
@@ -40,8 +48,8 @@ const TitleSpring: FC<TitleSpringInterface> = ({
         />
       ) : (
         <div style={{ color }}>{title}</div>
-      )}{' '}
-      {isSettingsPage && !contentEditable && (
+      )}
+      {user?.isMaster && isSettingsPage && !contentEditable && (
         <EditOutlined
           style={{ marginLeft: '15px' }}
           key="edit"
@@ -50,7 +58,7 @@ const TitleSpring: FC<TitleSpringInterface> = ({
           }}
         />
       )}
-      {isSettingsPage && contentEditable && (
+      {user?.isMaster && isSettingsPage && contentEditable && (
         <CheckOutlined
           style={{ marginLeft: '15px' }}
           key="check"
@@ -61,4 +69,4 @@ const TitleSpring: FC<TitleSpringInterface> = ({
   );
 };
 
-export default TitleSpring;
+export default memo(TitleSpring);

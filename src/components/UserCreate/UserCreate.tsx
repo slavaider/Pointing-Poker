@@ -13,7 +13,7 @@ import {
 } from 'antd';
 import { LoadingOutlined, UploadOutlined } from '@ant-design/icons';
 import styles from './userCreate.module.scss';
-import IUser from '../../interfaces/user';
+import User from '../../interfaces/user';
 
 type SizeType = Parameters<typeof Form>[0]['size'];
 
@@ -38,7 +38,7 @@ function beforeUpload(file: any) {
 type UserCreateProps = {
   isShow: boolean;
   hideModel: () => void;
-  handleUser: (user: IUser) => void;
+  handleUser: (user: User) => void;
 };
 
 const UserCreate: React.FC<UserCreateProps> = ({
@@ -60,7 +60,7 @@ const UserCreate: React.FC<UserCreateProps> = ({
     return e && e.fileList;
   };
 
-  const onFinish = (values: IUser) => {
+  const onFinish = (values: User) => {
     values.image = imageUrl;
     hideModel();
     handleUser(values);
@@ -174,8 +174,15 @@ const UserCreate: React.FC<UserCreateProps> = ({
               {loaded ? (
                 <Avatar
                   size={60}
-                  src={<Image className={styles.avatar__img} src={imageUrl} />}
-                ></Avatar>
+                  alt={'img'}
+                  src={
+                    <Image
+                      alt="img"
+                      className={styles.avatar__img}
+                      src={imageUrl}
+                    />
+                  }
+                />
               ) : (
                 <Avatar className={styles.avatar__text} size={60}>
                   {firstName

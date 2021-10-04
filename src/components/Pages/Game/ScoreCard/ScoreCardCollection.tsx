@@ -6,8 +6,6 @@ import { selectUser, selectUsers } from '../../../../store/usersSlice';
 import stiles from './ScoreCard.module.scss';
 
 const ScoreCardCollection: FC = () => {
-  // todo получить данные (карточки игроков)
-  //  и установить соответствующие значения карт(оценок)
   const user = useAppSelector(selectUser);
   const users = useAppSelector(selectUsers);
 
@@ -22,13 +20,13 @@ const ScoreCardCollection: FC = () => {
           //  get issueId + value in ScoreCard
           //
           <div key={currentUser.userId + issueId} className={stiles.wrapper}>
-            <ScoreCard value={'12'} />
+            <ScoreCard value={currentUser.status} />
             <PlayerCard
               {...currentUser}
               key={currentUser.userId}
-              ItIsYou={currentUser.userId === user?.userId}
+              isItYou={currentUser.userId === user?.userId}
               isMaster={currentUser.isMaster}
-              size="mini"
+              size="max"
             />
           </div>
         );

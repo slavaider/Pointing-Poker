@@ -1,20 +1,17 @@
-import React, { Dispatch, FC, SetStateAction } from 'react';
+import React, { Dispatch, FC, memo, SetStateAction, useContext } from 'react';
 import { Modal, Select, Form, Input, Button } from 'antd';
-import { useAppDispatch } from 'src/hooks';
-import { addIssue, editIssue } from 'src/store/counterSlice';
+import { useAppDispatch, useAppSelector } from 'src/hooks';
+import { addIssue, editIssue, selectUser } from 'src/store/usersSlice';
 import styles from './Issues.module.scss';
+import Issue from '../../../../interfaces/issue';
+import SocketContext from '../../../../shared/SocketContext';
 
 const { Option } = Select;
 
 interface ModalIssuesProps {
   isModalVisible: boolean;
   setIsModalVisible: Dispatch<SetStateAction<boolean>>;
-  props: {
-    cardTitle: string;
-    linkToIssue: string;
-    priority: string;
-    id: number;
-  };
+  issue: Issue;
   issueMode: string;
   modalTitle: string;
 }
@@ -22,32 +19,29 @@ interface ModalIssuesProps {
 const ModalIssues: FC<ModalIssuesProps> = ({
   isModalVisible,
   setIsModalVisible,
-  props,
+  issue,
   issueMode,
   modalTitle,
 }) => {
   const dispatch = useAppDispatch();
   const [form] = Form.useForm();
-  const initialValuesForm = {
-    cardTitle: props.cardTitle,
-    linkToIssue: props.linkToIssue,
-    priority: props.priority,
-  };
+  const socket = useContext(SocketContext);
+  const user = useAppSelector(selectUser);
+
   const onCancel = () => {
     setIsModalVisible(false);
   };
 
-  const onSubmit = (value: {
-    cardTitle: string;
-    linkToIssue: string;
-    priority: string;
-    id: number;
-  }) => {
+  const onSubmit = (value: Issue) => {
     setIsModalVisible(false);
     if (issueMode === 'create') {
-      dispatch(addIssue(value));
+      socket?.emit('send issue', value, user?.room, (issueData: Issue) => {
+        dispatch(addIssue(issueData));
+      });
     } else {
-      dispatch(editIssue(value));
+      socket?.emit('issue update', value, user?.room, (issueData: Issue) => {
+        dispatch(editIssue(issueData));
+      });
     }
   };
 
@@ -55,7 +49,7 @@ const ModalIssues: FC<ModalIssuesProps> = ({
     form
       .validateFields()
       .then((value) => {
-        value.id = props.id;
+        value.id = issue.id;
         onSubmit(value);
       })
       .catch((info) => {
@@ -64,7 +58,7 @@ const ModalIssues: FC<ModalIssuesProps> = ({
   };
 
   return (
-    <div>
+    <>
       <Modal
         className={styles.modal}
         visible={isModalVisible}
@@ -81,7 +75,7 @@ const ModalIssues: FC<ModalIssuesProps> = ({
         ]}
       >
         <p>{modalTitle}</p>
-        <Form form={form} name="issue" initialValues={initialValuesForm}>
+        <Form form={form} name="issue" initialValues={issue}>
           <Form.Item
             name="cardTitle"
             className={styles.input}
@@ -115,8 +109,8 @@ const ModalIssues: FC<ModalIssuesProps> = ({
           </Form.Item>
         </Form>
       </Modal>
-    </div>
+    </>
   );
 };
 
-export default ModalIssues;
+export default memo(ModalIssues);

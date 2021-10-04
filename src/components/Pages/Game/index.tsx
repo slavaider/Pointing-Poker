@@ -1,27 +1,36 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC, useContext, useMemo } from 'react';
 import PlayerCards from 'src/components/PlayerCards';
+import { withRouter } from 'next/router';
+import { WithRouterProps } from 'next/dist/client/with-router';
 import TitleServer from '../Settings/Title-Spring/Title-spring';
 
 import Issues from '../Settings/Issues';
 import styles from './GamePage.module.scss';
 import Button from '../../Button';
 import RoundControl from './RoundControl';
-import { useAppSelector } from '../../../hooks';
-import { selectUser, selectUsers } from '../../../store/usersSlice';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { removeUser, selectUser, selectUsers } from '../../../store/usersSlice';
 import CardCollection from '../Settings/Card-collection';
 import ScoreCardCollection from './ScoreCard/ScoreCardCollection';
+import User from '../../../interfaces/user';
+import SocketContext from '../../../shared/SocketContext';
 
-const Game: FC = () => {
+const Game: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
   const users = useAppSelector(selectUsers);
   const user = useAppSelector(selectUser);
+  const socket = useContext(SocketContext);
+  const dispatch = useAppDispatch();
 
   const master = useMemo(() => {
     return users.find((item) => item.isMaster);
   }, [users]);
 
-  // const others = useMemo(() => {
-  //   return users.filter((item) => !item.isMaster);
-  // }, [users]);
+  const stopGame = () => {
+    socket?.emit('remove user', user, user?.room, (userData: User) => {
+      dispatch(removeUser(userData));
+      router.push('/');
+    });
+  };
 
   return (
     <div style={{ display: 'flex' /* , flexWrap: 'wrap' */ }}>
@@ -34,7 +43,7 @@ const Game: FC = () => {
             user={user}
             title={'Scram master:'}
           />
-          <Button backgroundColor={'#fff'} color={'#2B3A67'}>
+          <Button backgroundColor={'#fff'} color={'#2B3A67'} onClick={stopGame}>
             Stop Game
           </Button>
         </div>
@@ -62,4 +71,4 @@ const Game: FC = () => {
   );
 };
 
-export default Game;
+export default withRouter(Game);

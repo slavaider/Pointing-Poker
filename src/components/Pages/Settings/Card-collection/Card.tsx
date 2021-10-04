@@ -1,25 +1,29 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import { CheckOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Input } from 'antd';
-import { useAppDispatch } from 'src/hooks';
-import { deleteCard, editCard } from 'src/store/counterSlice';
+import { useAppDispatch, useAppSelector } from 'src/hooks';
+import { deleteCard, editCard, selectUser } from 'src/store/usersSlice';
 import styles from './Card-collection.module.scss';
+import ICard from '../../../../interfaces/card';
+import SocketContext from '../../../../shared/SocketContext';
 
 interface CardProps {
-  cardData: {
-    cardTitle: string;
-    id: number;
-    cardValue: string | number;
-  };
+  card: ICard;
   width?: string;
   isSettingsPage: boolean;
 }
 
-const Card: FC<CardProps> = ({ width = '100px', isSettingsPage, cardData }) => {
+const Card: FC<CardProps> = ({
+  card,
+  width = '100px',
+  isSettingsPage,
+}: CardProps) => {
   const [isModeEdit, setIsModeEdit] = useState<boolean>(false);
   const dispatch = useAppDispatch();
-  const { cardTitle, id } = cardData;
-  let { cardValue } = cardData;
+  const { cardTitle, cardValue, id } = card;
+  const user = useAppSelector(selectUser);
+  const socket = useContext(SocketContext);
+
   const color = isModeEdit ? 'darkblue' : '#000';
 
   const editMode = () => {
@@ -27,19 +31,29 @@ const Card: FC<CardProps> = ({ width = '100px', isSettingsPage, cardData }) => {
   };
 
   const removeCard = () => {
-    dispatch(deleteCard(id));
+    socket?.emit('card remove', id, user?.room, (idResponse: string) => {
+      dispatch(deleteCard(idResponse));
+    });
   };
 
   const onClick = () => {
-    // Input value
-    cardValue = (document.getElementById(`${id}`) as HTMLInputElement).value;
-    dispatch(editCard({ ...cardData, cardValue }));
+    const inputValue = +(document.getElementById(id) as HTMLInputElement).value;
+    if (!Number.isNaN(inputValue)) {
+      const newCard = {
+        ...card,
+        cardValue: inputValue,
+      };
+      socket?.emit(
+        'card update',
+        newCard,
+        user?.room,
+        (cardResponse: string) => {
+          dispatch(editCard(cardResponse));
+        },
+      );
+    }
     setIsModeEdit(false);
   };
-
-  //
-  // todo для чего фрагмент
-  //
 
   return (
     <>
@@ -47,7 +61,7 @@ const Card: FC<CardProps> = ({ width = '100px', isSettingsPage, cardData }) => {
         <div className={styles.cardVal__top}>
           {isModeEdit ? (
             <Input
-              id={`${id}`}
+              id={id}
               className={styles.input__edit_card}
               defaultValue={cardValue}
               maxLength={5}
@@ -58,12 +72,10 @@ const Card: FC<CardProps> = ({ width = '100px', isSettingsPage, cardData }) => {
           ) : (
             <span style={{ color }}>{cardValue}</span>
           )}
-          {console.log('isSettingsPage', isSettingsPage)}
           <div style={{ display: 'flex' }}>
             {isSettingsPage && !isModeEdit && (
               <EditOutlined
                 className={styles.button__edit}
-                key={`edit - ${id}`}
                 onClick={editMode}
               />
             )}
@@ -71,12 +83,10 @@ const Card: FC<CardProps> = ({ width = '100px', isSettingsPage, cardData }) => {
             {isSettingsPage && isModeEdit && (
               <CheckOutlined
                 className={styles.button__edit}
-                key={`check - ${id}`}
                 onClick={onClick}
               />
             )}
             <DeleteOutlined
-              key={`delete - ${id}`}
               className={styles.button__delete}
               onClick={removeCard}
             />
