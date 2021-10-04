@@ -1,14 +1,4 @@
 .wrapper {
-  width: -webkit-fit-content;
-  width: -moz-fit-content;
-  width: fit-content;
-  min-width: 300px;
-  height: 90px;
-  padding: 12px 14px 13px;
-  margin-top: 16px;
-  -webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-          box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 4px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -18,6 +8,40 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  min-width: 300px;
+  min-height: 70px;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  padding: 12px 10px 0;
+  margin: 16px 0 0 1px;
+  -webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+          box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+.wrapper.min {
+  min-width: 150px;
+  min-height: 45px;
+  padding-bottom: 5px;
+}
+
+.wrapper.min div {
+  font-size: 12px;
+  line-height: 15px;
+  font-weight: 600;
+}
+
+.wrapper.min div :last-child {
+  font-size: 15px;
+}
+
+.wrapper.min div span {
+  font-size: 10px;
 }
 
 .wrapper * {
@@ -44,7 +68,8 @@
 }
 
 .button svg {
-  width: 30px !important;
+  width: 25px !important;
   height: 100% !important;
+  fill: tomato;
 }
 /*# sourceMappingURL=PlayerCard.module.css.map */

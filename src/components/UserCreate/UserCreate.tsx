@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
 import {
   Modal,
@@ -107,7 +109,7 @@ const UserCreate: React.FC<UserCreateProps> = ({
     <section className={styles.user__create}>
       <Modal
         width={600}
-        style={{ top: 20 }}
+        style={{ top: 70 }}
         visible={isShow}
         onCancel={hideModel}
         closable={false}

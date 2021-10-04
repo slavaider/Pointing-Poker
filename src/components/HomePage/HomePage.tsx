@@ -115,6 +115,11 @@ const HomePage: React.FC = () => {
             <a>Test</a>
           </Link>
         </li>
+        <li>
+          <Link href="/main" replace>
+            <a>Main</a>
+          </Link>
+        </li>
       </ul>
       <hr />
       <Space size={10}>

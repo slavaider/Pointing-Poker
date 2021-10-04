@@ -10,7 +10,6 @@
       -ms-flex-pack: justify;
           justify-content: space-between;
   height: 160px;
-  width: 98px;
   margin: 10px 10px 0 0;
   padding: 5px;
   border: 1px solid #eeeeee;
@@ -69,21 +68,26 @@
   line-height: 15px;
 }
 
-.button__edit,
-.button__delete {
+.cardStatisticValue {
+  margin-top: 5px;
+  text-align: center;
+}
+
+.cardStatisticValue .button__edit,
+.cardStatisticValue .button__delete {
   cursor: pointer;
   margin-left: 11px;
 }
 
-.button__edit {
+.cardStatisticValue .button__edit {
   margin-left: 5px;
 }
 
-.button__delete {
+.cardStatisticValue .button__delete {
   color: red;
 }
 
-.input__edit {
+.cardStatisticValue .input__edit {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -96,7 +100,7 @@
           justify-content: space-between;
 }
 
-.input__edit_card {
+.cardStatisticValue .input__edit_card {
   position: absolute;
   font-size: 15px;
   left: -2px;
@@ -107,11 +111,11 @@
   outline: none;
 }
 
-.input__edit_card:focus {
+.cardStatisticValue .input__edit_card:focus {
   background-color: white;
 }
 
-.input__edit_button {
+.cardStatisticValue .input__edit_button {
   position: absolute;
   padding: 0px 2px;
   height: 33px;
@@ -119,7 +123,7 @@
   right: 0;
 }
 
-.input__edit_button > span {
+.cardStatisticValue .input__edit_button > span {
   font-size: 16px;
 }
 /*# sourceMappingURL=Card-collection.module.css.map */
