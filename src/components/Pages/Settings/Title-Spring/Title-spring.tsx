@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, useContext, useState } from 'react';
+import React, { ChangeEvent, FC, memo, useContext, useState } from 'react';
 import { EditOutlined, CheckOutlined } from '@ant-design/icons';
 import AutosizeInput from 'react-input-autosize';
 import styles from './TitleSpring.module.scss';
@@ -69,4 +69,4 @@ const TitleSpring: FC<TitleSpringInterface> = ({
   );
 };
 
-export default TitleSpring;
+export default memo(TitleSpring);

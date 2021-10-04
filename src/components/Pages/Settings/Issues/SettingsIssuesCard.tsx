@@ -1,4 +1,4 @@
-import React, { FC, useContext, useState } from 'react';
+import React, { FC, memo, useContext, useState } from 'react';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { removeIssue, selectUser } from 'src/store/usersSlice';
 import { useAppDispatch, useAppSelector } from 'src/hooks';
@@ -73,4 +73,4 @@ const SettingsIssuesCard: FC<Issue> = ({
   );
 };
 
-export default SettingsIssuesCard;
+export default memo(SettingsIssuesCard);

@@ -74,10 +74,31 @@ nextApp.prepare().then(async () => {
     socket.on('send user server', (user, cb) => {
       cb(user);
     });
-
-    socket.on('leave', (user:User) => {
-      socket.leave(user.room);
+    
+    socket.on('remove user', (userData: User, room, cb) => {
+      const userIndex = users[room].findIndex((item) => item.userId === userData.userId)
+      socket.leave(room);
+      users[room].splice(1, userIndex);
+      socket.broadcast.to(room).emit('remove user server', userData);
+      cb(userData);
     });
+
+    socket.on('remove user server', (user, cb) => {
+      cb(user);
+    });
+
+    socket.on('update user', (userData: User, room, cb) => {
+      const userIndex = users[room].findIndex((item) => item.userId === userData.userId)
+      users[room][userIndex] = {...userData}
+      socket.broadcast.to(room).emit('update user server', userData);
+      cb(userData);
+    });
+
+    socket.on('update user server', (user, cb) => {
+      cb(user);
+    });
+
+    // MESSAGES
 
     socket.on('send message', (message: Message, cb) => {
       messages[message.room].push(message);
@@ -89,6 +110,8 @@ nextApp.prepare().then(async () => {
       cb(message);
     });
 
+    // OPTIONS
+
     socket.on('send option', (option: Options, room, cb) => {
       options[room] = option;
       socket.broadcast.to(room).emit('send option server', option);
@@ -99,6 +122,8 @@ nextApp.prepare().then(async () => {
       cb(option);
     });
 
+    // TITLE
+
     socket.on('send title', (title: string, room, cb) => {
       titles[room] = title;
       socket.broadcast.to(room).emit('send title server', title);
@@ -108,6 +133,8 @@ nextApp.prepare().then(async () => {
     socket.on('send title server', (title, cb) => {
       cb(title);
     });
+
+    // ISSUES
 
     socket.on('send issue', (issue: Issue, room, cb) => {
       issues[room].push(issue);
@@ -141,6 +168,7 @@ nextApp.prepare().then(async () => {
       cb(issue);
     });
 
+    // CARDS
 
     socket.on('send card', (card: Card, room, cb) => {
       cards[room].push(card);
@@ -174,9 +202,11 @@ nextApp.prepare().then(async () => {
       cb(card);
     });
 
+    // GAME
+
     socket.on('start game', (usersData: User[], room, cb) => {
       users[room] = usersData.map((item) => {
-        item.status = 'game';
+        item.status = 'idle';
         return item;
       });
       socket.broadcast.to(room).emit('start game server', usersData);
@@ -186,34 +216,32 @@ nextApp.prepare().then(async () => {
     socket.on('start game server', (users, cb) => {
       cb(users);
     });
-    
 
-    socket.on('kick player', (userId: string, user:User, split, cb) => {
-      
+
+    socket.on('kick player', (userId: string, user: User, split, cb) => {
+
       const userIndex = users[user.room].findIndex(
         (item) => item.userId === userId,
       );
-      
+
       if (userIndex !== -1) {
         users[user.room][userIndex].kickVotes += 1;
+        users[user.room][userIndex].allVotes += 1;
         socket.broadcast.to(user.room).emit('update user server', users[user.room][userIndex]);
       }
-      
+
       if (users[user.room][userIndex].kickVotes === users[user.room].length - 1) {
         users[user.room].splice(userIndex, 1);
       }
-      
-      if(split) socket.broadcast.to(user.room).emit('kick player server', userId,user);
+
+      if (split) socket.broadcast.to(user.room).emit('kick player server', userId, user);
 
       cb(userId);
     });
-    
-    socket.on('kick player server', (userId,user, cb) => {
-      cb(userId,user);
-    });
-    
-    
 
+    socket.on('kick player server', (userId, user, cb) => {
+      cb(userId, user);
+    });
 
   });
 

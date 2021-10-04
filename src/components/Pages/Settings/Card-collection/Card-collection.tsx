@@ -1,4 +1,4 @@
-import React, { FC, useContext } from 'react';
+import React, { FC, memo, useContext } from 'react';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from 'src/hooks';
 import { v4 } from 'uuid';
@@ -79,4 +79,4 @@ const CardCollection: FC<Props> = ({
   );
 };
 
-export default CardCollection;
+export default memo(CardCollection);

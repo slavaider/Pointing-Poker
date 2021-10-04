@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, memo } from 'react';
 import { Button } from 'antd';
 import styles from './Link-to-lobby.module.scss';
 
@@ -27,4 +27,4 @@ const LinkToLobby: FC<LinkToLobbyProps> = ({
   );
 };
 
-export default LinkToLobby;
+export default memo(LinkToLobby);

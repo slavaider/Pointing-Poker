@@ -9,5 +9,5 @@ export default interface User {
   userId: string;
   status: string; // 'settings' | 'idle' | [value]
   kickVotes: number;
-  socketId: string;
+  allVotes: number;
 }

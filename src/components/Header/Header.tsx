@@ -23,7 +23,7 @@ const Header: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
 
   const [visible, setVisible] = useState(false);
   const [text, setText] = useState('');
-  const { roomId } = router.query;
+  const { id } = router.query;
   const user = useAppSelector(selectUser);
   const messages = useAppSelector(selectMessages);
 
@@ -46,7 +46,7 @@ const Header: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
       <div className={styles.headerLine}>
         <div style={{ display: 'inline-block' }}>Logo</div>
 
-        {user && roomId && (
+        {user && id && (
           <>
             <button
               className={styles.button}
@@ -75,7 +75,7 @@ const Header: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
                   user={{
                     ...message,
                     size: 'mini',
-                    ItIsYou: message?.userId === user?.userId,
+                    isItYou: message?.userId === user?.userId,
                   }}
                 />
               ))}

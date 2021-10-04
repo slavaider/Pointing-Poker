@@ -47,6 +47,18 @@ const usersSlice = createSlice({
     setUser: (state, action) => {
       state.userId = action.payload.userId;
     },
+    updateUser: (state, action: PayloadAction<User>) => {
+      const userIndex = state.users.findIndex(
+        (item) => item.userId === action.payload.userId,
+      );
+      state.users[userIndex] = { ...action.payload };
+    },
+    removeUser: (state, action: PayloadAction<User>) => {
+      const userIndex = state.users.findIndex(
+        (item) => item.userId === action.payload.userId,
+      );
+      state.users.splice(userIndex, 1);
+    },
 
     // MESSAGES
     addMessages: (state, action) => {
@@ -106,18 +118,9 @@ const usersSlice = createSlice({
     // GAME
     startGameUsers: (state, action: PayloadAction<User[]>) => {
       state.users = action.payload.map((item) => {
-        item.status = 'game';
+        item.status = 'idle';
         return item;
       });
-    },
-    updateUser: (state, action: PayloadAction<User>) => {
-      const userIndex = state.users.findIndex(
-        (item) => item.userId === action.payload.userId,
-      );
-      state.users[userIndex].kickVotes = action.payload.kickVotes;
-      if (state.users[userIndex].kickVotes === state.users.length - 1) {
-        state.users.splice(userIndex, 1);
-      }
     },
 
     kickPlayerById: (state, action: PayloadAction<string>) => {
@@ -126,9 +129,7 @@ const usersSlice = createSlice({
       );
       if (userIndex !== -1) {
         state.users[userIndex].kickVotes += 1;
-      }
-      if (state.users[userIndex].kickVotes === state.users.length - 1) {
-        state.users.splice(userIndex, 1);
+        state.users[userIndex].allVotes += 1;
       }
     },
   },
@@ -139,6 +140,7 @@ export const {
   addUser,
   setUser,
   addMessages,
+  removeUser,
   addMessage,
   addOptions,
   addIssue,

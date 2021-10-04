@@ -57,6 +57,7 @@ const HomePage: React.FC = () => {
           room,
           status: 'settings',
           kickVotes: 0,
+          allVotes: 0,
         },
         (
           usersData: User[],

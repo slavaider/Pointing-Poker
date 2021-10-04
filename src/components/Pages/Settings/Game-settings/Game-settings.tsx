@@ -1,4 +1,4 @@
-import React, { FC, useContext, useState } from 'react';
+import React, { FC, memo, useContext, useState } from 'react';
 import { Button, Form, Input, Switch, TimePicker } from 'antd';
 import moment, { Moment } from 'moment';
 import { addOptions, selectOptions, selectUser } from 'src/store/usersSlice';
@@ -107,4 +107,4 @@ const GameSettings: FC = () => {
   );
 };
 
-export default GameSettings;
+export default memo(GameSettings);

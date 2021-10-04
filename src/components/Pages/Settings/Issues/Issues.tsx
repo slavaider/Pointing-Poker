@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, memo, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { useAppSelector } from 'src/hooks';
 import { v4 } from 'uuid';
@@ -55,4 +55,4 @@ const Issues: FC<IssuesProps> = ({ isMaster = false, width }) => {
   );
 };
 
-export default Issues;
+export default memo(Issues);

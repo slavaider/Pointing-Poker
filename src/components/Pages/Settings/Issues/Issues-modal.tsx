@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, SetStateAction, useContext } from 'react';
+import React, { Dispatch, FC, memo, SetStateAction, useContext } from 'react';
 import { Modal, Select, Form, Input, Button } from 'antd';
 import { useAppDispatch, useAppSelector } from 'src/hooks';
 import { addIssue, editIssue, selectUser } from 'src/store/usersSlice';
@@ -113,4 +113,4 @@ const ModalIssues: FC<ModalIssuesProps> = ({
   );
 };
 
-export default ModalIssues;
+export default memo(ModalIssues);

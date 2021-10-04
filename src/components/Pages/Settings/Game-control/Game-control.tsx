@@ -1,4 +1,4 @@
-import React, { FC, useContext } from 'react';
+import React, { FC, memo, useContext } from 'react';
 import { Button } from 'antd';
 import { withRouter } from 'next/router';
 import { WithRouterProps } from 'next/dist/client/with-router';
@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../../../hooks';
 import {
   selectUser,
   selectUsers,
+  removeUser,
   startGameUsers,
 } from '../../../../store/usersSlice';
 import SocketContext from '../../../../shared/SocketContext';
@@ -28,33 +29,25 @@ const GameControl: FC<GameControlProps> = ({
   const startGame = () => {
     socket?.emit('start game', users, user?.room, (usersData: User[]) => {
       dispatch(startGameUsers(usersData));
-      router.push('/game');
+      router.push(`/game/${user?.room}`);
     });
   };
-  const cancelGame = () => {
-    router.push('/');
-  };
+
   const exitGame = () => {
-    router.push('/');
+    socket?.emit('remove user', user, user?.room, (userData: User) => {
+      dispatch(removeUser(userData));
+      router.push('/');
+    });
   };
 
   return (
     <div className={styles.game__control_container}>
-      <Button
-        type="primary"
-        className="button"
-        onClick={() => {
-          console.log(users);
-        }}
-      >
-        TEST
-      </Button>
       {isMaster ? (
         <>
           <Button type="primary" className="button" onClick={startGame}>
             START GAME
           </Button>
-          <Button type="default" className="button" onClick={cancelGame}>
+          <Button type="default" className="button" onClick={exitGame}>
             CANCEL GAME
           </Button>
         </>
@@ -67,4 +60,4 @@ const GameControl: FC<GameControlProps> = ({
   );
 };
 
-export default withRouter(GameControl);
+export default withRouter(memo(GameControl));
