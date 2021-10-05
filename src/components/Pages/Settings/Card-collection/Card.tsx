@@ -12,6 +12,9 @@ interface CardProps {
   width?: string;
   isSettingsPage: boolean;
 }
+// todo delete
+const isActiveCard = true;
+//
 
 const Card: FC<CardProps> = ({
   card,
@@ -56,46 +59,45 @@ const Card: FC<CardProps> = ({
   };
 
   return (
-    <>
-      <div className={styles.card__wrapper} style={{ width }}>
-        <div className={styles.cardVal__top}>
-          {isModeEdit ? (
-            <Input
-              id={id}
-              className={styles.input__edit_card}
-              defaultValue={cardValue}
-              maxLength={5}
-              autoFocus
-              bordered={false}
-              style={{ color }}
-            />
-          ) : (
-            <span style={{ color }}>{cardValue}</span>
+    <div
+      className={`${styles.card__wrapper} ${
+        isActiveCard ? styles.card__wrapperActive : ''
+      }`}
+      style={{ width }}
+    >
+      <div className={styles.cardVal__top}>
+        {isModeEdit ? (
+          <Input
+            id={id}
+            className={styles.input__edit_card}
+            defaultValue={cardValue}
+            maxLength={5}
+            autoFocus
+            bordered={false}
+            style={{ color }}
+          />
+        ) : (
+          <span style={{ color }}>{cardValue}</span>
+        )}
+        <div style={{ display: 'flex' }}>
+          {isSettingsPage && !isModeEdit && (
+            <EditOutlined className={styles.button__edit} onClick={editMode} />
           )}
-          <div style={{ display: 'flex' }}>
-            {isSettingsPage && !isModeEdit && (
-              <EditOutlined
-                className={styles.button__edit}
-                onClick={editMode}
-              />
-            )}
 
-            {isSettingsPage && isModeEdit && (
-              <CheckOutlined
-                className={styles.button__edit}
-                onClick={onClick}
-              />
-            )}
+          {isSettingsPage && isModeEdit && (
+            <CheckOutlined className={styles.button__edit} onClick={onClick} />
+          )}
+          {isSettingsPage && (
             <DeleteOutlined
               className={styles.button__delete}
               onClick={removeCard}
             />
-          </div>
+          )}
         </div>
-        <div className={styles.card__title}>{cardTitle}</div>
-        <span className={styles.cardVal__bottom}>{cardValue}</span>
       </div>
-    </>
+      <div className={styles.card__title}>{cardTitle}</div>
+      <span className={styles.cardVal__bottom}>{cardValue}</span>
+    </div>
   );
 };
 

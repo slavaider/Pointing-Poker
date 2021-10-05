@@ -41,7 +41,7 @@ const CardCollection: FC<Props> = ({
   };
 
   return (
-    <>
+    <div style={{ width: 'fit-content' }}>
       {isSettingsPage ? (
         <h4 className={stylesPage.title}>Add card values:</h4>
       ) : (
@@ -75,7 +75,7 @@ const CardCollection: FC<Props> = ({
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

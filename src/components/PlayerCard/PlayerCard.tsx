@@ -12,7 +12,7 @@ const { Meta } = Card;
 export interface PlayerCardProps extends User {
   isItYou: boolean;
   isMaster: boolean;
-  size: 'max' | 'mini';
+  size: 'max' | 'mini' | 'score';
 }
 
 const PlayerCard: FC<PlayerCardProps> = ({
@@ -149,6 +149,49 @@ const PlayerCard: FC<PlayerCardProps> = ({
             title={job}
             description={`${firstName}  ${lastName || ''}`}
           />
+        </div>
+      )}
+
+      {size === 'score' && (
+        <div
+          style={isItYou ? { backgroundColor: '#9af7f7' } : undefined}
+          className={`${styles.wrapper} ${styles.min}`}
+        >
+          <Meta
+            avatar={
+              <Badge dot={isItYou}>
+                <Avatar
+                  style={{
+                    width: '30px',
+                    height: '30px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    color: 'fff',
+                    backgroundColor: '#60DABF',
+                    boxShadow: 'inset 0px 4px 4px rgba(0, 0, 0, 0.25)',
+                  }}
+                  src={image}
+                >
+                  {firstName[0].toUpperCase() +
+                    (lastName
+                      ? lastName[0]
+                      : firstName[firstName.length - 1].toUpperCase())}
+                </Avatar>
+              </Badge>
+            }
+            title={job}
+            description={`${firstName}  ${lastName || ''}`}
+          />
+
+          {!isMaster && !isItYou && (
+            <button
+              onClick={handleShow}
+              type={'button'}
+              className={styles.button_min}
+            >
+              <StopOutlined />
+            </button>
+          )}
         </div>
       )}
 
