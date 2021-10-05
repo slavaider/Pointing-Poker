@@ -9,7 +9,7 @@ import useSocket from '../../hooks/useSocket';
 const AppLayout: FC = ({ children }) => {
   let host = 'http://localhost:3000';
   if (process.browser) {
-    host = window.location.origin.replace(/^http/, 'ws');
+    host = window.location.origin.replace(/^https/, 'ws');
   }
   const socket = useSocket(host);
 
