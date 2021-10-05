@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AACA,AAAA,MAAM,CAAC;EACL,KAAK,EAAE,KAAK;EACZ,MAAM,EAAE,IAAI;EACZ,SAAS,EAAE,IAAI;EACf,MAAM,EAAE,iBAAiB;EACzB,UAAU,EAAE,KAAK,CAAC,CAAC,CAAC,GAAG,CAAC,GAAG,CAAC,mBAAmB;EAC/C,aAAa,EAAE,UAAU;CAC1B",
+    "sources": [
+        "Game-settings.module.scss"
+    ],
+    "names": [],
+    "file": "Game-settings.module.css"
+}

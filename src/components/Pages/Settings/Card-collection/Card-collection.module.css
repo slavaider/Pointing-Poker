@@ -1,0 +1,129 @@
+.card__wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  height: 160px;
+  margin: 10px 10px 0 0;
+  padding: 5px;
+  border: 1px solid #eeeeee;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  -webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+          box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 14px;
+  position: relative;
+}
+
+.cards__container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.cardVal__top {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.cardVal__top svg {
+  width: 15px;
+  height: 15px;
+}
+
+.card__title {
+  text-align: center;
+}
+
+.cardVal__bottom {
+  text-align: start;
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg);
+}
+
+.cardVal__bottom,
+.cardVal__top span {
+  font-size: 15px;
+  line-height: 15px;
+}
+
+.cardStatisticValue {
+  margin-top: 5px;
+  text-align: center;
+}
+
+.cardStatisticValue .button__edit,
+.cardStatisticValue .button__delete {
+  cursor: pointer;
+  margin-left: 11px;
+}
+
+.cardStatisticValue .button__edit {
+  margin-left: 5px;
+}
+
+.cardStatisticValue .button__delete {
+  color: red;
+}
+
+.cardStatisticValue .input__edit {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.cardStatisticValue .input__edit_card {
+  position: absolute;
+  font-size: 15px;
+  left: -2px;
+  top: 2px;
+  max-width: 69.5%;
+  margin: 0 0;
+  border: 0 transparent;
+  outline: none;
+}
+
+.cardStatisticValue .input__edit_card:focus {
+  background-color: white;
+}
+
+.cardStatisticValue .input__edit_button {
+  position: absolute;
+  padding: 0px 2px;
+  height: 33px;
+  top: 7px;
+  right: 0;
+}
+
+.cardStatisticValue .input__edit_button > span {
+  font-size: 16px;
+}
+/*# sourceMappingURL=Card-collection.module.css.map */
