@@ -14,7 +14,7 @@ import {
 import SocketContext from '../../../../shared/SocketContext';
 
 export interface GameControlProps extends WithRouterProps {
-  isMaster: boolean;
+  isMaster?: boolean;
 }
 
 const GameControl: FC<GameControlProps> = ({

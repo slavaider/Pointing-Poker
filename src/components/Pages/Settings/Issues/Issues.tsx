@@ -19,21 +19,23 @@ const Issues: FC<IssuesProps> = ({ isMaster = false, width }) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
   const onClick = () => {
-    console.log(isMaster);
     setIsModalVisible(true);
   };
 
   return (
     <div style={{ width }}>
       <h4 className={stylesPage.title}>Issues:</h4>
+
       <div className={styles.container}>
         {issues.map((item) => (
           <SettingsIssuesCard {...item} key={item.id} />
         ))}
-        <button className={styles.card__wrapper_new__issue} onClick={onClick}>
-          Create new Issue
-          <PlusOutlined />
-        </button>
+        {isMaster && (
+          <button className={styles.card__wrapper_new__issue} onClick={onClick}>
+            Create new Issue
+            <PlusOutlined />
+          </button>
+        )}
       </div>
       {isModalVisible ? (
         <ModalIssues
@@ -44,6 +46,7 @@ const Issues: FC<IssuesProps> = ({ isMaster = false, width }) => {
             priority: 'Low',
             linkToIssue: '',
             id: v4(),
+            votes: [],
           }}
           issueMode="create"
           modalTitle="Create Issue"

@@ -11,6 +11,7 @@ const SettingsIssuesCard: FC<Issue> = ({
   cardTitle,
   priority,
   linkToIssue,
+  votes,
   id,
 }: Issue) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -36,22 +37,24 @@ const SettingsIssuesCard: FC<Issue> = ({
             {priority} priority
           </span>
         </div>
-        <div>
-          <span className={styles.button__edit}>
-            <EditOutlined
-              onClick={() => {
-                setIsModalVisible(true);
-              }}
-            />
-          </span>
-          <span className={styles.button__delete}>
-            <DeleteOutlined
-              onClick={() => {
-                issueRemove(id);
-              }}
-            />
-          </span>
-        </div>
+        {user?.isMaster && (
+          <div>
+            <span className={styles.button__edit}>
+              <EditOutlined
+                onClick={() => {
+                  setIsModalVisible(true);
+                }}
+              />
+            </span>
+            <span className={styles.button__delete}>
+              <DeleteOutlined
+                onClick={() => {
+                  issueRemove(id);
+                }}
+              />
+            </span>
+          </div>
+        )}
       </div>
       {isModalVisible ? (
         <ModalIssues
@@ -62,6 +65,7 @@ const SettingsIssuesCard: FC<Issue> = ({
             priority,
             linkToIssue,
             id,
+            votes,
           }}
           issueMode="edit"
           modalTitle="Edit Issue"

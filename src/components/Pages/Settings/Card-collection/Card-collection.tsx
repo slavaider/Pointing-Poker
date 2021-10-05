@@ -8,22 +8,25 @@ import ICard from '../../../../interfaces/card';
 import stylesPage from '../Settings.module.scss';
 import {
   addCard,
-  selectCards,
   selectOptions,
   selectUser,
 } from '../../../../store/usersSlice';
 import SocketContext from '../../../../shared/SocketContext';
+import Vote from '../../../../interfaces/vote';
 
 export type Props = {
   isSettingsPage?: boolean;
+  isVotes?: boolean;
   cardWidth?: string;
+  items: Vote[] | ICard[];
 };
 
 const CardCollection: FC<Props> = ({
   isSettingsPage = true,
   cardWidth,
+  isVotes = false,
+  items,
 }: Props) => {
-  const cards = useAppSelector(selectCards);
   const options = useAppSelector(selectOptions);
   const dispatch = useAppDispatch();
   const socket = useContext(SocketContext);
@@ -40,26 +43,28 @@ const CardCollection: FC<Props> = ({
     });
   };
 
+  let title = 'Game';
+  if (isSettingsPage && isVotes) {
+    title = 'Statistics:';
+  }
+  if (isSettingsPage) {
+    title = 'Add card values:';
+  }
+
   return (
     <>
-      {isSettingsPage ? (
-        <h4 className={stylesPage.title}>Add card values:</h4>
-      ) : (
-        <h4 className={stylesPage.title}> Statistics:</h4>
-      )}
+      <h4 className={stylesPage.title}>{title}</h4>
 
       <div id="cardsContainer" className={styles.cards__container}>
-        {cards.map((card) => (
+        {items.map((card) => (
           <React.Fragment key={card.id}>
             <Card
               isSettingsPage={isSettingsPage}
               card={card}
               width={cardWidth}
             />
-            {!isSettingsPage && (
-              <div className={styles.cardStatisticValue}>
-                {card.cardStatisticValue}
-              </div>
+            {!isSettingsPage && isVotes && (
+              <div className={styles.cardStatisticValue}>{card.cardValue}</div>
             )}
           </React.Fragment>
         ))}
