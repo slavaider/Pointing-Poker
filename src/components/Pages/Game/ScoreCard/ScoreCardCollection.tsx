@@ -26,7 +26,7 @@ const ScoreCardCollection: FC<ScoreProps> = ({ currentIssue }: ScoreProps) => {
             key={currentUser.userId + vote?.issueId}
             className={stiles.wrapper}
           >
-            <ScoreCard value={vote ? vote.value : currentUser.status} />
+            <ScoreCard value={vote ? vote.cardValue : currentUser.status} />
             <PlayerCard
               {...currentUser}
               key={currentUser.userId}
