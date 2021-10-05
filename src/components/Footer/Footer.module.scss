@@ -1,9 +1,65 @@
 .footer {
   height: 70px;
-  background: #2B3A67;
-
+  background: #2b3a67;
   color: tomato;
   display: flex;
   align-items: center;
   justify-content: center;
+
+  &__wrapper {
+    max-width: 1000px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  &__content {
+    width: 100%;
+    height: 70px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  &__content > a {
+    max-width: 80px;
+    width: 100%;
+    transition: 0.3s;
+    display: flex;
+    justify-content: center;
+  }
+
+  &__content:hover > a {
+    opacity: 0.8;
+  }
+}
+
+.logo {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  max-width: 50px;
+  width: 100%;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+
+  &__rs {
+    border-radius: 0;
+    max-width: 80px;
+    height: 50px;
+    background-size: contain;
+    background-image: url("../../../public/rs_school_js.svg");
+  }
+
+  &__slavaider {
+    background-image: url("../../../public/slavaider.jpg");
+  }
+
+  &__arsen {
+    background-image: url("../../../public/arsen.png");
+  }
+
+  &__victor {
+    background-image: url("../../../public/victor.jpg");
+  }
 }

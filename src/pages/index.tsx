@@ -1,8 +1,8 @@
 import React from 'react';
-import HomePage from '../components/HomePage';
+import Main from 'src/components/Pages/Main';
 
 const Index: React.FC = () => {
-  return <HomePage />;
+  return <Main />;
 };
 
 export default Index;
