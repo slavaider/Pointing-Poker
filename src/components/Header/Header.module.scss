@@ -1,0 +1,36 @@
+.header{
+  z-index: 2;
+}
+
+.headerLine{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  height: 50px;
+  background-color: #2B3A67;
+}
+.button{
+  background-color: rgba(129, 129, 156, 0.5);
+  width: 40px;
+}
+
+.greenLine{
+  height: 19px;
+  background: #66999B;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.messageText{
+  display: inline-block;
+
+  width: 100%;
+  margin-top: 16px;
+  padding: 5px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  background-color: #FFFFFF;
+
+  font-size: 15px;
+  line-height: 15px;
+}

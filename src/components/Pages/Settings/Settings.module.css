@@ -1,0 +1,16 @@
+.SettingsContainer {
+  max-width: 1000px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 27px 38px 130px 36px;
+  background-color: #ffffff;
+  -webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+          box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.title {
+  font-size: 30px;
+  text-align: center;
+  margin: 45px auto;
+}
+/*# sourceMappingURL=Settings.module.css.map */

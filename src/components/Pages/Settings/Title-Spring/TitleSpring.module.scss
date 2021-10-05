@@ -1,0 +1,16 @@
+.titleSpring{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin-bottom: 20px;
+}
+
+.autoSizeInput{
+  input{
+    box-shadow: rgb(0 0 0 / 25%) 0 4px 4px inset;
+  }
+  *{
+    max-width: 70vw;
+  }
+}

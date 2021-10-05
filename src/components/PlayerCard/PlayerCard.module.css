@@ -1,0 +1,50 @@
+.wrapper {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  min-width: 300px;
+  height: 90px;
+  padding: 12px 14px 13px;
+  margin-top: 16px;
+  -webkit-box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+          box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.wrapper * {
+  font-family: Roboto, sans-serif;
+  font-weight: 300;
+  color: #000;
+}
+
+.wrapper * + div {
+  font-size: 20px;
+  line-height: 20px;
+  font-weight: 600;
+}
+
+.wrapper span {
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.button {
+  background-color: inherit;
+  height: 30px;
+  margin: 10px;
+}
+
+.button svg {
+  width: 30px !important;
+  height: 100% !important;
+}
+/*# sourceMappingURL=PlayerCard.module.css.map */

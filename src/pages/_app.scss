@@ -1,0 +1,43 @@
+*,
+p {
+	margin: 0 auto;
+	padding: 0;
+}
+
+.anticon-upload>svg {
+	font-size: 16px;
+}
+
+.ant-form-item-label>label {
+	font-size: 24px;
+}
+
+.ant-upload.ant-upload-select-picture-card {
+	height: 40px;
+}
+
+.ant-form-item-control-input-content {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: flex-end;
+}
+
+.button {
+	width: 190px;
+	max-width: 100%;
+	height: 47px;
+	background: #2B3A67;
+	border: 1px solid #496A81;
+	box-sizing: border-box;
+	border-radius: 0 3px 3px 0;
+	box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+	font-weight: bold;
+	color: #FFFFFF;
+	text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+	transition: 0.8s;
+}
+
+.button__small {
+	width: 135px;
+}

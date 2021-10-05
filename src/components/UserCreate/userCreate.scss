@@ -1,0 +1,59 @@
+*,
+p {
+	margin: 0 auto;
+	padding: 0;
+	font-family: Roboto,
+		sans-serif;
+}
+
+.user-create {
+	width: 876px;
+	height: 833px;
+}
+
+.form-user-create {
+	width: 100%;
+}
+
+.form-title {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: flex-start;
+
+	&-text {
+		margin: 0;
+		font-size: 64px;
+		font-style: normal;
+		font-weight: 700;
+		line-height: 75px;
+		letter-spacing: 0em;
+		text-align: left;
+		vertical-align: middle;
+		width: 100%;
+	}
+}
+
+label {
+	width: 230px;
+	font-size: 24px;
+}
+
+.label {
+	&-switch> {
+		max-width: 100%;
+
+		.ant-form-item-label {
+			max-width: 150px;
+		}
+
+		.ant-form-item-control {
+			width: 100px;
+		}
+	}
+
+	&-text {
+		font-size: 16px;
+	}
+}
+
