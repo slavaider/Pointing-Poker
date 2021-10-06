@@ -47,7 +47,7 @@ nextApp.prepare().then(async () => {
         users[room] = [newUser];
         messages[room] = [];
         options[room] = {
-          timerValue: '02:20',
+          timerValue: '00:20',
           playable: true,
           swap: true,
           timer: true,
@@ -74,7 +74,7 @@ nextApp.prepare().then(async () => {
     socket.on('send user server', (user, cb) => {
       cb(user);
     });
-    
+
     socket.on('remove user', (userData: User, room, cb) => {
       const userIndex = users[room].findIndex((item) => item.userId === userData.userId)
       socket.leave(room);
@@ -172,7 +172,7 @@ nextApp.prepare().then(async () => {
 
     socket.on('send card', (card: Card, room, cb) => {
       cards[room].push(card);
-      socket.broadcast.to(room).emit('add card', card);
+      socket.broadcast.to(room).emit('send card server', card);
       cb(card);
     });
 
@@ -204,17 +204,17 @@ nextApp.prepare().then(async () => {
 
     // GAME
 
-    socket.on('start game', (usersData: User[], room, cb) => {
+    socket.on('change status', (usersData: User[], room, status, cb) => {
       users[room] = usersData.map((item) => {
-        item.status = 'idle';
+        item.status = status;
         return item;
       });
-      socket.broadcast.to(room).emit('start game server', usersData);
-      cb(usersData);
+      socket.broadcast.to(room).emit('change status server', usersData, status);
+      cb(usersData, status);
     });
 
-    socket.on('start game server', (users, cb) => {
-      cb(users);
+    socket.on('change status server', (users, status, cb) => {
+      cb(users, status);
     });
 
 
@@ -246,8 +246,8 @@ nextApp.prepare().then(async () => {
   });
 
   app.all('*', (req: any, res: any) => nextHandler(req, res));
-  
-  
+
+
   server.listen(port, () => {
     console.log(`> Ready on http://localhost:${port}`);
   });

@@ -6,7 +6,7 @@ interface ScoreCardProps {
 }
 
 const ScoreCard: FC<ScoreCardProps> = ({ value }) => {
-  return <div className={stiles.card}>{value || 'In progress'}</div>;
+  return <div className={stiles.card}>{value}</div>;
 };
 
 export default ScoreCard;

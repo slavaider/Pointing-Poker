@@ -11,7 +11,7 @@ import {
   editIssue,
   editCard,
   deleteCard,
-  startGameUsers,
+  changeStatus,
   removeUser,
   updateUser,
 } from '../store/usersSlice';
@@ -68,8 +68,8 @@ const useFetchSettingsSockets = (): void => {
         dispatch(editCard(card));
       });
 
-      socket.on('start game server', (users: User[]) => {
-        dispatch(startGameUsers(users));
+      socket.on('change status server', (users: User[], status) => {
+        dispatch(changeStatus({ users, status }));
       });
 
       socket.on('update user server', (newUser: User) => {

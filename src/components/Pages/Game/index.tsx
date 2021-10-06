@@ -2,11 +2,11 @@ import React, { FC, useContext, useEffect, useMemo, useState } from 'react';
 import PlayerCards from 'src/components/PlayerCards';
 import { withRouter } from 'next/router';
 import { WithRouterProps } from 'next/dist/client/with-router';
+import { Button } from 'antd';
 import TitleServer from '../Settings/Title-Spring/Title-spring';
 
 import Issues from '../Settings/Issues';
 import styles from './GamePage.module.scss';
-import Button from '../../Button';
 import RoundControl from './RoundControl';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import {
@@ -27,11 +27,19 @@ const Game: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
   const cards = useAppSelector(selectCards);
 
   const socket = useContext(SocketContext);
+  const [isGameStarted, setIsGameStarted] = useState<boolean>(false);
+  const [isUpdate, setIsUpdate] = useState<boolean>(false);
   const dispatch = useAppDispatch();
 
   const issues = useAppSelector(selectIssues);
 
-  const [index, setIndex] = useState<number>(0);
+  const master = useMemo(() => {
+    return users.find((item) => item.isMaster);
+  }, [users]);
+
+  const [index, setIndex] = useState<number>(
+    master?.currentIssueIndex as number,
+  );
 
   const currentIssue = useMemo(() => {
     return issues[index];
@@ -40,10 +48,6 @@ const Game: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
   const nextIssue = useMemo(() => {
     return issues[index + 1];
   }, [index, issues]);
-
-  const master = useMemo(() => {
-    return users.find((item) => item.isMaster);
-  }, [users]);
 
   const stopGame = () => {
     socket?.emit('remove user', user, user?.room, (userData: User) => {
@@ -76,55 +80,42 @@ const Game: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
             user={user}
             title={'Scram master:'}
           />
-
-          {master?.userId !== user?.userId ? (
-            //
-            // todo обавить таймер
-            //
-
-            <Button
-              backgroundColor={'#aaa'}
-              color={'#2B3A67'}
-              onClick={stopGame}
-            >
-              Exit
-            </Button>
-          ) : (
-            <Button
-              backgroundColor={'#aaa'}
-              color={'#2B3A67'}
-              onClick={stopGame}
-            >
-              Stop Game
-            </Button>
-          )}
+          <Button type="default" className="button" onClick={stopGame}>
+            {user?.isMaster ? 'Stop Game' : 'Exit'}
+          </Button>
         </div>
 
         <div className={styles.flexRow} style={{ alignItems: 'center' }}>
           <Issues isMaster={user?.isMaster} width={'305px'} />
-          {user?.isMaster && (
-            <RoundControl
-              setIndex={setIndex}
-              currentIssue={currentIssue}
-              nextIssue={nextIssue}
-            />
-          )}
+          <RoundControl
+            setIsUpdate={setIsUpdate}
+            setIsGameStarted={setIsGameStarted}
+            setIndex={setIndex}
+            currentIssue={currentIssue}
+            nextIssue={nextIssue}
+          />
         </div>
 
-        {/* Game */}
-
-        {cards.length > 0 ? (
-          <CardCollection items={cards} isSettingsPage={false} />
+        {issues.length > 0 && cards.length > 0 ? (
+          <CardCollection
+            isUpdate={isUpdate}
+            setIsUpdate={setIsUpdate}
+            isGameStarted={isGameStarted}
+            currentIssue={currentIssue}
+            items={cards}
+            isSettingsPage={false}
+          />
         ) : (
           <p style={{ marginTop: '30px', textAlign: 'center' }}>
-            Карточек нет, игра невозможна...
+            Карточек или issues нет, игра невозможна...
           </p>
         )}
 
-        {/* Statistic */}
-        {currentIssue?.votes.length > 0 ? (
+        {!isGameStarted && currentIssue?.votes.length > 0 ? (
           <CardCollection
+            isGameStarted={isGameStarted}
             isVotes={true}
+            currentIssue={currentIssue}
             items={currentIssue?.votes}
             isSettingsPage={false}
           />
@@ -135,14 +126,14 @@ const Game: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
         <aside className={styles.aside_mobile}>
           <div>Score:</div>
           <div>Players:</div>
-          <ScoreCardCollection currentIssue={currentIssue} />
+          <ScoreCardCollection />
         </aside>
       </div>
 
       <aside className={styles.aside}>
         <div>Score:</div>
         <div>Players:</div>
-        <ScoreCardCollection currentIssue={currentIssue} />
+        <ScoreCardCollection />
       </aside>
     </div>
   );

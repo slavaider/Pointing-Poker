@@ -1,7 +1,5 @@
-export default interface Vote {
+import Card from './card';
+
+export default interface Vote extends Card {
   userId?: string;
-  issueId: string;
-  cardValue: number;
-  cardTitle: string;
-  id: string;
 }

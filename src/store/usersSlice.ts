@@ -22,7 +22,7 @@ const initialState: InitialStateType = {
   userId: null,
   messages: [],
   options: {
-    timerValue: '02:20',
+    timerValue: '00:20',
     playable: true,
     swap: true,
     timer: true,
@@ -116,9 +116,15 @@ const usersSlice = createSlice({
     },
 
     // GAME
-    startGameUsers: (state, action: PayloadAction<User[]>) => {
-      state.users = action.payload.map((item) => {
-        item.status = 'idle';
+    changeStatus: (
+      state,
+      action: PayloadAction<{
+        users: User[];
+        status: string;
+      }>,
+    ) => {
+      state.users = action.payload.users.map((item) => {
+        item.status = action.payload.status;
         return item;
       });
     },
@@ -154,7 +160,7 @@ export const {
   addCards,
   editCard,
   editTitleSpring,
-  startGameUsers,
+  changeStatus,
 } = usersSlice.actions;
 
 export const selectUsers = (state: RootState): User[] => state.users.users;
