@@ -5,7 +5,9 @@ const useSocket = (url: string): Socket | null => {
   const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
-    const socketIo = io(url);
+    const socketIo = io(url, {
+      transports: ['websocket', 'polling'],
+    });
 
     setSocket(socketIo);
 
