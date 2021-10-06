@@ -82,7 +82,11 @@ const Game: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
             // todo обавить таймер
             //
 
-            <Button backgroundColor={'#aaa'} color={'#2B3A67'} onClick={exit}>
+            <Button
+              backgroundColor={'#aaa'}
+              color={'#2B3A67'}
+              onClick={stopGame}
+            >
               Exit
             </Button>
           ) : (
