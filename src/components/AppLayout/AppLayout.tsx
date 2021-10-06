@@ -10,7 +10,7 @@ const AppLayout: FC = ({ children }) => {
   let host = 'http://localhost:3000';
 
   if (process.browser) {
-    host = window.location.origin.replace(/https/, 'http');
+    host = window.location.origin;
   }
 
   const socket = useSocket(host);
