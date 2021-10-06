@@ -14,6 +14,7 @@ import {
   selectUsers,
   updateUser,
   removeUser,
+  selectCards,
 } from '../../../store/usersSlice';
 import PlayerCards from '../../PlayerCards';
 import useFetchSettingsSockets from '../../../hooks/useFetchDataSockets';
@@ -24,6 +25,7 @@ const Settings: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
   useFetchSettingsSockets();
 
   const users = useAppSelector(selectUsers);
+  const cards = useAppSelector(selectCards);
   const user = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
   const socket = useContext(SocketContext);
@@ -87,13 +89,13 @@ const Settings: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
         />
       }
       <LinkToLobby linkToLobby={id as string} />
-      <GameControl isMaster={master?.userId === user?.userId} />
+      <GameControl isMaster={user?.isMaster} />
       <PlayerCards items={others} user={user} title={'Members:'} />
-      {master?.userId === user?.userId && (
+      {user?.isMaster && (
         <>
-          <Issues />
+          <Issues isMaster={user?.isMaster} />
           <GameSettings />
-          <CardCollection />
+          <CardCollection items={cards} />
         </>
       )}
     </div>

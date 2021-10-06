@@ -44,7 +44,9 @@ const Header: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
   return (
     <header className={styles.header}>
       <div className={styles.headerLine}>
-        <div style={{ display: 'inline-block' }}>Logo</div>
+        <div style={{ display: 'inline-block' }}>
+          <Image width="30" height="30" src="/photos.png" alt="logo" />
+        </div>
 
         {user && id && (
           <>

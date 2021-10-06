@@ -7,7 +7,13 @@ import Footer from '../Footer';
 import useSocket from '../../hooks/useSocket';
 
 const AppLayout: FC = ({ children }) => {
-  const socket = useSocket('http://localhost:3000');
+  let host = 'http://localhost:3000';
+
+  if (process.browser) {
+    host = window.location.origin;
+  }
+
+  const socket = useSocket(host);
 
   return (
     <SocketContext.Provider value={socket}>

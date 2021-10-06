@@ -72,11 +72,11 @@ const useFetchSettingsSockets = (): void => {
         dispatch(startGameUsers(users));
       });
 
-      socket?.on('update user server', (newUser: User) => {
+      socket.on('update user server', (newUser: User) => {
         dispatch(updateUser(newUser));
       });
 
-      socket?.on('remove user server', (newUser: User) => {
+      socket.on('remove user server', (newUser: User) => {
         dispatch(removeUser(newUser));
       });
     }

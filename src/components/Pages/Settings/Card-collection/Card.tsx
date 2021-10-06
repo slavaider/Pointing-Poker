@@ -2,15 +2,22 @@ import React, { FC, useContext, useState } from 'react';
 import { CheckOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Input } from 'antd';
 import { useAppDispatch, useAppSelector } from 'src/hooks';
-import { deleteCard, editCard, selectUser } from 'src/store/usersSlice';
+import {
+  deleteCard,
+  editCard,
+  editIssue,
+  selectUser,
+} from 'src/store/usersSlice';
 import styles from './Card-collection.module.scss';
 import ICard from '../../../../interfaces/card';
 import SocketContext from '../../../../shared/SocketContext';
+import Issue from '../../../../interfaces/issue';
 
 interface CardProps {
   card: ICard;
   width?: string;
   isSettingsPage: boolean;
+  currentIssue?: Issue;
 }
 // todo delete
 const isActiveCard = true;
@@ -20,6 +27,7 @@ const Card: FC<CardProps> = ({
   card,
   width = '100px',
   isSettingsPage,
+  currentIssue,
 }: CardProps) => {
   const [isModeEdit, setIsModeEdit] = useState<boolean>(false);
   const dispatch = useAppDispatch();
@@ -57,13 +65,31 @@ const Card: FC<CardProps> = ({
     }
     setIsModeEdit(false);
   };
+  const clickCard = () => {
+    if (!isSettingsPage && !user?.isObserver) {
+      currentIssue?.votes.push({
+        ...card,
+        userId: user?.userId,
+        issueId: currentIssue?.id,
+      });
+      socket?.emit(
+        'issue update',
+        currentIssue,
+        user?.room,
+        (issueData: Issue) => {
+          dispatch(editIssue(issueData));
+        },
+      );
+    }
+  };
 
   return (
     <div
+      onClick={clickCard}
       className={`${styles.card__wrapper} ${
         isActiveCard ? styles.card__wrapperActive : ''
       }`}
-      style={{ width }}
+      style={{ width, cursor: isSettingsPage ? 'default' : 'pointer' }}
     >
       <div className={styles.cardVal__top}>
         {isModeEdit ? (

@@ -34,12 +34,15 @@ const ModalIssues: FC<ModalIssuesProps> = ({
 
   const onSubmit = (value: Issue) => {
     setIsModalVisible(false);
+
+    const newIssue = { ...issue, ...value };
+
     if (issueMode === 'create') {
-      socket?.emit('send issue', value, user?.room, (issueData: Issue) => {
+      socket?.emit('send issue', newIssue, user?.room, (issueData: Issue) => {
         dispatch(addIssue(issueData));
       });
     } else {
-      socket?.emit('issue update', value, user?.room, (issueData: Issue) => {
+      socket?.emit('issue update', newIssue, user?.room, (issueData: Issue) => {
         dispatch(editIssue(issueData));
       });
     }

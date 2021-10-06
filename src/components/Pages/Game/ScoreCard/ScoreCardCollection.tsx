@@ -1,26 +1,32 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import ScoreCard from './ScoreCard';
 import PlayerCard from '../../../PlayerCard';
 import { useAppSelector } from '../../../../hooks';
 import { selectUser, selectUsers } from '../../../../store/usersSlice';
 import stiles from './ScoreCard.module.scss';
+import Issue from '../../../../interfaces/issue';
 
-const ScoreCardCollection: FC = () => {
+export type ScoreProps = {
+  currentIssue?: Issue;
+};
+
+const ScoreCardCollection: FC<ScoreProps> = ({ currentIssue }: ScoreProps) => {
   const user = useAppSelector(selectUser);
   const users = useAppSelector(selectUsers);
 
-  // todo delete
-  const issueId = 'fddfeeesfdfef';
+  const vote = useMemo(() => {
+    return currentIssue?.votes.find((item) => item?.userId === user?.userId);
+  }, [currentIssue?.votes, user?.userId]);
 
   return (
     <>
       {users.map((currentUser) => {
         return (
-          // todo
-          //  get issueId + value in ScoreCard
-          //
-          <div key={currentUser.userId + issueId} className={stiles.wrapper}>
-            <ScoreCard value={currentUser.status} />
+          <div
+            key={currentUser.userId + vote?.issueId}
+            className={stiles.wrapper}
+          >
+            <ScoreCard value={vote ? vote.cardValue : currentUser.status} />
             <PlayerCard
               {...currentUser}
               key={currentUser.userId}

@@ -3,7 +3,7 @@
   "scripts": {
     "dev": "nodemon",
     "build": "next build && tsc --project tsconfig.server.json",
-    "start": "cross-env NODE_ENV=production node dist/index.js",
+    "start": "cross-env NODE_ENV=production node dist/server/index.js",
     "lint": "eslint src --fix"
   },
   "dependencies": {
@@ -16,11 +16,12 @@
     "cross-env": "^7.0.2",
     "express": "^4.17.1",
     "moment": "^2.29.1",
-    "next": "latest",
+    "next": "^11.1.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-input-autosize": "^3.0.0",
     "react-redux": "^7.2.5",
+    "react-timer-hook": "^3.0.5",
     "redux": "^4.1.1",
     "redux-devtools-extension": "^2.13.9",
     "sass": "^1.39.0",
@@ -41,6 +42,7 @@
     "eslint-config-airbnb-typescript": "^12.3.1",
     "eslint-config-next": "^11.1.2",
     "eslint-config-prettier": "^8.3.0",
+    "prettier": "^2.4.1",
     "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.25.1",
