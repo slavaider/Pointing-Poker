@@ -66,7 +66,7 @@ const Game: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
   }, [dispatch, master, router, socket, user]);
 
   return (
-    <div style={{ display: 'flex' /* , flexWrap: 'wrap' */ }}>
+    <div style={{ display: 'flex', justifyContent: 'space-around' }}>
       <div className={styles.GameContainer}>
         <TitleServer />
 
@@ -76,9 +76,28 @@ const Game: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
             user={user}
             title={'Scram master:'}
           />
-          <Button backgroundColor={'#fff'} color={'#2B3A67'} onClick={stopGame}>
-            Stop Game
-          </Button>
+
+          {master?.userId !== user?.userId ? (
+            //
+            // todo обавить таймер
+            //
+
+            <Button
+              backgroundColor={'#aaa'}
+              color={'#2B3A67'}
+              onClick={stopGame}
+            >
+              Exit
+            </Button>
+          ) : (
+            <Button
+              backgroundColor={'#aaa'}
+              color={'#2B3A67'}
+              onClick={stopGame}
+            >
+              Stop Game
+            </Button>
+          )}
         </div>
 
         <div className={styles.flexRow} style={{ alignItems: 'center' }}>
@@ -113,7 +132,7 @@ const Game: FC<WithRouterProps> = ({ router }: WithRouterProps) => {
           ''
         )}
 
-        <aside className={styles.aside2}>
+        <aside className={styles.aside_mobile}>
           <div>Score:</div>
           <div>Players:</div>
           <ScoreCardCollection currentIssue={currentIssue} />

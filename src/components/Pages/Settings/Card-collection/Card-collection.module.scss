@@ -1,4 +1,4 @@
-.card__wrapper {
+.card__wrapper{
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -10,6 +10,9 @@
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 14px;
   position: relative;
+}
+.card__wrapperActive{
+  background-color: rgba(0,255,0,0.2);
 }
 .cards__container {
   display: flex;

@@ -19,6 +19,9 @@ interface CardProps {
   isSettingsPage: boolean;
   currentIssue?: Issue;
 }
+// todo delete
+const isActiveCard = true;
+//
 
 const Card: FC<CardProps> = ({
   card,
@@ -83,7 +86,9 @@ const Card: FC<CardProps> = ({
   return (
     <div
       onClick={clickCard}
-      className={styles.card__wrapper}
+      className={`${styles.card__wrapper} ${
+        isActiveCard ? styles.card__wrapperActive : ''
+      }`}
       style={{ width, cursor: isSettingsPage ? 'default' : 'pointer' }}
     >
       <div className={styles.cardVal__top}>

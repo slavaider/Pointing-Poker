@@ -32,7 +32,7 @@ const ScoreCardCollection: FC<ScoreProps> = ({ currentIssue }: ScoreProps) => {
               key={currentUser.userId}
               isItYou={currentUser.userId === user?.userId}
               isMaster={currentUser.isMaster}
-              size="max"
+              size="score"
             />
           </div>
         );

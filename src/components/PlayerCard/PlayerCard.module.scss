@@ -46,7 +46,7 @@
   }
 
 }
-.button{
+.button, .button_min{
   background-color: inherit;
   height: 30px;
   margin: 10px;
@@ -54,5 +54,8 @@
     width: 25px !important;
     height: 100% !important;
     fill: tomato;
+  }
+  &_min{
+    margin: 0 5px;
   }
 }
