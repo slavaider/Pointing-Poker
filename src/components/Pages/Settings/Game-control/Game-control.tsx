@@ -9,7 +9,7 @@ import {
   selectUser,
   selectUsers,
   removeUser,
-  startGameUsers,
+  changeStatus,
 } from '../../../../store/usersSlice';
 import SocketContext from '../../../../shared/SocketContext';
 
@@ -27,10 +27,16 @@ const GameControl: FC<GameControlProps> = ({
   const user = useAppSelector(selectUser);
 
   const startGame = () => {
-    socket?.emit('start game', users, user?.room, (usersData: User[]) => {
-      dispatch(startGameUsers(usersData));
-      router.push(`/game/${user?.room}`);
-    });
+    socket?.emit(
+      'change status',
+      users,
+      user?.room,
+      'idle',
+      (usersData: User[]) => {
+        dispatch(changeStatus({ users: usersData, status: 'idle' }));
+        router.push(`/game/${user?.room}`);
+      },
+    );
   };
 
   const exitGame = () => {

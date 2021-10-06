@@ -7,7 +7,8 @@ export default interface User {
   lastName: string;
   isObserver?: boolean;
   userId: string;
-  status: string; // 'settings' | 'idle' | [value]
+  status: string;
   kickVotes: number;
   allVotes: number;
+  currentIssueIndex: number;
 }

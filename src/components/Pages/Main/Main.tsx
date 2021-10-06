@@ -57,6 +57,7 @@ const Main: FC = () => {
           room,
           status: 'settings',
           kickVotes: 0,
+          currentIssueIndex: 0,
           allVotes: 0,
         },
         (

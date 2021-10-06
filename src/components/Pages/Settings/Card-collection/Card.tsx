@@ -1,4 +1,4 @@
-import React, { FC, useContext, useState } from 'react';
+import React, { FC, useContext, useMemo, useState } from 'react';
 import { CheckOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Input } from 'antd';
 import { useAppDispatch, useAppSelector } from 'src/hooks';
@@ -7,34 +7,38 @@ import {
   editCard,
   editIssue,
   selectUser,
+  updateUser,
 } from 'src/store/usersSlice';
 import styles from './Card-collection.module.scss';
 import ICard from '../../../../interfaces/card';
 import SocketContext from '../../../../shared/SocketContext';
 import Issue from '../../../../interfaces/issue';
+import User from '../../../../interfaces/user';
 
 interface CardProps {
   card: ICard;
   width?: string;
   isSettingsPage: boolean;
   currentIssue?: Issue;
+  isUpdate?: boolean;
+  setIsUpdate?: (item: any) => void;
+  isGameStarted?: boolean;
 }
-// todo delete
-const isActiveCard = true;
-//
 
 const Card: FC<CardProps> = ({
   card,
   width = '100px',
   isSettingsPage,
+  isUpdate,
+  setIsUpdate,
   currentIssue,
+  isGameStarted,
 }: CardProps) => {
   const [isModeEdit, setIsModeEdit] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const { cardTitle, cardValue, id } = card;
   const user = useAppSelector(selectUser);
   const socket = useContext(SocketContext);
-
   const color = isModeEdit ? 'darkblue' : '#000';
 
   const editMode = () => {
@@ -66,28 +70,62 @@ const Card: FC<CardProps> = ({
     setIsModeEdit(false);
   };
   const clickCard = () => {
-    if (!isSettingsPage && !user?.isObserver) {
-      currentIssue?.votes.push({
+    if (!isSettingsPage && !user?.isObserver && isGameStarted) {
+      const newIssue = { ...currentIssue };
+      const vote = {
         ...card,
         userId: user?.userId,
-        issueId: currentIssue?.id,
-      });
-      socket?.emit(
-        'issue update',
-        currentIssue,
-        user?.room,
-        (issueData: Issue) => {
-          dispatch(editIssue(issueData));
-        },
-      );
+      };
+
+      if (newIssue?.votes) {
+        const arr = [...newIssue?.votes];
+
+        if (isUpdate) {
+          const voteIndex = newIssue.votes.findIndex(
+            (item) => item?.userId === user?.userId,
+          );
+          if (voteIndex !== -1) {
+            arr[voteIndex] = vote;
+          }
+        } else {
+          arr?.push(vote);
+        }
+
+        Object.assign(newIssue, { votes: arr });
+
+        socket?.emit(
+          'update user',
+          { ...user, status: card.cardValue },
+          user?.room,
+          (newUser: User) => {
+            dispatch(updateUser(newUser));
+          },
+        );
+
+        socket?.emit(
+          'issue update',
+          newIssue,
+          user?.room,
+          (newIssueData: Issue) => {
+            setIsUpdate?.(true);
+            dispatch(editIssue(newIssueData));
+          },
+        );
+      }
     }
   };
+
+  const vote = useMemo(() => {
+    return currentIssue?.votes.find((item) => item.userId === user?.userId);
+  }, [currentIssue?.votes, user?.userId]);
 
   return (
     <div
       onClick={clickCard}
       className={`${styles.card__wrapper} ${
-        isActiveCard ? styles.card__wrapperActive : ''
+        vote?.id === card.id && !isSettingsPage
+          ? styles.card__wrapperActive
+          : ''
       }`}
       style={{ width, cursor: isSettingsPage ? 'default' : 'pointer' }}
     >

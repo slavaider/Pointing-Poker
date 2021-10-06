@@ -98,7 +98,7 @@ const GameSettings: FC = () => {
         </Form.Item>
 
         <Form.Item className={styles.setting}>
-          <Button type="primary" htmlType="submit">
+          <Button type="default" className="button" htmlType="submit">
             Submit
           </Button>
         </Form.Item>
